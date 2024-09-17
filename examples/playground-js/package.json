@@ -1,5 +1,5 @@
 {
-  "name": "vite-react-typescript-starter",
+  "name": "outspeed-playground",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
