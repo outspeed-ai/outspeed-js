@@ -1,5 +1,4 @@
 import { WebsocketApp } from "./websocket/WebsocketApp";
-import { AvatarApp } from "./avatar/AvatarApp";
 import WebRTCApp from "./webrtc/WebRTCApp";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { RealtimeExamples } from "./RealtimeExamples";
@@ -22,10 +21,6 @@ const router = createBrowserRouter([
   {
     path: "/webrtc-screen-share",
     element: <WebRTCScreenShareApp />,
-  },
-  {
-    path: "/avatar",
-    element: <AvatarApp />,
   },
 ]);
 

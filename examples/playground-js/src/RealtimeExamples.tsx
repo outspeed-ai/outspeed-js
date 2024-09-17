@@ -1,10 +1,4 @@
-import {
-  AudioLinesIcon,
-  ScreenShare,
-  TextIcon,
-  User2,
-  VideoIcon,
-} from "lucide-react";
+import { AudioLinesIcon, ScreenShare, VideoIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export function RealtimeExamples() {
@@ -56,26 +50,6 @@ export function RealtimeExamples() {
         {
           title: "Screen",
           children: <ScreenShare />,
-        },
-      ],
-    },
-    {
-      title: "Avatar",
-      description:
-        "In this example, we will establish a WebSocket connection and speak with an Avatar.",
-      link: "/avatar",
-      icons: [
-        {
-          title: "Avatar",
-          children: <User2 />,
-        },
-        {
-          title: "Audio",
-          children: <AudioLinesIcon />,
-        },
-        {
-          title: "Text",
-          children: <TextIcon />,
         },
       ],
     },
