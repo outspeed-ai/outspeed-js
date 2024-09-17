@@ -1,6 +1,6 @@
 import { defineConfig } from "tsup";
 import { copyFileSync } from "fs";
-import path from "path";
+import { join, resolve } from "path";
 
 export default defineConfig({
   entry: ["src/**/*.(ts|tsx)"],
@@ -13,8 +13,8 @@ export default defineConfig({
   minify: false,
   splitting: false,
   onSuccess: async () => {
-    const destPath = path.join(__dirname, "dist");
-    const licensePath = path.join(__dirname, "..", "..", "LICENSE");
-    copyFileSync(path.resolve(licensePath), path.join(destPath, "LICENSE"));
+    const destPath = join(__dirname, "dist");
+    const licensePath = join(__dirname, "..", "..", "LICENSE");
+    copyFileSync(resolve(licensePath), join(destPath, "LICENSE"));
   },
 });

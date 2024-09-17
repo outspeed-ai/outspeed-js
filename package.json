@@ -2,7 +2,7 @@
   "scripts": {
     "build": "pnpm -r --stream --filter @outspeed/* build",
     "release": "pnpm publish -r",
-    "playground": "cd examples/playground-js && pnpm dev",
+    "playground:dev": "cd examples/playground-js && pnpm dev",
     "playground:build": "cd examples/playground-js && pnpm build",
     "playground:serve": "cd examples/playground-js && pnpm preview"
   },

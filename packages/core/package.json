@@ -2,9 +2,22 @@
   "name": "@outspeed/core",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "exports": {
+    ".": {
+      "development": "./src/index.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./*": {
+      "development": "./src/*",
+      "import": "./dist/*",
+      "require": "./dist/*",
+      "types": "./dist/*"
+    }
+  },
   "files": [
     "dist/",
     "LICENSE",
