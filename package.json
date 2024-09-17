@@ -13,5 +13,6 @@
   "author": "",
   "devDependencies": {
     "concurrently": "^9.0.1"
-  }
+  },
+  "homepage": "https://outspeed.ai"
 }
