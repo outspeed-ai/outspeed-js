@@ -26,7 +26,8 @@
     "README.md"
   ],
   "scripts": {
-    "build": "tsup"
+    "build": "tsup",
+    "watch:types": "tsc --watch --project tsconfig.types.json"
   },
   "repository": {
     "type": "git",
