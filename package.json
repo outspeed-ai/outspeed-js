@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "build": "pnpm -r --stream build",
+    "release": "pnpm publish -r",
+    "playground": "cd examples/playground-js && pnpm dev"
+  },
+  "keywords": [],
+  "author": ""
+}
