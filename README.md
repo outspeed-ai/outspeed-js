@@ -108,7 +108,7 @@ To run the example playground (a React app) in development mode, run the followi
 pnpm playground:dev
 ```
 
-The playground is located in `./examples/playground-js`, and any edits you make will be reflected in real-time.
+The playground is in `./examples/playground-js`, and any edits you make will be reflected in real-time.
 
 #### Step 4: Run packages in dev mode
 
