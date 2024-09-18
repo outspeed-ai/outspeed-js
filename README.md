@@ -1,7 +1,11 @@
 <p align="center">
-  <picture>
-    <img alt="Outspeed's logo" src="./assets/logo.jpg" style="width: 100%; max-width: 500px">
-  </picture>
+  <a href="https://outspeed.ai" target="_blank">
+    <picture>
+      <source srcset="./assets/logo-white.webp" media="(prefers-color-scheme: dark)" />
+      <source srcset="./assets/logo-black.webp" media="(prefers-color-scheme: light)" />
+      <img src="./assets/logo.jpg" alt="Sentry" width="280">
+    </picture>
+  </a>
 </p>
 
 # Documentation
