@@ -36,7 +36,7 @@ export function RealtimeChat(props: RealtimeChatProps) {
         },
       ]);
     } else {
-      console.error("Message is neither websocket message nor webRTC message.");
+      return;
     }
 
     setTimeout(() => {
