@@ -1,6 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 
-import { DataChannel, isMessageEvent } from "@outspeed/core";
+import {
+  DataChannel,
+  isMessageEvent,
+  isWebRTCMessage,
+  isWebSocketMessage,
+  stitchWebSocketMessage,
+} from "@outspeed/core";
 import { useRealtimeToast } from "../hooks";
 
 export type RealtimeChatProps = {
@@ -16,12 +22,22 @@ export function RealtimeChat(props: RealtimeChatProps) {
   >([]);
   const input = useRef<HTMLInputElement>(null);
 
-  function updateMessage(message: {
-    content?: string;
-    text?: string;
-    type: "user" | "bot";
-  }) {
-    setMessages((currentMessages) => [...currentMessages, message]);
+  function updateMessage(message: { content?: unknown; type: "user" | "bot" }) {
+    if (isWebRTCMessage(message)) {
+      setMessages((currentMessages) => [...currentMessages, message]);
+
+      return;
+    } else if (isWebSocketMessage(message)) {
+      setMessages((currentMessages) => [
+        ...currentMessages,
+        {
+          type: message.type,
+          content: stitchWebSocketMessage(message.text),
+        },
+      ]);
+    } else {
+      console.error("Message is neither websocket message nor webRTC message.");
+    }
 
     setTimeout(() => {
       chatRef.current?.scroll({
@@ -35,6 +51,7 @@ export function RealtimeChat(props: RealtimeChatProps) {
     updateMessage({ content: msg, type: "user" });
 
     dataChannel.send({
+      msg,
       content: msg,
       text: msg,
       role: "user",
@@ -77,7 +94,6 @@ export function RealtimeChat(props: RealtimeChatProps) {
               <div dangerouslySetInnerHTML={{ __html: message.render }} />
             ),
           });
-          console.log();
         }
 
         updateMessage({ ...message, type: "bot" });
@@ -90,7 +106,7 @@ export function RealtimeChat(props: RealtimeChatProps) {
     return () => {
       dataChannel.removeEventListener("message", onMessage);
     };
-  }, [dataChannel]);
+  }, [dataChannel, toast]);
 
   return (
     <div

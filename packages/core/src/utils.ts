@@ -229,3 +229,82 @@ export const blobToBase64 = (blob: Blob): Promise<string | null> => {
     reader.readAsDataURL(blob);
   });
 };
+
+export type TWebSocketMessageText = {
+  mark: number;
+  word: string;
+};
+
+export type TWebSocketMessage = {
+  text: TWebSocketMessageText[];
+  // TODO: Websocket message has more data like
+  // TODO: anim, voice, rate pitch etc.
+  // TODO: We need to add them as well.
+};
+
+export type TWebRTCMessage = {
+  type: string;
+  content: string;
+};
+
+export function isWebRTCMessage(obj: unknown): obj is TWebRTCMessage {
+  if (typeof obj !== "object" || obj === null) {
+    return false;
+  }
+
+  const message = obj as Partial<TWebRTCMessage>;
+  if (typeof message.type !== "string") {
+    return false;
+  }
+
+  if (typeof message.content !== "string") {
+    return false;
+  }
+
+  return true;
+}
+
+export function isWebSocketMessageText(
+  obj: unknown
+): obj is TWebSocketMessageText {
+  if (typeof obj !== "object" || obj === null) {
+    return false;
+  }
+
+  if (!Array.isArray(obj)) {
+    return false;
+  }
+
+  if (typeof obj[0]?.mark !== "number") {
+    return false;
+  }
+
+  if (typeof obj[0]?.word !== "string") {
+    return false;
+  }
+
+  return true;
+}
+
+export function isWebSocketMessage(obj: unknown): obj is TWebSocketMessage {
+  if (typeof obj !== "object" || obj === null) {
+    return false;
+  }
+
+  const message = obj as Partial<TWebSocketMessage>;
+
+  if (!isWebSocketMessageText(message.text)) {
+    return false;
+  }
+
+  return true;
+}
+
+export function stitchWebSocketMessage(
+  content: TWebSocketMessageText[]
+): string {
+  return content
+    .sort((a, b) => a.mark - b.mark)
+    .map((a) => a.word)
+    .join(" ");
+}
