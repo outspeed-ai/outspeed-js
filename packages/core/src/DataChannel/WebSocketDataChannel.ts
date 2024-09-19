@@ -72,11 +72,11 @@ export class WebSocketDataChannel implements DataChannel<null> {
       throw new Error("WebSocket is not open");
     }
 
-    if (typeof payload.msg === "string") {
-      this.socket.send(stringify({ type: "message", data: payload.msg }));
+    if (typeof payload.data === "string") {
+      this.socket.send(stringify(payload));
     } else {
       throw new Error(
-        "Expecting `payload.msg` to be a string. It is not defined."
+        `Expecting \`payload.data\` to be a string. Got: ${typeof payload.data}.`
       );
     }
   }

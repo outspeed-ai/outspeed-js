@@ -50,12 +50,14 @@ export function RealtimeChat(props: RealtimeChatProps) {
   function sendMessage(msg: string) {
     updateMessage({ content: msg, type: "user" });
 
-    dataChannel.send({
-      msg,
-      content: msg,
-      text: msg,
-      role: "user",
-    });
+    try {
+      dataChannel.send({
+        type: "message",
+        data: msg,
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   const fixChatContainerHeight = React.useCallback(() => {
