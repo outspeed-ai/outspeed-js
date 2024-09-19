@@ -1,0 +1,57 @@
+{
+  "name": "@outspeed/core",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "development": "./src/index.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    },
+    "./*": {
+      "types": "./dist/*",
+      "development": "./src/*",
+      "require": "./dist/*",
+      "import": "./dist/*"
+    }
+  },
+  "files": [
+    "dist/",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "watch:types": "tsc --watch --project tsconfig.types.json",
+    "test": "vitest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/outspeed-ai/outspeed-js",
+    "directory": "packages/core"
+  },
+  "devDependencies": {
+    "@types/audioworklet": "^0.0.60",
+    "@types/node": "^20.12.12",
+    "@typescript-eslint/eslint-plugin": "^7.2.0",
+    "@typescript-eslint/parser": "^7.2.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.6",
+    "tsup": "8.2.4",
+    "typescript": "^5.2.2",
+    "vitest": "^2.0.5"
+  },
+  "dependencies": {
+    "change-case": "^5.4.4",
+    "extendable-media-recorder": "^9.2.11",
+    "extendable-media-recorder-wav-encoder": "^7.0.115",
+    "fast-base64": "^0.1.8",
+    "xstate": "5.17.4"
+  },
+  "keywords": [],
+  "author": ""
+}
