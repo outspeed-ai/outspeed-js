@@ -26,10 +26,9 @@ const router = createBrowserRouter([
 
 export default function App() {
   return (
-    <div className="container h-screen p-4 flex flex-col">
-      <h3 className="font-extrabold">Adapt Playground.</h3>
-      <hr className="mt-4" />
-      <div className="flex justify-center items-center py-4 flex-1">
+    <div className="container h-screen flex flex-col">
+      <h3 className="font-extrabold py-4">Outspeed Playground</h3>
+      <div className="flex justify-center items-center flex-1">
         <RouterProvider router={router} />
       </div>
     </div>

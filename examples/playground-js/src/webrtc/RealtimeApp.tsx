@@ -1,9 +1,9 @@
 import React from "react";
 import { useWebRTC, RealtimeChat, useRealtimeToast } from "@outspeed/react";
 import { TRealtimeConfig } from "@outspeed/core";
-import { VideoSection } from "./VideoSection";
 import { Loader2 } from "lucide-react";
 import { Button } from "../components/button";
+import { VideoStream } from "../components/video-stream-layout";
 
 export type TRealtimeAppProps = {
   onDisconnect: () => void;
@@ -80,7 +80,7 @@ export function RealtimeApp(props: TRealtimeAppProps) {
   return (
     <div className="h-full flex flex-1">
       <div className="flex-1 flex">
-        <VideoSection
+        <VideoStream
           onCallEndClick={handleDisconnect}
           localTrack={getLocalVideoTrack()}
           remoteTrack={getRemoteVideoTrack()}
@@ -88,11 +88,11 @@ export function RealtimeApp(props: TRealtimeAppProps) {
           remoteAudioTrack={getRemoteAudioTrack()}
         />
       </div>
-      {dataChannel && (
+      {/* {dataChannel && (
         <div className="w-[350px] px-4 hidden md:block">
           <RealtimeChat dataChannel={dataChannel} />
         </div>
-      )}
+      )} */}
     </div>
   );
 }
