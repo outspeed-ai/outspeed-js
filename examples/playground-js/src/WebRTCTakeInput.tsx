@@ -33,6 +33,7 @@ export function WebRTCTakeInput(props: TWebRTCTakeInputProps) {
 
   return (
     <div className="space-y-6 max-w-lg relative z-10">
+      <div className="font-bold text-3xl mb-8">WebRTC</div>
       <RealtimeFunctionURLInput
         onChange={(e) => setFunctionURL(e.currentTarget.value)}
         value={functionURL}

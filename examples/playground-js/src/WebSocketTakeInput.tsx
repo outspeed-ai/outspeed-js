@@ -36,6 +36,7 @@ export function WebSocketTakeInput(props: TWebSocketTakeInputProps) {
 
   return (
     <div className="space-y-6 max-w-lg relative z-10">
+      <div className="font-bold text-3xl mb-8">Web Socket</div>
       <RealtimeFunctionURLInput
         onChange={(e) => setFunctionURL(e.currentTarget.value)}
         value={functionURL}
