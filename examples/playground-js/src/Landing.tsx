@@ -1,11 +1,20 @@
 import React from "react";
 import { RealtimeExamples } from "./RealtimeExamples";
-import { Button, buttonVariants } from "./components/button";
+import { buttonVariants } from "./components/button";
 import { Github } from "lucide-react";
+import { WebRTCTakeInput } from "./WebRTCTakeInput";
+import { TRealtimeConfig } from "@outspeed/core";
+import { TRealtimeWebSocketConfig } from "@outspeed/core";
+import { WebSocketTakeInput } from "./WebSocketTakeInput";
 
-export function Landing() {
-  const [selectedExample, setSelectedExample] = React.useState("webrtc");
+export type TLandingProps = {
+  selectedExample: string;
+  setSelectedExample: (selected: string) => void;
+  onSubmit: (data: TRealtimeConfig | TRealtimeWebSocketConfig) => void;
+};
 
+export function Landing(props: TLandingProps) {
+  const { onSubmit, selectedExample, setSelectedExample } = props;
   return (
     <div className="flex h-screen w-screen">
       <div className="flex-1 bg-[hsl(204,80%,5%)] flex justify-end">
@@ -30,7 +39,7 @@ export function Landing() {
             selected={selectedExample}
             onClick={(id) => setSelectedExample(id)}
           />
-          <div className="mt-auto flex justify-end">
+          <div className="mt-auto">
             <a
               target="_blank"
               href="https://github.com/outspeed-ai/outspeed-js"
@@ -46,7 +55,14 @@ export function Landing() {
         </div>
       </div>
       <div className="flex-1 flex justify-start p-4">
-        <div className="flex-1 max-w-2xl ">Form section</div>
+        <div className="flex-1 max-w-2xl flex flex-col justify-center px-10">
+          {selectedExample === "webrtc" && (
+            <WebRTCTakeInput onSubmit={onSubmit} />
+          )}
+          {selectedExample === "websocket" && (
+            <WebSocketTakeInput onSubmit={onSubmit} />
+          )}
+        </div>
       </div>
     </div>
   );

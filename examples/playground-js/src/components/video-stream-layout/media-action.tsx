@@ -32,7 +32,7 @@ export function MediaAction(props: TMediaActionProps) {
   return (
     <Button
       className="rounded-full w-10 h-10"
-      variant="default"
+      variant="outline"
       size="icon"
       onClick={handleOnToggle}
     >

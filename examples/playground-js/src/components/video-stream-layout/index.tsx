@@ -4,6 +4,7 @@ import { VideContainer } from "./video-container";
 import { MediaAction } from "./media-action";
 import { ChatAction } from "./chat-action";
 import { DisconnectAction } from "./disconnect-action";
+import { Clock } from "./clock";
 
 export type TVideoStreamProps = {
   remoteTrack: Track | null;
@@ -28,13 +29,21 @@ export function VideoStream(props: TVideoStreamProps) {
 
       {/* Call Section */}
       <div className="pb-4 flex">
-        <div className="bg-[#222] flex flex-1 p-4 rounded-md">
-          <DisconnectAction onClick={onCallEndClick} />
+        <div className="flex flex-1 p-4 rounded-md">
+          <div className="flex-1 flex justify-start items-center space-x-4">
+            <div className="uppercase font-bold">
+              <Clock />
+            </div>
+          </div>
           <div className="flex flex-1 space-x-4 justify-center">
+            <DisconnectAction onClick={onCallEndClick} />
             <MediaAction track={localAudioTrack} On={Mic} Off={MicOff} />
             <MediaAction track={localTrack} On={Video} Off={VideoOff} />
+            <ChatAction />
           </div>
-          <ChatAction />
+          <div className="flex-1 flex justify-end">
+            <span className="font-bold text-muted">WebRTC Example</span>
+          </div>
         </div>
       </div>
     </div>

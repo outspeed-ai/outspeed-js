@@ -14,7 +14,7 @@ export function ChatAction(props: TChatActionProps) {
   return (
     <Button
       className="rounded-full w-10 h-10"
-      variant={isEnabled ? "default" : "ghost"}
+      variant={isEnabled ? "default" : "outline"}
       size="icon"
       onClick={handleOnToggleChat}
     >

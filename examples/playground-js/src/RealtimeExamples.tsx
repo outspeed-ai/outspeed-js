@@ -47,7 +47,7 @@ export function RealtimeExamples(props: TRealtimeExamples) {
           <div
             className={clsx(
               "border border-[#222] max-w-[250px] p-4 rounded cursor-pointer hover:bg-accent hover:border-transparent",
-              selected === item.id && "border-primary hover:border-primary"
+              selected === item.id && "border-primary hover:!border-primary"
             )}
             key={item.title}
             onClick={() => onClick(item.id)}

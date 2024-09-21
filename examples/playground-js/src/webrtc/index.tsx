@@ -5,12 +5,12 @@ import { Loader2 } from "lucide-react";
 import { Button } from "../components/button";
 import { VideoStream } from "../components/video-stream-layout";
 
-export type TRealtimeAppProps = {
+export type TWebRTCRealtimeApp = {
   onDisconnect: () => void;
   config: TRealtimeConfig;
 };
 
-export function RealtimeApp(props: TRealtimeAppProps) {
+export function WebRTCRealtimeApp(props: TWebRTCRealtimeApp) {
   const { config, onDisconnect } = props;
   const { toast } = useRealtimeToast();
 
