@@ -1,9 +1,9 @@
 import React from "react";
-import { useWebRTC, RealtimeChat, useRealtimeToast } from "@outspeed/react";
+import { useWebRTC, useRealtimeToast } from "@outspeed/react";
 import { TRealtimeConfig } from "@outspeed/core";
 import { Loader2 } from "lucide-react";
 import { Button } from "../components/button";
-import { VideoStream } from "../components/video-stream-layout";
+import { MeetingLayout } from "../components/meeting-layout";
 
 export type TWebRTCRealtimeApp = {
   onDisconnect: () => void;
@@ -80,7 +80,8 @@ export function WebRTCRealtimeApp(props: TWebRTCRealtimeApp) {
   return (
     <div className="h-full flex flex-1">
       <div className="flex-1 flex">
-        <VideoStream
+        <MeetingLayout
+          title="WebRTC Example"
           onCallEndClick={handleDisconnect}
           localTrack={getLocalVideoTrack()}
           remoteTrack={getRemoteVideoTrack()}

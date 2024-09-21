@@ -10,17 +10,19 @@ import React from "react";
 import { RealtimeChat } from "@outspeed/react";
 import clsx from "clsx";
 
-export type TVideoStreamProps = {
+export type TMeetingLayoutProps = {
   remoteTrack: Track | null;
   localTrack: Track | null;
   remoteAudioTrack: Track | null;
   localAudioTrack: Track | null;
   onCallEndClick: () => void;
   dataChannel?: DataChannel<unknown> | null;
+  title: string;
 };
 
-export function VideoStream(props: TVideoStreamProps) {
-  const { localTrack, localAudioTrack, onCallEndClick, dataChannel } = props;
+export function MeetingLayout(props: TMeetingLayoutProps) {
+  const { localTrack, localAudioTrack, onCallEndClick, dataChannel, title } =
+    props;
 
   const [isChatOpened, setIsChatOpened] = React.useState(false);
 
@@ -52,7 +54,7 @@ export function VideoStream(props: TVideoStreamProps) {
             />
           </div>
           <div className="flex-1 flex justify-end">
-            <span className="font-bold text-muted">WebRTC Example</span>
+            <span className="font-bold text-muted">{title}</span>
           </div>
         </div>
       </div>
