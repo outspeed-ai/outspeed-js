@@ -28,44 +28,7 @@ export function RealtimeChat(props: RealtimeChatProps) {
   const chatRef = useRef<HTMLDivElement>(null);
   const [messages, setMessages] = useState<
     { content?: string; text?: string; type: "user" | "bot" }[]
-  >([
-    {
-      content: "Hello",
-      type: "user",
-    },
-    {
-      content: "I am good! How are you?",
-      type: "bot",
-    },
-    {
-      content: "Great! Thanks for asking",
-      type: "user",
-    },
-    {
-      content: "Hello",
-      type: "user",
-    },
-    {
-      content: "I am good! How are you?",
-      type: "bot",
-    },
-    {
-      content: "Great! Thanks for asking",
-      type: "user",
-    },
-    {
-      content: "Hello",
-      type: "user",
-    },
-    {
-      content: "I am good! How are you?",
-      type: "bot",
-    },
-    {
-      content: "Great! Thanks for asking",
-      type: "user",
-    },
-  ]);
+  >([]);
   const input = useRef<HTMLInputElement>(null);
 
   function updateMessage(message: {
@@ -134,7 +97,7 @@ export function RealtimeChat(props: RealtimeChatProps) {
       className="flex-1 h-full flex flex-col rounded-lg bg-foreground text-background"
     >
       <div className="p-2 font-bold text-center">{heading}</div>
-      <div className="overflow-auto" ref={chatRef}>
+      <div className="overflow-auto flex flex-1" ref={chatRef}>
         <section className="flex-1 flex flex-col space-y-2 px-4 mt-4 pb-2">
           {messages.map((msg, index) => {
             const data = msg.content || msg.text;
