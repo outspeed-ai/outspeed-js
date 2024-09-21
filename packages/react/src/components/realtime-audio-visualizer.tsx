@@ -106,8 +106,6 @@ function setupDraw(
 
   const prevRadius = indexes.map(() => baseRadius);
 
-  console.log("width", width, height, baseRadius, maxRadiusOffset);
-
   return function draw(dataArray: Uint8Array | null) {
     ctx.clearRect(0, 0, width, height);
 
