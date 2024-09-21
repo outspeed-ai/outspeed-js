@@ -7,8 +7,9 @@ import { DisconnectAction } from "./disconnect-action";
 import { Clock } from "./clock";
 import { DataChannel } from "@outspeed/core";
 import React from "react";
-import { RealtimeChat } from "@outspeed/react";
+import { RealtimeAudio, RealtimeChat } from "@outspeed/react";
 import clsx from "clsx";
+import { AudioVisualizerContainer } from "./audio-visualzier-container";
 
 export type TMeetingLayoutProps = {
   remoteTrack: Track | null;
@@ -21,8 +22,15 @@ export type TMeetingLayoutProps = {
 };
 
 export function MeetingLayout(props: TMeetingLayoutProps) {
-  const { localTrack, localAudioTrack, onCallEndClick, dataChannel, title } =
-    props;
+  const {
+    localTrack,
+    localAudioTrack,
+    remoteAudioTrack,
+    remoteTrack,
+    onCallEndClick,
+    dataChannel,
+    title,
+  } = props;
 
   const [isChatOpened, setIsChatOpened] = React.useState(false);
 
@@ -31,8 +39,32 @@ export function MeetingLayout(props: TMeetingLayoutProps) {
       {/* Video section */}
       <div className="flex-1 items-center flex">
         <div className="flex flex-1 justify-center space-x-6">
-          <VideContainer track={localTrack} label="Outspeed" />
-          <VideContainer track={localTrack} label="You" />
+          {remoteTrack && (
+            <VideContainer
+              track={remoteTrack}
+              label="Outspeed"
+              hasControls={{ audio: remoteAudioTrack }}
+            />
+          )}
+          {!remoteTrack && (
+            <>
+              <AudioVisualizerContainer
+                track={remoteAudioTrack}
+                label="Outspeed"
+                hasControls
+                threshold={120}
+              />
+              <RealtimeAudio track={remoteAudioTrack} />
+            </>
+          )}
+          {localTrack && <VideContainer track={localTrack} label="You" />}
+          {!localTrack && (
+            <AudioVisualizerContainer
+              track={localAudioTrack}
+              label="You"
+              threshold={250}
+            />
+          )}
         </div>
       </div>
 
