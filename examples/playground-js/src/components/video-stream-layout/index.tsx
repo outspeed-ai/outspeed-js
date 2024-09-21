@@ -1,13 +1,5 @@
-import {
-  RealtimeAudio,
-  RealtimeAudioVisualizer,
-  RealtimeConnectionStatus,
-  RealtimeVideo,
-} from "@outspeed/react";
 import { Track } from "@outspeed/core";
-import React from "react";
 import { Mic, MicOff, Video, VideoOff } from "lucide-react";
-import { Button } from "../button";
 import { VideContainer } from "./video-container";
 import { MediaAction } from "./media-action";
 import { ChatAction } from "./chat-action";
@@ -22,7 +14,7 @@ export type TVideoStreamProps = {
 };
 
 export function VideoStream(props: TVideoStreamProps) {
-  const { localTrack, localAudioTrack } = props;
+  const { localTrack, localAudioTrack, onCallEndClick } = props;
 
   return (
     <div className="flex flex-col flex-1">
@@ -37,7 +29,7 @@ export function VideoStream(props: TVideoStreamProps) {
       {/* Call Section */}
       <div className="pb-4 flex">
         <div className="bg-[#222] flex flex-1 p-4 rounded-md">
-          <DisconnectAction />
+          <DisconnectAction onClick={onCallEndClick} />
           <div className="flex flex-1 space-x-4 justify-center">
             <MediaAction track={localAudioTrack} On={Mic} Off={MicOff} />
             <MediaAction track={localTrack} On={Video} Off={VideoOff} />

@@ -31,12 +31,12 @@ export function MediaAction(props: TMediaActionProps) {
 
   return (
     <Button
-      className="rounded-full"
+      className="rounded-full w-10 h-10"
       variant="default"
       size="icon"
       onClick={handleOnToggle}
     >
-      {isEnabled ? <On className="h-4 w-4" /> : <Off className="h-4 w-4" />}
+      {isEnabled ? <On className="h-5 w-5" /> : <Off className="h-5 w-5" />}
     </Button>
   );
 }

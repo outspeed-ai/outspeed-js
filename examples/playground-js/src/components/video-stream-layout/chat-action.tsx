@@ -13,15 +13,15 @@ export function ChatAction(props: TChatActionProps) {
 
   return (
     <Button
-      className="rounded-full"
+      className="rounded-full w-10 h-10"
       variant={isEnabled ? "default" : "ghost"}
       size="icon"
       onClick={handleOnToggleChat}
     >
       {isEnabled ? (
-        <MessageSquare className="h-4 w-4" />
+        <MessageSquare className="h-5 w-5" />
       ) : (
-        <MessageSquare className="h-4 w-4" />
+        <MessageSquare className="h-5 w-5" />
       )}
     </Button>
   );

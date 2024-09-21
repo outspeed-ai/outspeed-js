@@ -39,7 +39,7 @@ export function TakeUserInput(props: TTakeUserInputProps) {
       <div className="flex justify-between items-center mb-4">
         <span className="font-bold text-lg">WebRTC Example</span>
         <Link to="/">
-          <Button variant="outline">Go Back</Button>
+          <Button variant="secondary">Go Back</Button>
         </Link>
       </div>
       <RealtimeFunctionURLInput
