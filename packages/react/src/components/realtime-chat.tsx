@@ -1,19 +1,71 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import { DataChannel, isMessageEvent } from "@outspeed/core";
 import { useRealtimeToast } from "../hooks";
 
 export type RealtimeChatProps = {
   dataChannel: DataChannel<unknown>;
+  /**
+   * Heading of the chat window.
+   *
+   * @default "Chat"
+   */
+  heading?: string;
+
+  userLabel?: string;
+
+  avatarLabel?: string;
 };
 
 export function RealtimeChat(props: RealtimeChatProps) {
   const { toast } = useRealtimeToast();
-  const { dataChannel } = props;
-  const chatRef = useRef<HTMLAudioElement>(null);
+  const {
+    dataChannel,
+    heading = "Chat",
+    userLabel = "User",
+    avatarLabel = "Avatar",
+  } = props;
+  const chatRef = useRef<HTMLDivElement>(null);
   const [messages, setMessages] = useState<
     { content?: string; text?: string; type: "user" | "bot" }[]
-  >([]);
+  >([
+    {
+      content: "Hello",
+      type: "user",
+    },
+    {
+      content: "I am good! How are you?",
+      type: "bot",
+    },
+    {
+      content: "Great! Thanks for asking",
+      type: "user",
+    },
+    {
+      content: "Hello",
+      type: "user",
+    },
+    {
+      content: "I am good! How are you?",
+      type: "bot",
+    },
+    {
+      content: "Great! Thanks for asking",
+      type: "user",
+    },
+    {
+      content: "Hello",
+      type: "user",
+    },
+    {
+      content: "I am good! How are you?",
+      type: "bot",
+    },
+    {
+      content: "Great! Thanks for asking",
+      type: "user",
+    },
+  ]);
   const input = useRef<HTMLInputElement>(null);
 
   function updateMessage(message: {
@@ -40,22 +92,6 @@ export function RealtimeChat(props: RealtimeChatProps) {
       role: "user",
     });
   }
-
-  const fixChatContainerHeight = React.useCallback(() => {
-    const chatContainer = document.getElementById("chat");
-    if (chatContainer) {
-      chatContainer.style.height = `${window.innerHeight - 100}px`;
-    }
-  }, []);
-
-  useEffect(() => {
-    fixChatContainerHeight();
-    window.addEventListener("resize", fixChatContainerHeight);
-
-    return () => {
-      window.removeEventListener("resize", fixChatContainerHeight);
-    };
-  }, [fixChatContainerHeight]);
 
   useEffect(() => {
     const onMessage = (evt: unknown) => {
@@ -90,52 +126,51 @@ export function RealtimeChat(props: RealtimeChatProps) {
     return () => {
       dataChannel.removeEventListener("message", onMessage);
     };
-  }, [dataChannel]);
+  }, [dataChannel, toast]);
 
   return (
     <div
       id="chat"
-      className="flex-1 h-full flex flex-col border rounded overflow-hidden"
+      className="flex-1 h-full flex flex-col rounded-lg bg-foreground text-background"
     >
-      <div className="p-2 font-bold border-b">Chat</div>
-      <section
-        ref={chatRef}
-        className="flex-1 flex flex-col overflow-auto space-y-2 px-2"
-      >
-        {messages.map((msg, index) => {
-          const data = msg.content || msg.text;
-          if (!data) return null;
+      <div className="p-2 font-bold text-center">{heading}</div>
+      <div className="overflow-auto" ref={chatRef}>
+        <section className="flex-1 flex flex-col space-y-2 px-4 mt-4 pb-2">
+          {messages.map((msg, index) => {
+            const data = msg.content || msg.text;
+            if (!data) return null;
 
-          if (msg.type === "user") {
+            if (msg.type === "user") {
+              return (
+                <div
+                  key={index}
+                  className="ml-auto text-right inline-flex flex-col space-y-1 max-w-[200px]"
+                >
+                  <span className="font-bold">{userLabel}</span>
+                  <span className=" py-2 px-4 rounded-[8px] bg-primary text-primary-foreground">
+                    {data}
+                  </span>
+                </div>
+              );
+            }
+
             return (
               <div
                 key={index}
-                className="ml-auto text-right inline-flex flex-col space-y-1 max-w-[200px]"
+                className="mr-auto inline-flex flex-col space-y-1 max-w-[200px]"
               >
-                <span>User</span>
-                <span className=" py-2 px-4 rounded-[8px] bg-secondary text-foreground">
+                <span className="font-bold">{avatarLabel}</span>
+                <span className=" py-2 px-4 rounded-[8px] bg-background text-foreground">
                   {data}
                 </span>
               </div>
             );
-          }
-
-          return (
-            <div
-              key={index}
-              className="mr-auto inline-flex flex-col space-y-1 max-w-[200px]"
-            >
-              <span>Avatar</span>
-              <span className=" py-2 px-4 rounded-[8px] bg-primary text-background">
-                {data}
-              </span>
-            </div>
-          );
-        })}
-      </section>
-      <div className="overflow-hidden rounded" style={{ marginTop: 10 }}>
+          })}
+        </section>
+      </div>
+      <div className="flex items-center space-x-4" style={{ marginTop: 10 }}>
         <input
-          className="px-2 py-4 w-full rounded bg-gray-100 hover:bg-gray-200 focus:bg-gray-50 focus:border-t"
+          className="p-4 rounded-lg flex h-16 flex-1 bg-[#aaa] placeholder:text-gray-700 hover:bg-[#999] outline-none focus:outline-none"
           placeholder="Type a message & hit Enter"
           ref={input}
           onKeyDown={(e) => {
