@@ -86,13 +86,9 @@ export function WebRTCRealtimeApp(props: TWebRTCRealtimeApp) {
           remoteTrack={getRemoteVideoTrack()}
           localAudioTrack={getLocalAudioTrack()}
           remoteAudioTrack={getRemoteAudioTrack()}
+          dataChannel={dataChannel}
         />
       </div>
-      {/* {dataChannel && (
-        <div className="w-[350px] px-4 hidden md:block">
-          <RealtimeChat dataChannel={dataChannel} />
-        </div>
-      )} */}
     </div>
   );
 }

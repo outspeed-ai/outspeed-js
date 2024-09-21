@@ -12,7 +12,7 @@ export function VideContainer(props: TVideContainerProps) {
   return (
     <div className="flex-1 relative">
       <RealtimeVideo track={track} />
-      <div className="absolute bottom-0 left-0 px-4 py-2 bg-black bg-opacity-45 rounded-bl-md rounded-tr-md font-bold">
+      <div className="absolute bottom-2 text-sm left-2 px-2 py-1 bg-background rounded-md font-bold">
         {label}
       </div>
     </div>

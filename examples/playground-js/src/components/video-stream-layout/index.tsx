@@ -5,6 +5,10 @@ import { MediaAction } from "./media-action";
 import { ChatAction } from "./chat-action";
 import { DisconnectAction } from "./disconnect-action";
 import { Clock } from "./clock";
+import { DataChannel } from "@outspeed/core";
+import React from "react";
+import { RealtimeChat } from "@outspeed/react";
+import clsx from "clsx";
 
 export type TVideoStreamProps = {
   remoteTrack: Track | null;
@@ -12,13 +16,16 @@ export type TVideoStreamProps = {
   remoteAudioTrack: Track | null;
   localAudioTrack: Track | null;
   onCallEndClick: () => void;
+  dataChannel?: DataChannel<unknown> | null;
 };
 
 export function VideoStream(props: TVideoStreamProps) {
-  const { localTrack, localAudioTrack, onCallEndClick } = props;
+  const { localTrack, localAudioTrack, onCallEndClick, dataChannel } = props;
+
+  const [isChatOpened, setIsChatOpened] = React.useState(false);
 
   return (
-    <div className="flex flex-col flex-1">
+    <div className="flex flex-col flex-1 relative">
       {/* Video section */}
       <div className="flex-1 items-center flex">
         <div className="flex flex-1 justify-center space-x-6">
@@ -39,13 +46,35 @@ export function VideoStream(props: TVideoStreamProps) {
             <DisconnectAction onClick={onCallEndClick} />
             <MediaAction track={localAudioTrack} On={Mic} Off={MicOff} />
             <MediaAction track={localTrack} On={Video} Off={VideoOff} />
-            <ChatAction />
+            <ChatAction
+              isEnabled={isChatOpened}
+              setIsEnabled={setIsChatOpened}
+            />
           </div>
           <div className="flex-1 flex justify-end">
             <span className="font-bold text-muted">WebRTC Example</span>
           </div>
         </div>
       </div>
+
+      {/* Chat */}
+      {dataChannel && (
+        <div
+          className={clsx(
+            "overflow-hidden transition-all flex self-end absolute bottom-24 right-0 w-96",
+            isChatOpened ? "h-[500px] opacity-100" : "h-0 opacity-0"
+          )}
+        >
+          <div className="w-full h-[500px] flex">
+            <RealtimeChat
+              userLabel="You"
+              avatarLabel="Outspeed"
+              heading="Messages"
+              dataChannel={dataChannel}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
