@@ -1,7 +1,6 @@
-import React from "react";
 import { RealtimeExamples } from "./RealtimeExamples";
 import { buttonVariants } from "./components/button";
-import { Github } from "lucide-react";
+import { FileIcon, Github } from "lucide-react";
 import { WebRTCTakeInput } from "./WebRTCTakeInput";
 import { TRealtimeConfig } from "@outspeed/core";
 import { TRealtimeWebSocketConfig } from "@outspeed/core";
@@ -50,6 +49,17 @@ export function Landing(props: TLandingProps) {
               })}
             >
               <Github className="h-5 w-5" />
+            </a>
+            <a
+              target="_blank"
+              href="https://docs.outspeed.ai/guide/quickstart"
+              className={buttonVariants({
+                variant: "ghost",
+                className: "w-10 h-10",
+                size: "icon",
+              })}
+            >
+              <FileIcon className="h-5 w-5" />
             </a>
           </div>
         </div>
