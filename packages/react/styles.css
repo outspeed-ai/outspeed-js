@@ -48,7 +48,7 @@
     --secondary-foreground: 0 0% 10%; 
 
     --muted: 0 0% 30%; 
-    --muted-foreground: 0 0% 70%; 
+    --muted-foreground: 0 0% 50%; 
 
     --accent: 204 70% 7%; 
     --accent-foreground: 0 0% 90%;
@@ -57,7 +57,7 @@
     --destructive-foreground: 0 0% 95%; /* very light gray text for destructive actions */
 
     --border: 183, 66%, 30%; 
-    --input: 183, 66%, 60%; 
+    --input: 0, 0%, 20%; 
     --ring: 183, 66%, 30%; 
 
     --chart-1: 0 0% 35%; 
