@@ -12,6 +12,8 @@ export type RealtimeChatProps = {
    */
   heading?: string;
 
+  noMessage?: string;
+
   userLabel?: string;
 
   avatarLabel?: string;
@@ -24,6 +26,7 @@ export function RealtimeChat(props: RealtimeChatProps) {
     heading = "Chat",
     userLabel = "User",
     avatarLabel = "Avatar",
+    noMessage = "",
   } = props;
   const chatRef = useRef<HTMLDivElement>(null);
   const [messages, setMessages] = useState<
@@ -99,6 +102,11 @@ export function RealtimeChat(props: RealtimeChatProps) {
       <div className="p-2 font-bold text-center">{heading}</div>
       <div className="overflow-auto flex flex-1" ref={chatRef}>
         <section className="flex-1 flex flex-col space-y-2 px-4 mt-4 pb-2">
+          {messages.length === 0 && noMessage && (
+            <div className="text-muted flex flex-1 justify-center items-center">
+              {noMessage}
+            </div>
+          )}
           {messages.map((msg, index) => {
             const data = msg.content || msg.text;
             if (!data) return null;
@@ -110,7 +118,7 @@ export function RealtimeChat(props: RealtimeChatProps) {
                   className="ml-auto text-right inline-flex flex-col space-y-1 max-w-[200px]"
                 >
                   <span className="font-bold">{userLabel}</span>
-                  <span className=" py-2 px-4 rounded-[8px] bg-primary text-primary-foreground">
+                  <span className="py-2 px-4 rounded-[8px] bg-background text-foreground">
                     {data}
                   </span>
                 </div>
@@ -123,7 +131,7 @@ export function RealtimeChat(props: RealtimeChatProps) {
                 className="mr-auto inline-flex flex-col space-y-1 max-w-[200px]"
               >
                 <span className="font-bold">{avatarLabel}</span>
-                <span className=" py-2 px-4 rounded-[8px] bg-background text-foreground">
+                <span className="py-2 px-4 rounded-[8px] bg-primary text-primary-foreground">
                   {data}
                 </span>
               </div>
