@@ -73,6 +73,7 @@ export function MeetingLayout(props: TMeetingLayoutProps) {
               avatarLabel="Outspeed"
               heading="Messages"
               dataChannel={dataChannel}
+              noMessage="Your conversation will appear here."
             />
           </div>
         </div>
