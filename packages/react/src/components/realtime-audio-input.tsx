@@ -32,6 +32,16 @@ export type TRealtimeAudioInputProps = {
    * Callback when the value changes.
    */
   onChange: (value: string) => void;
+
+  /**
+   * If then border and label color will be red.
+   */
+  isError?: boolean;
+
+  /**
+   * If defined then error msg will be shown below description.
+   */
+  errorMsg?: string;
 };
 
 export function RealtimeAudioInput(props: TRealtimeAudioInputProps) {
@@ -41,15 +51,19 @@ export function RealtimeAudioInput(props: TRealtimeAudioInputProps) {
     placeholder = "Select audio device",
     label = "Audio",
     description,
+    isError,
+    errorMsg,
   } = props;
 
   const { availableAudioDevices } = useAvailableMediaDevices();
 
   return (
     <FormItem>
-      <FormLabel htmlFor="audio-device">{label}</FormLabel>
+      <FormLabel htmlFor="audio-device" isError={isError}>
+        {label}
+      </FormLabel>
       <Select onValueChange={onChange} value={value}>
-        <SelectTrigger id="audio-device">
+        <SelectTrigger id="audio-device" isError={isError}>
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent>
@@ -61,6 +75,7 @@ export function RealtimeAudioInput(props: TRealtimeAudioInputProps) {
         </SelectContent>
       </Select>
       {description && <FormDescription>{description}</FormDescription>}
+      {errorMsg && <FormDescription isError>{errorMsg}</FormDescription>}
     </FormItem>
   );
 }

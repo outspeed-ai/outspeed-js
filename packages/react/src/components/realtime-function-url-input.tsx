@@ -1,6 +1,7 @@
 import React from "react";
 import { FormDescription, FormItem, FormLabel } from "./__internal/form";
 import { Input } from "./__internal/input";
+import { cn } from "./__internal/utils";
 
 export type TRealtimeFunctionURLInputProps = {
   /**
@@ -26,6 +27,15 @@ export type TRealtimeFunctionURLInputProps = {
    * Callback when the value changes.
    */
   onChange: (e: React.FormEvent<HTMLInputElement>) => void;
+  /**
+   * If then border and label color will be red.
+   */
+  isError?: boolean;
+
+  /**
+   * If defined then error msg will be shown below description.
+   */
+  errorMsg?: string;
 };
 
 export function RealtimeFunctionURLInput(
@@ -37,16 +47,26 @@ export function RealtimeFunctionURLInput(
     placeholder = "https://infra.getadapt.ai/run/...",
     description,
     label = "Function URL",
+    isError,
+    errorMsg,
   } = props;
 
   return (
     <FormItem>
       <FormLabel className="space-y-2">
-        <div className="inline">{label}</div>
+        <div className={cn("inline", isError && "text-destructive")}>
+          {label}
+        </div>
 
-        <Input placeholder={placeholder} value={value} onChange={onChange} />
+        <Input
+          isError={isError}
+          placeholder={placeholder}
+          value={value}
+          onChange={onChange}
+        />
       </FormLabel>
       {description && <FormDescription>{description}</FormDescription>}
+      {errorMsg && <FormDescription isError>{errorMsg}</FormDescription>}
     </FormItem>
   );
 }
