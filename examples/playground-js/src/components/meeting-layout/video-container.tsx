@@ -15,7 +15,7 @@ export function VideContainer(props: TVideContainerProps) {
   const { track, label, hasControls } = props;
 
   return (
-    <div className="flex-1 relative group">
+    <div className="flex-1 relative group rounded-lg border border-secondary">
       {hasControls && (
         <div className="absolute top-2 right-2 opacity-0 space-x-3 group-hover:opacity-100">
           {track && <MediaAction track={track} Off={VideoOff} On={Video} />}

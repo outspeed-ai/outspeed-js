@@ -11,7 +11,7 @@ export function ChatAction(props: TChatActionProps) {
 
   return (
     <Button
-      className="rounded-full w-10 h-10"
+      className="rounded-full w-10 h-10 hidden sm:inline-flex"
       variant={isEnabled ? "default" : "outline"}
       size="icon"
       onClick={() => setIsEnabled(!isEnabled)}

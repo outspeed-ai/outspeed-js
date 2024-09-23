@@ -37,8 +37,8 @@ export function MeetingLayout(props: TMeetingLayoutProps) {
   return (
     <div className="flex flex-col flex-1 relative">
       {/* Video section */}
-      <div className="flex-1 items-center flex">
-        <div className="flex flex-1 justify-center space-x-6">
+      <div className="flex-1 items-center flex max-w-[calc(100vw-32px)]">
+        <div className="flex-1 justify-center overflow-hidden flex flex-col space-y-6 sm:flex-row sm:space-x-6 sm:space-y-0">
           {remoteTrack && (
             <VideContainer
               track={remoteTrack}
@@ -78,7 +78,7 @@ export function MeetingLayout(props: TMeetingLayoutProps) {
       {/* Call Section */}
       <div className="pb-4 flex">
         <div className="flex flex-1 p-4 rounded-md">
-          <div className="flex-1 flex justify-start items-center space-x-4">
+          <div className="flex-1 justify-start items-center space-x-4 hidden sm:flex">
             <div className="uppercase font-bold">
               <Clock />
             </div>
@@ -92,7 +92,7 @@ export function MeetingLayout(props: TMeetingLayoutProps) {
               setIsEnabled={setIsChatOpened}
             />
           </div>
-          <div className="flex-1 flex justify-end">
+          <div className="flex-1 justify-end items-center hidden sm:flex">
             <span className="font-bold text-muted">{title}</span>
           </div>
         </div>

@@ -50,7 +50,7 @@ export function Chat(props: TChatProps) {
     <div
       ref={chatContainerRef}
       className={clsx(
-        "overflow-hidden transition-all flex self-end right-0",
+        "overflow-hidden transition-all self-end right-0 hidden sm:flex",
         isOpen ? "w-[350px] ml-6 opacity-100" : "opacity-0 w-0"
       )}
     >
