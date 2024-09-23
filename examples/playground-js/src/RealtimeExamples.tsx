@@ -42,11 +42,11 @@ export function RealtimeExamples(props: TRealtimeExamples) {
 
   return (
     <div className="flex-1 mt-20">
-      <div className="flex flex-wrap gap-4">
+      <div className="flex flex-wrap gap-4 flex-col sm:flex-row">
         {data.map((item) => (
           <div
             className={clsx(
-              "border border-[#222] max-w-[250px] p-4 rounded cursor-pointer hover:bg-accent hover:border-transparent",
+              "border border-[#222] flex-1 p-4 rounded cursor-pointer hover:bg-accent hover:border-transparent md:max-w-[250px] md:flex-auto",
               selected === item.id && "border-primary hover:!border-primary"
             )}
             key={item.title}
