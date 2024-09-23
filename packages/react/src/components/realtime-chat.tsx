@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 
 import { DataChannel, isMessageEvent } from "@outspeed/core";
 import { useRealtimeToast } from "../hooks";
+import { Cross2Icon } from "@radix-ui/react-icons";
 
 export type RealtimeChatProps = {
   dataChannel: DataChannel<unknown>;
@@ -17,6 +18,11 @@ export type RealtimeChatProps = {
   userLabel?: string;
 
   avatarLabel?: string;
+
+  /**
+   * If defined then close button will be shown.
+   */
+  onCloseButtonClick?: () => void;
 };
 
 export function RealtimeChat(props: RealtimeChatProps) {
@@ -27,6 +33,7 @@ export function RealtimeChat(props: RealtimeChatProps) {
     userLabel = "User",
     avatarLabel = "Avatar",
     noMessage = "",
+    onCloseButtonClick,
   } = props;
   const chatRef = useRef<HTMLDivElement>(null);
   const [messages, setMessages] = useState<
@@ -99,7 +106,17 @@ export function RealtimeChat(props: RealtimeChatProps) {
       id="chat"
       className="flex-1 h-full flex flex-col rounded-lg bg-foreground text-background"
     >
-      <div className="p-2 font-bold text-center">{heading}</div>
+      <div className="p-2 font-bold flex justify-between items-center relative">
+        <span>{heading}</span>
+        {onCloseButtonClick && (
+          <button
+            onClick={onCloseButtonClick}
+            className="hover:bg-red-100 p-2 rounded-full"
+          >
+            <Cross2Icon className="h-3 w-3" />
+          </button>
+        )}
+      </div>
       <div className="overflow-auto flex flex-1" ref={chatRef}>
         <section className="flex-1 flex flex-col space-y-2 px-4 mt-4 pb-2">
           {messages.length === 0 && noMessage && (
