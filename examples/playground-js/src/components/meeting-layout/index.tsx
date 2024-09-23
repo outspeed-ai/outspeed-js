@@ -7,9 +7,9 @@ import { DisconnectAction } from "./disconnect-action";
 import { Clock } from "./clock";
 import { DataChannel } from "@outspeed/core";
 import React from "react";
-import { RealtimeAudio, RealtimeChat } from "@outspeed/react";
-import clsx from "clsx";
+import { RealtimeAudio } from "@outspeed/react";
 import { AudioVisualizerContainer } from "./audio-visualzier-container";
+import { Chat } from "./chat";
 
 export type TMeetingLayoutProps = {
   remoteTrack: Track | null;
@@ -66,6 +66,13 @@ export function MeetingLayout(props: TMeetingLayoutProps) {
             />
           )}
         </div>
+        {dataChannel && (
+          <Chat
+            onRequestClose={() => setIsChatOpened(false)}
+            dataChannel={dataChannel}
+            isOpen={isChatOpened}
+          />
+        )}
       </div>
 
       {/* Call Section */}
@@ -90,26 +97,6 @@ export function MeetingLayout(props: TMeetingLayoutProps) {
           </div>
         </div>
       </div>
-
-      {/* Chat */}
-      {dataChannel && (
-        <div
-          className={clsx(
-            "overflow-hidden transition-all flex self-end absolute bottom-24 right-0 w-96",
-            isChatOpened ? "h-[500px] opacity-100" : "h-0 opacity-0"
-          )}
-        >
-          <div className="w-full h-[500px] flex">
-            <RealtimeChat
-              userLabel="You"
-              avatarLabel="Outspeed"
-              heading="Messages"
-              dataChannel={dataChannel}
-              noMessage="Your conversation will appear here."
-            />
-          </div>
-        </div>
-      )}
     </div>
   );
 }
