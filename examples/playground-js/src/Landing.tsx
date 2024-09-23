@@ -5,6 +5,7 @@ import { WebRTCTakeInput } from "./WebRTCTakeInput";
 import { TRealtimeConfig } from "@outspeed/core";
 import { TRealtimeWebSocketConfig } from "@outspeed/core";
 import { WebSocketTakeInput } from "./WebSocketTakeInput";
+import clsx from "clsx";
 
 export type TLandingProps = {
   selectedExample: string;
@@ -15,9 +16,9 @@ export type TLandingProps = {
 export function Landing(props: TLandingProps) {
   const { onSubmit, selectedExample, setSelectedExample } = props;
   return (
-    <div className="flex h-screen w-screen">
-      <div className="flex-1 bg-[hsl(204,80%,5%)] flex justify-end">
-        <div className="flex-1 max-w-2xl p-4 flex flex-col">
+    <div className="flex h-screen w-screen flex-col items-center md:items-stretch md:flex-row">
+      <div className="flex-1 bg-[hsl(204,80%,5%)] w-full flex justify-center md:justify-end">
+        <div className="flex-1 p-4 flex flex-col max-w-lg md:max-w-2xl">
           {/* Logo */}
           <div className="mt-10">
             <img src="/outspeed.svg" className="h-10" />
@@ -38,34 +39,11 @@ export function Landing(props: TLandingProps) {
             selected={selectedExample}
             onClick={(id) => setSelectedExample(id)}
           />
-          <div className="mt-auto">
-            <a
-              target="_blank"
-              href="https://github.com/outspeed-ai/outspeed-js"
-              className={buttonVariants({
-                variant: "ghost",
-                className: "w-14 h-14",
-                size: "icon",
-              })}
-            >
-              <Github className="h-7 w-7" />
-            </a>
-            <a
-              target="_blank"
-              href="https://docs.outspeed.ai/guide/quickstart"
-              className={buttonVariants({
-                variant: "ghost",
-                className: "w-14 h-14",
-                size: "icon",
-              })}
-            >
-              <FileIcon className="h-7 w-7" />
-            </a>
-          </div>
+          <Links className="hidden md:block" />
         </div>
       </div>
-      <div className="flex-1 flex justify-start p-4">
-        <div className="flex-1 max-w-2xl flex flex-col justify-center px-10">
+      <div className="flex-1 flex w-full justify-center md:justify-start">
+        <div className="flex-1 flex flex-col max-w-lg md:px-10 md:max-w-2xl p-4">
           {selectedExample === "webrtc" && (
             <WebRTCTakeInput onSubmit={onSubmit} />
           )}
@@ -74,6 +52,40 @@ export function Landing(props: TLandingProps) {
           )}
         </div>
       </div>
+      <div className="w-full justify-center mt-4 flex md:hidden">
+        <div className="max-w-lg flex-1">
+          <Links />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Links(props: React.HTMLProps<HTMLDivElement>) {
+  return (
+    <div {...props} className={clsx("mt-4", props.className)}>
+      <a
+        target="_blank"
+        href="https://github.com/outspeed-ai/outspeed-js"
+        className={buttonVariants({
+          variant: "ghost",
+          className: "w-12 h-12",
+          size: "icon",
+        })}
+      >
+        <Github className="h-6 w-6" />
+      </a>
+      <a
+        target="_blank"
+        href="https://docs.outspeed.ai/guide/quickstart"
+        className={buttonVariants({
+          variant: "ghost",
+          className: "w-12 h-12",
+          size: "icon",
+        })}
+      >
+        <FileIcon className="h-6 w-6" />
+      </a>
     </div>
   );
 }
