@@ -34,7 +34,7 @@ export function WebRTCTakeInput(props: TWebRTCTakeInputProps) {
 
   function handleFormSubmit() {
     let isFormValid = true;
-    if (!audioDeviceId || !videoDeviceId) {
+    if (!audioDeviceId && !videoDeviceId) {
       setIsMediaMissing(true);
       isFormValid = false;
     }
