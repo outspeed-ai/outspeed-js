@@ -44,22 +44,22 @@ export function Landing(props: TLandingProps) {
               href="https://github.com/outspeed-ai/outspeed-js"
               className={buttonVariants({
                 variant: "ghost",
-                className: "w-10 h-10",
+                className: "w-14 h-14",
                 size: "icon",
               })}
             >
-              <Github className="h-5 w-5" />
+              <Github className="h-7 w-7" />
             </a>
             <a
               target="_blank"
               href="https://docs.outspeed.ai/guide/quickstart"
               className={buttonVariants({
                 variant: "ghost",
-                className: "w-10 h-10",
+                className: "w-14 h-14",
                 size: "icon",
               })}
             >
-              <FileIcon className="h-5 w-5" />
+              <FileIcon className="h-7 w-7" />
             </a>
           </div>
         </div>
