@@ -52,6 +52,20 @@ export function RealtimeAudioVisualizer(props: RealtimeAudioVisualizerProps) {
   React.useEffect(() => {
     init();
     fitCanvasToContainer();
+
+    const resizeObserver = new ResizeObserver(fitCanvasToContainer);
+
+    const parentElement = canvasRef.current?.parentElement;
+
+    if (parentElement) {
+      resizeObserver.observe(parentElement);
+    }
+
+    return () => {
+      if (resizeObserver && parentElement) {
+        resizeObserver.unobserve(parentElement);
+      }
+    };
   }, [init, fitCanvasToContainer]);
 
   React.useEffect(() => {
@@ -62,14 +76,14 @@ export function RealtimeAudioVisualizer(props: RealtimeAudioVisualizerProps) {
 
     if (!ctx) return;
 
-    const draw = setupDraw(canvas, ctx, threshold);
+    const draw = setupDraw(threshold);
 
     const animate = () => {
       if (analyser && dataArray) {
         analyser.getByteFrequencyData(dataArray);
-        draw(dataArray);
+        draw(canvas, ctx, dataArray);
       } else {
-        draw(null);
+        draw(canvas, ctx, null);
       }
 
       requestAnimationFrame(animate);
@@ -85,28 +99,28 @@ function lerp(start: number, end: number) {
   return start + (end - start) * 0.1;
 }
 
-function setupDraw(
-  canvas: HTMLCanvasElement,
-  ctx: CanvasRenderingContext2D,
-  threshold: number
-) {
+function setupDraw(threshold: number) {
   const indexes = [5, 8, 10, 14, 16, 18, 20];
   const dpr = window.devicePixelRatio || 1;
-  const width = canvas.width / dpr;
-  const height = canvas.height / dpr;
 
-  // Center coordinates
-  const x = width / 2;
-  const y = height / 2;
+  const prevRadius = indexes.map(() => 0);
 
-  const dim = x > y ? y : x;
+  return function draw(
+    canvas: HTMLCanvasElement,
+    ctx: CanvasRenderingContext2D,
+    dataArray: Uint8Array | null
+  ) {
+    const width = canvas.width / dpr;
+    const height = canvas.height / dpr;
 
-  const baseRadius = dim / 2;
-  const maxRadiusOffset = baseRadius * 0.9;
+    // Center coordinates
+    const x = width / 2;
+    const y = height / 2;
 
-  const prevRadius = indexes.map(() => baseRadius);
+    const dim = x > y ? y : x;
 
-  return function draw(dataArray: Uint8Array | null) {
+    const baseRadius = dim / 2;
+    const maxRadiusOffset = baseRadius * 0.9;
     ctx.clearRect(0, 0, width, height);
 
     if (!dataArray) return;
