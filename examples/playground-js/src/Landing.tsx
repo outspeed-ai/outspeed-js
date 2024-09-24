@@ -20,8 +20,10 @@ export function Landing(props: TLandingProps) {
       <div className="flex-1 bg-[hsl(204,80%,5%)] w-full flex justify-center md:justify-end">
         <div className="flex-1 p-4 flex flex-col max-w-lg md:max-w-2xl">
           {/* Logo */}
-          <div className="mt-10">
-            <img src="/outspeed.svg" className="h-10" />
+          <div className="mt-10 flex justify-start">
+            <a href="https://outspeed.com">
+              <img src="/outspeed.svg" className="h-10" />
+            </a>
           </div>
           {/* Description */}
           <div className="mt-10 text-[#999] pr-10">
