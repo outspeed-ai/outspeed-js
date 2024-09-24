@@ -79,7 +79,7 @@ function Links(props: React.HTMLProps<HTMLDivElement>) {
       </a>
       <a
         target="_blank"
-        href="https://docs.outspeed.ai/guide/quickstart"
+        href="https://docs.outspeed.com/examples/quickstart"
         className={buttonVariants({
           variant: "ghost",
           className: "w-12 h-12",
