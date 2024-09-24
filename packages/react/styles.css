@@ -41,7 +41,7 @@
 
     --popover: 204 80% 5%; 
     --popover-foreground: 0 0% 90%; 
-    --primary: 183 63% 60%;
+    --primary: 187 66% 60%;
     --primary-foreground: 0 0% 0%; 
 
     --secondary: 0 0% 90%; 
@@ -56,9 +56,9 @@
     --destructive: 0 62% 50%; /* dark gray for destructive actions */
     --destructive-foreground: 0 0% 95%; /* very light gray text for destructive actions */
 
-    --border: 183, 66%, 30%; 
-    --input: 0, 0%, 20%; 
-    --ring: 183, 66%, 30%; 
+    --border: 204 17% 23%; 
+    --input: 203 32% 14%; 
+    --ring: 183 66% 30%; 
 
     --chart-1: 0 0% 35%; 
     --chart-2: 0 0% 30%; 
@@ -66,6 +66,14 @@
     --chart-4: 0 0% 40%; 
     --chart-5: 0 0% 45%; 
 
+    --chat-bg: #131924; 
+    --chat-fg: white;
+    --chat-user-bg: #303C44;
+    --chat-user-fg: white;
+    --chat-agent-bg: #192730;
+    --chat-agent-fg: white;
+    --chat-input-bg: #192130;
+    --chat-input-fg: #fff;
 
   }
 }
