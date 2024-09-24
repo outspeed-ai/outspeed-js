@@ -46,7 +46,7 @@ export function RealtimeExamples(props: TRealtimeExamples) {
         {data.map((item) => (
           <div
             className={clsx(
-              "border border-[#222] flex-1 p-4 rounded cursor-pointer hover:bg-accent hover:border-transparent md:max-w-[250px] md:flex-auto",
+              "border flex-1 p-4 rounded cursor-pointer hover:bg-accent hover:border-transparent md:max-w-[250px] md:flex-auto",
               selected === item.id && "border-primary hover:!border-primary"
             )}
             key={item.title}

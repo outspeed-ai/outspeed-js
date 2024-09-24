@@ -8,7 +8,7 @@ export function ThankYouScreen(props: TThankYouScreenProps) {
 
   return (
     <div className="flex justify-center h-screen w-screen">
-      <div className="flex flex-1 max-w-[1376px] p-4">
+      <div className="flex flex-1 max-w-[1344px] p-4">
         <div className="flex-1 flex flex-col">
           {/* Logo */}
           <div className="mt-10">

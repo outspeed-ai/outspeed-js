@@ -16,7 +16,7 @@ export function RealtimeApp(props: TRealtimeAppProps) {
       <div className="flex flex-1 max-w-[1344px] p-4">
         <div className="flex-1 flex flex-col">
           {/* Logo */}
-          <div className="mt-10 flex justify-start" onClick={onDisconnect}>
+          <div className="mt-10 flex justify-start">
             <a href="https://outspeed.com">
               <img src="/outspeed.svg" className="h-10" />
             </a>

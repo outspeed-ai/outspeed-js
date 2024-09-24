@@ -16,7 +16,7 @@ export function AudioVisualizerContainer(
   const { track, label, hasControls, threshold } = props;
 
   return (
-    <div className="flex-1 relative group flex justify-center rounded-lg items-center border border-secondary py-10 overflow-hidden max-h-72 sm:max-h-[500px]">
+    <div className="flex-1 relative group flex justify-center rounded-lg items-center border py-10 overflow-hidden max-h-72 sm:max-h-[500px]">
       {hasControls && (
         <div className="absolute top-2 right-2 opacity-0 space-x-3 group-hover:opacity-100">
           <MediaAction track={track} Off={MicOff} On={Mic} />
