@@ -54,8 +54,8 @@ export function Landing(props: TLandingProps) {
           )}
         </div>
       </div>
-      <div className="w-full justify-center mt-4 flex md:hidden">
-        <div className="max-w-lg flex-1">
+      <div className="w-full justify-center mt-16 flex md:hidden">
+        <div className="max-w-lg flex-1 py-4 border-t">
           <Links />
         </div>
       </div>
