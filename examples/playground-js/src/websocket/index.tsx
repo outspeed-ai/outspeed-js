@@ -37,12 +37,13 @@ export function WebSocketRealtimeApp(props: TWebSocketRealtimeAppProps) {
     };
   }, []);
 
-  if (connectionStatus === "connecting")
+  if (connectionStatus === "connecting") {
     return (
       <div className="h-full flex flex-1 justify-center items-center">
         <Loader2 size={48} className="animate-spin" />
       </div>
     );
+  }
 
   if (connectionStatus === "failed") {
     return (

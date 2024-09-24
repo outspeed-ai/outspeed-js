@@ -52,12 +52,13 @@ export function WebRTCRealtimeApp(props: TWebRTCRealtimeApp) {
     onDisconnect();
   }
 
-  if (connectionStatus === "Connecting")
+  if (connectionStatus === "Connecting") {
     return (
       <div className="h-full flex flex-1 justify-center items-center">
         <Loader2 size={48} className="animate-spin" />
       </div>
     );
+  }
 
   if (connectionStatus === "Failed") {
     return (
