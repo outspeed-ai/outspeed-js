@@ -41,7 +41,7 @@
 
     --popover: 204 80% 5%; 
     --popover-foreground: 0 0% 90%; 
-    --primary: 183 66% 30%; 
+    --primary: 183 63% 60%;
     --primary-foreground: 0 0% 0%; 
 
     --secondary: 0 0% 90%; 
@@ -91,3 +91,4 @@
     padding-left: 0.5rem;
   }
 }
+
