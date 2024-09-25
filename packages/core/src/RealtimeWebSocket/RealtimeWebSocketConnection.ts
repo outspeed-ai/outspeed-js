@@ -217,8 +217,6 @@ export class RealtimeWebSocketConnection {
       return { error: "Failed to connect" };
     }
 
-    console.log("So", response.data);
-
     this.socket = new WebSocket(response.data, config.protocols);
     this.dataChannel = new WebSocketDataChannel(this.socket);
 
