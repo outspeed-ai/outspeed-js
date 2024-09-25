@@ -37,8 +37,11 @@ export function MeetingLayout(props: TMeetingLayoutProps) {
 
   const handleResize = React.useCallback(() => {
     if(!container.current) return
+    
+    const parent = container.current.parentElement
+    if(!parent) return
 
-    container.current.style.maxWidth = container.current.clientWidth + 'px'
+    container.current.style.maxWidth = parent.clientWidth + 'px'
   }, [])
 
   React.useEffect(() => {
@@ -54,8 +57,8 @@ export function MeetingLayout(props: TMeetingLayoutProps) {
   return (
     <div className="flex flex-col flex-1 relative">
       {/* Video section */}
-      <div className="flex-1 items-center flex max-w-[calc(100vw-32px)] py-4" ref={container}>
-        <div className="flex-1 justify-center overflow-hidden flex flex-col space-y-6 sm:flex-row sm:space-x-6 sm:space-y-0">
+      <div className="flex-1 items-center flex max-w-[calc(100vw-32px)] py-4">
+        <div className="flex-1 justify-center overflow-hidden flex flex-col space-y-6 sm:flex-row sm:space-x-6 sm:space-y-0" ref={container}>
           {remoteTrack && (
             <VideContainer
               track={remoteTrack}
