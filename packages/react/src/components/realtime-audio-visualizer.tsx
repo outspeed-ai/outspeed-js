@@ -110,8 +110,8 @@ function setupDraw(threshold: number) {
     ctx: CanvasRenderingContext2D,
     dataArray: Uint8Array | null
   ) {
-    const width = canvas.width / dpr;
-    const height = canvas.height / dpr;
+    const width = canvas.width;
+    const height = canvas.height;
 
     // Center coordinates
     const x = width / 2;
