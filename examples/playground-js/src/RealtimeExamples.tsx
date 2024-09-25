@@ -70,7 +70,7 @@ export function RealtimeExamples(props: TRealtimeExamples) {
 
   return (
     <div className="flex-1 mt-20">
-      <div className="flex flex-wrap gap-4 flex-col sm:flex-row">
+      <div className="flex flex-wrap gap-4 flex-col md:flex-row">
         {data.map((item) => (
           <div
             className={clsx(
