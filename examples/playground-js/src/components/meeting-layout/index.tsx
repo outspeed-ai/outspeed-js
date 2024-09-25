@@ -54,7 +54,7 @@ export function MeetingLayout(props: TMeetingLayoutProps) {
   return (
     <div className="flex flex-col flex-1 relative">
       {/* Video section */}
-      <div className="flex-1 items-center flex max-w-[calc(100vw-32px)]" ref={container}>
+      <div className="flex-1 items-center flex max-w-[calc(100vw-32px)] p-1" ref={container}>
         <div className="flex-1 justify-center overflow-hidden flex flex-col space-y-6 sm:flex-row sm:space-x-6 sm:space-y-0">
           {remoteTrack && (
             <VideContainer
