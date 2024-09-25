@@ -2,9 +2,11 @@ import { TRealtimeConfig } from "@outspeed/core";
 import { TRealtimeWebSocketConfig } from "@outspeed/core";
 import { WebRTCRealtimeApp } from "./webrtc";
 import { WebSocketRealtimeApp } from "./websocket";
+import { TRoutes } from "./constants";
+import { WebRTCScreenShareRealtimeApp } from "./webrtc-screen-share";
 
 export type TRealtimeAppProps = {
-  selected: string;
+  selected: TRoutes;
   config: TRealtimeWebSocketConfig | TRealtimeConfig;
   onDisconnect: () => void;
 };
@@ -27,6 +29,12 @@ export function RealtimeApp(props: TRealtimeAppProps) {
           {selected === "websocket" && (
             <WebSocketRealtimeApp
               config={config as TRealtimeWebSocketConfig}
+              onDisconnect={onDisconnect}
+            />
+          )}
+          {selected === "webrtc-screen=share" && (
+            <WebRTCScreenShareRealtimeApp
+              config={config}
               onDisconnect={onDisconnect}
             />
           )}

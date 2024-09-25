@@ -6,10 +6,12 @@ import { TRealtimeConfig } from "@outspeed/core";
 import { TRealtimeWebSocketConfig } from "@outspeed/core";
 import { WebSocketTakeInput } from "./WebSocketTakeInput";
 import clsx from "clsx";
+import { TRoutes } from "./constants";
+import { WebRTCScreenShareTakeInput } from "./WebRTCScreenShareTakeInput";
 
 export type TLandingProps = {
-  selectedExample: string;
-  setSelectedExample: (selected: string) => void;
+  selectedExample: TRoutes;
+  setSelectedExample: (selected: TRoutes) => void;
   onSubmit: (data: TRealtimeConfig | TRealtimeWebSocketConfig) => void;
 };
 
@@ -51,6 +53,9 @@ export function Landing(props: TLandingProps) {
           )}
           {selectedExample === "websocket" && (
             <WebSocketTakeInput onSubmit={onSubmit} />
+          )}
+          {selectedExample === "webrtc-screen=share" && (
+            <WebRTCScreenShareTakeInput onSubmit={onSubmit} />
           )}
         </div>
       </div>
