@@ -99,6 +99,7 @@ export function WebRTCScreenShareTakeInput(
         }}
         value={screenShareInput}
         isError={isScreenShareInputMissing}
+        description='Select "Yes" to confirm that you want to share your screen.'
         errorMsg={
           isScreenShareInputMissing
             ? "In this example, please agree to share your screen as we will need this to proceed."
