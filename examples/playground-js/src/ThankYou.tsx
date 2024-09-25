@@ -7,7 +7,7 @@ export function ThankYouScreen(props: TThankYouScreenProps) {
   const { onClick } = props;
 
   return (
-    <div className="flex justify-center h-screen w-screen">
+    <div className="flex justify-center h-dvh w-dvw">
       <div className="flex flex-1 max-w-[1344px] p-4">
         <div className="flex-1 flex flex-col">
           {/* Logo */}
