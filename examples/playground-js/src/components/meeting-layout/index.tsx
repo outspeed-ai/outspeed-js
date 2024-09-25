@@ -33,11 +33,28 @@ export function MeetingLayout(props: TMeetingLayoutProps) {
   } = props;
 
   const [isChatOpened, setIsChatOpened] = React.useState(false);
+  const container = React.useRef<HTMLDivElement>(null)
+
+  const handleResize = React.useCallback(() => {
+    if(!container.current) return
+
+    container.current.style.maxWidth = container.current.clientWidth + 'px'
+  }, [])
+
+  React.useEffect(() => {
+    handleResize()
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)  
+    }
+
+  }, [handleResize])
 
   return (
     <div className="flex flex-col flex-1 relative">
       {/* Video section */}
-      <div className="flex-1 items-center flex max-w-[calc(100vw-32px)]">
+      <div className="flex-1 items-center flex max-w-[calc(100vw-32px)]" ref={container}>
         <div className="flex-1 justify-center overflow-hidden flex flex-col space-y-6 sm:flex-row sm:space-x-6 sm:space-y-0">
           {remoteTrack && (
             <VideContainer
