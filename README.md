@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://outspeed.ai" target="_blank">
+  <a href="https://outspeed.com" target="_blank">
     <picture>
       <source srcset="./assets/logo-white.webp" media="(prefers-color-scheme: dark)" />
       <source srcset="./assets/logo-black.webp" media="(prefers-color-scheme: light)" />
@@ -12,7 +12,7 @@ The `outspeed-js` library provides a simple API that facilitates easy connection
 
 # Documentation
 
-You can read the [docs](http://docs.outspeed.ai/) to learn more about the SDK.
+You can read the [docs](http://docs.outspeed.com/) to learn more about the SDK.
 
 # Installation
 

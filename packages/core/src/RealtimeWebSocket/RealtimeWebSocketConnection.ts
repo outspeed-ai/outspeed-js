@@ -64,7 +64,11 @@ export class RealtimeWebSocketConnection {
 
       // Waiting for connection to start.
       // Making fetch request to check whether it is started.
-      await fetchWithRetry(functionURL + "connections", undefined, retryOnFail);
+      await fetchWithRetry(
+        functionURL.replace(/\/$/, "") + "/connections",
+        undefined,
+        retryOnFail
+      );
 
       if (!payload || typeof payload !== "object") {
         throw new Error(
@@ -159,7 +163,6 @@ export class RealtimeWebSocketConnection {
     this._logger?.info(this._logLabel, "Received message", message.type);
 
     if (message.type.startsWith("audio")) {
-
       this.mediaManager.processAudioPayload({
         ...message,
       });

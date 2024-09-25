@@ -1,16 +1,16 @@
 import React from "react";
-import { useWebRTC, RealtimeChat, useRealtimeToast } from "@outspeed/react";
+import { useWebRTC, useRealtimeToast } from "@outspeed/react";
 import { TRealtimeConfig } from "@outspeed/core";
-import { VideoSection } from "./VideoSection";
 import { Loader2 } from "lucide-react";
 import { Button } from "../components/button";
+import { MeetingLayout } from "../components/meeting-layout";
 
-export type TRealtimeAppProps = {
+export type TWebRTCRealtimeApp = {
   onDisconnect: () => void;
   config: TRealtimeConfig;
 };
 
-export function RealtimeApp(props: TRealtimeAppProps) {
+export function WebRTCRealtimeApp(props: TWebRTCRealtimeApp) {
   const { config, onDisconnect } = props;
   const { toast } = useRealtimeToast();
 
@@ -52,12 +52,13 @@ export function RealtimeApp(props: TRealtimeAppProps) {
     onDisconnect();
   }
 
-  if (connectionStatus === "Connecting")
+  if (connectionStatus === "Connecting") {
     return (
       <div className="h-full flex flex-1 justify-center items-center">
         <Loader2 size={48} className="animate-spin" />
       </div>
     );
+  }
 
   if (connectionStatus === "Failed") {
     return (
@@ -80,19 +81,16 @@ export function RealtimeApp(props: TRealtimeAppProps) {
   return (
     <div className="h-full flex flex-1">
       <div className="flex-1 flex">
-        <VideoSection
+        <MeetingLayout
+          title="WebRTC Example"
           onCallEndClick={handleDisconnect}
           localTrack={getLocalVideoTrack()}
           remoteTrack={getRemoteVideoTrack()}
           localAudioTrack={getLocalAudioTrack()}
           remoteAudioTrack={getRemoteAudioTrack()}
+          dataChannel={dataChannel}
         />
       </div>
-      {dataChannel && (
-        <div className="w-[350px] px-4 hidden md:block">
-          <RealtimeChat dataChannel={dataChannel} />
-        </div>
-      )}
     </div>
   );
 }
