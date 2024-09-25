@@ -9,8 +9,6 @@ export type TChatProps = {
   onRequestClose: () => void;
 };
 
-const DEFAULT_CHAT_BOX_HEIGHT = 500;
-
 export function Chat(props: TChatProps) {
   const { dataChannel, isOpen, onRequestClose } = props;
   const chatContainerRef = React.useRef<HTMLDivElement>(null);
@@ -20,20 +18,8 @@ export function Chat(props: TChatProps) {
       return;
     }
 
-    const parent = chatContainerRef.current.parentElement;
+    chatContainerRef.current.style.height = `${window.innerHeight - 225}px`;
 
-    if (!parent) {
-      chatContainerRef.current.style.height = `${DEFAULT_CHAT_BOX_HEIGHT}px`;
-      return;
-    }
-
-    const height = parent.clientHeight;
-
-    if (height) {
-      chatContainerRef.current.style.height = `${height}px`;
-    } else {
-      chatContainerRef.current.style.height = `${DEFAULT_CHAT_BOX_HEIGHT}px`;
-    }
   }, []);
 
   React.useEffect(() => {
