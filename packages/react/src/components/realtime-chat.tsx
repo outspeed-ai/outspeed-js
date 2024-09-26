@@ -1,12 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 
-import {
-  DataChannel,
-  isMessageEvent,
-  isWebRTCMessage,
-  isWebSocketMessage,
-  stitchWebSocketMessage,
-} from "@outspeed/core";
+import { DataChannel, isMessageEvent } from "@outspeed/core";
 import { useRealtimeToast } from "../hooks";
 import { Cross1Icon } from "@radix-ui/react-icons";
 import { Input } from "./__internal/input";
@@ -49,21 +43,12 @@ export function RealtimeChat(props: RealtimeChatProps) {
   const input = useRef<HTMLInputElement>(null);
 
   function updateMessage(message: { content?: unknown; type: "user" | "bot" }) {
-    if (isWebRTCMessage(message)) {
-      setMessages((currentMessages) => [...currentMessages, message]);
+    if (typeof message !== "object" || !message) return;
+    const { type, content } = message;
 
-      return;
-    } else if (isWebSocketMessage(message)) {
-      setMessages((currentMessages) => [
-        ...currentMessages,
-        {
-          type: message.type,
-          content: stitchWebSocketMessage(message.text),
-        },
-      ]);
-    } else {
-      return;
-    }
+    if (typeof content !== "string") return;
+
+    setMessages((currentMessages) => [...currentMessages, { type, content }]);
 
     setTimeout(() => {
       chatRef.current?.scroll({
