@@ -10,6 +10,7 @@ import React from "react";
 import { RealtimeAudio } from "@outspeed/react";
 import { AudioVisualizerContainer } from "./audio-visualzier-container";
 import { Chat } from "./chat";
+import { RealtimeAvatar } from "../../avatar/AvatarComponent/Avatar";
 
 export type TMeetingLayoutProps = {
   remoteTrack: Track | null;
@@ -66,15 +67,16 @@ export function MeetingLayout(props: TMeetingLayoutProps) {
               hasControls={{ audio: remoteAudioTrack }}
             />
           )}
-          {!remoteTrack && (
+          {!remoteTrack && dataChannel && (
             <>
-              <AudioVisualizerContainer
+            <RealtimeAvatar dataChannel={dataChannel} />
+              {/* <AudioVisualizerContainer
                 track={remoteAudioTrack}
                 label="Outspeed"
                 hasControls
                 threshold={120}
               />
-              <RealtimeAudio track={remoteAudioTrack} />
+              <RealtimeAudio track={remoteAudioTrack} /> */}
             </>
           )}
           {localTrack && <VideContainer track={localTrack} label="You" />}
