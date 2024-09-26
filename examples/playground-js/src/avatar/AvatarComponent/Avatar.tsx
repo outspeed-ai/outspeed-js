@@ -61,7 +61,7 @@ export function RealtimeAvatar(props: RealtimeAvatarProps) {
 
   useEffect(() => {
     const onMessage = (evt: unknown) => {
-      console.log("Recevied message", evt, isMessageEvent(evt))
+      console.log("Recevied message", evt, isMessageEvent(evt));
       if (!isMessageEvent(evt)) {
         return;
       }
@@ -73,8 +73,8 @@ export function RealtimeAvatar(props: RealtimeAvatarProps) {
       try {
         // TODO HERE
         const message = JSON.parse(evt.data);
-        console.log("Parsed message")
-        console.log(message)
+        console.log("Parsed message");
+        console.log(message);
         if (avatar) {
           avatar.speakTextHttp(message.data);
         } else {
@@ -94,9 +94,12 @@ export function RealtimeAvatar(props: RealtimeAvatarProps) {
   return (
     <div
       id="avatar-container"
-      className="h-96 w-96 flex items-center relative border rounded"
+      className="flex-1 relative flex rounded-lg border overflow-hidden h-[500px]"
     >
-      <div ref={avatarRef} className="h-full w-full bg-gradient-to-br from-blue-100 to-blue-300 rounded-lg" />
+      <div
+        ref={avatarRef}
+        className="h-full w-full bg-gradient-to-br from-blue-100 to-blue-300 rounded-lg"
+      />
       {progressValue !== 100 && (
         <div className="absolute inset-0 flex items-center p-4">
           <div className="absolute left-0 right-0 top-0 bottom-0 bg-black opacity-50"></div>
