@@ -4,6 +4,8 @@ import { TRealtimeWebSocketConfig } from "@outspeed/core";
 import { Loader2 } from "lucide-react";
 import { Button } from "../components/button";
 import { MeetingLayout } from "../components/meeting-layout";
+import { Track } from "@outspeed/core";
+import { ETrackOrigin } from "@outspeed/core";
 
 export type TWebSocketRealtimeAppProps = {
   onDisconnect: () => void;
@@ -12,6 +14,10 @@ export type TWebSocketRealtimeAppProps = {
 
 export function WebSocketRealtimeApp(props: TWebSocketRealtimeAppProps) {
   const { config, onDisconnect } = props;
+
+  const [localVideoStream, setLocalVideoStream] = React.useState<Track | null>(
+    null
+  );
 
   const {
     connect,
@@ -28,6 +34,17 @@ export function WebSocketRealtimeApp(props: TWebSocketRealtimeAppProps) {
     disconnect();
     onDisconnect();
   }, [disconnect, onDisconnect]);
+
+  const updateLocalStream = React.useCallback(async () => {
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+
+    const videoTrack = stream.getVideoTracks()[0];
+    setLocalVideoStream(new Track(videoTrack, ETrackOrigin.Local));
+  }, []);
+
+  React.useEffect(() => {
+    updateLocalStream();
+  }, [updateLocalStream]);
 
   React.useEffect(() => {
     connect();
@@ -69,7 +86,7 @@ export function WebSocketRealtimeApp(props: TWebSocketRealtimeAppProps) {
         <MeetingLayout
           title="WebSocket Example"
           onCallEndClick={handleDisconnect}
-          localTrack={null}
+          localTrack={localVideoStream}
           remoteTrack={null}
           localAudioTrack={getLocalAudioTrack()}
           remoteAudioTrack={getRemoteAudioTrack()}
