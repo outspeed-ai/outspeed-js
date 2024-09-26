@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 399.9 400" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
+  
+   <style type="text/css">
+      .st0{fill:#080808;}
+      .st1{fill:url(#a);}
+      .st2{fill:#19D8D8;}
+      .st3{fill:#FFFFFF;}
+   </style>
+   <g transform="translate(-200,-200)">
+   <radialGradient id="a" cx="448.13" cy="351.87" r="189.06" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#063231" offset="0"/><stop stop-color="#028684" offset="1"/></radialGradient><path class="st1" d="m504.1 371.7 88.7 88.6c-4.8 15.3-11.4 29.8-19.5 43.4l-100.6-100.6v-75.8h-75.8l-100.6-100.6c13.5-8.1 28-14.7 43.4-19.5l88.6 88.7v-95.9c15.4 2.2 30.3 6.1 44.4 11.5v84.4l53.5-53.5c11.6 9.3 22.1 19.8 31.4 31.4l-53.5 53.5h84.3c5.4 14.1 9.4 29 11.5 44.4z" fill="url(#a)"/><path class="st2" d="m472.7 327.3v261.2c-14.1 5.4-29 9.4-44.4 11.5v-196.9l-154.5 154.5c-11.6-9.3-22.1-19.8-31.4-31.4l154.5-154.5h-196.9c2.2-15.4 6.1-30.3 11.5-44.4z"/></g></svg>

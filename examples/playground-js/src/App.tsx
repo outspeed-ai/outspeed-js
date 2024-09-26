@@ -1,37 +1,48 @@
-import { WebsocketApp } from "./websocket/WebsocketApp";
-import WebRTCApp from "./webrtc/WebRTCApp";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { RealtimeExamples } from "./RealtimeExamples";
-import WebRTCScreenShareApp from "./webrtc-screen-share/WebRTCScreenShareApp";
 import "@outspeed/react/styles.css";
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <RealtimeExamples />,
-  },
-  {
-    path: "/webrtc",
-    element: <WebRTCApp />,
-  },
-  {
-    path: "/websocket",
-    element: <WebsocketApp />,
-  },
-  {
-    path: "/webrtc-screen-share",
-    element: <WebRTCScreenShareApp />,
-  },
-]);
+import { Landing } from "./Landing";
+import React from "react";
+import { TRealtimeWebSocketConfig } from "@outspeed/core";
+import { TRealtimeConfig } from "@outspeed/core";
+import { RealtimeApp } from "./RealtimeApp";
+import { ThankYouScreen } from "./ThankYou";
 
 export default function App() {
+  const [config, setConfig] = React.useState<
+    TRealtimeWebSocketConfig | TRealtimeConfig
+  >();
+  const [selectedExample, setSelectedExample] = React.useState("webrtc");
+  const [showThankYou, setShowThankYou] = React.useState(false);
+
+  const onDisconnect = React.useCallback(() => {
+    setConfig(undefined);
+    setShowThankYou(true);
+  }, []);
+
+  if (showThankYou) {
+    return (
+      <ThankYouScreen
+        onClick={() => {
+          setShowThankYou(false);
+        }}
+      />
+    );
+  }
+
+  if (!config) {
+    return (
+      <Landing
+        selectedExample={selectedExample}
+        setSelectedExample={setSelectedExample}
+        onSubmit={(_c) => setConfig(_c)}
+      />
+    );
+  }
+
   return (
-    <div className="container h-screen p-4 flex flex-col">
-      <h3 className="font-extrabold">Adapt Playground.</h3>
-      <hr className="mt-4" />
-      <div className="flex justify-center items-center py-4 flex-1">
-        <RouterProvider router={router} />
-      </div>
-    </div>
+    <RealtimeApp
+      onDisconnect={onDisconnect}
+      selected={selectedExample}
+      config={config}
+    />
   );
 }

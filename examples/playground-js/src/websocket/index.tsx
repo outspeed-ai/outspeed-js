@@ -1,16 +1,16 @@
 import React from "react";
-import { useWebSocket, RealtimeChat } from "@outspeed/react";
+import { useWebSocket } from "@outspeed/react";
 import { TRealtimeWebSocketConfig } from "@outspeed/core";
 import { Loader2 } from "lucide-react";
 import { Button } from "../components/button";
-import { View } from "./View";
+import { MeetingLayout } from "../components/meeting-layout";
 
-export type TRealtimeAppProps = {
+export type TWebSocketRealtimeAppProps = {
   onDisconnect: () => void;
   config: TRealtimeWebSocketConfig;
 };
 
-export function RealtimeApp(props: TRealtimeAppProps) {
+export function WebSocketRealtimeApp(props: TWebSocketRealtimeAppProps) {
   const { config, onDisconnect } = props;
 
   const {
@@ -37,12 +37,13 @@ export function RealtimeApp(props: TRealtimeAppProps) {
     };
   }, []);
 
-  if (connectionStatus === "connecting")
+  if (connectionStatus === "connecting") {
     return (
       <div className="h-full flex flex-1 justify-center items-center">
         <Loader2 size={48} className="animate-spin" />
       </div>
     );
+  }
 
   if (connectionStatus === "failed") {
     return (
@@ -65,17 +66,16 @@ export function RealtimeApp(props: TRealtimeAppProps) {
   return (
     <div className="h-full flex flex-1">
       <div className="flex-1 flex">
-        <View
+        <MeetingLayout
+          title="WebSocket Example"
           onCallEndClick={handleDisconnect}
+          localTrack={null}
+          remoteTrack={null}
           localAudioTrack={getLocalAudioTrack()}
           remoteAudioTrack={getRemoteAudioTrack()}
+          dataChannel={dataChannel}
         />
       </div>
-      {dataChannel && (
-        <div className="w-[350px] px-4 hidden md:block">
-          <RealtimeChat dataChannel={dataChannel} />
-        </div>
-      )}
     </div>
   );
 }

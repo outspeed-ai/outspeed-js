@@ -32,6 +32,15 @@ export type TRealtimeVideoInputProps = {
    * Callback when the value changes.
    */
   onChange: (value: string) => void;
+  /**
+   * If then border and label color will be red.
+   */
+  isError?: boolean;
+
+  /**
+   * If defined then error msg will be shown below description.
+   */
+  errorMsg?: string;
 };
 
 export function RealtimeVideoInput(props: TRealtimeVideoInputProps) {
@@ -41,15 +50,19 @@ export function RealtimeVideoInput(props: TRealtimeVideoInputProps) {
     placeholder = "Select video device",
     label = "Video",
     description,
+    isError,
+    errorMsg,
   } = props;
 
   const { availableVideoDevices } = useAvailableMediaDevices();
 
   return (
     <FormItem>
-      <FormLabel htmlFor="video-device">{label}</FormLabel>
+      <FormLabel htmlFor="video-device" isError={isError}>
+        {label}
+      </FormLabel>
       <Select onValueChange={onChange} value={value}>
-        <SelectTrigger id="video-device">
+        <SelectTrigger id="video-device" isError={isError}>
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent>
@@ -61,6 +74,7 @@ export function RealtimeVideoInput(props: TRealtimeVideoInputProps) {
         </SelectContent>
       </Select>
       {description && <FormDescription>{description}</FormDescription>}
+      {errorMsg && <FormDescription isError>{errorMsg}</FormDescription>}
     </FormItem>
   );
 }
