@@ -45,6 +45,22 @@ export function MeetingLayout(props: TMeetingLayoutProps) {
     container.current.style.maxWidth = parent.clientWidth + 'px'
   }, [])
 
+  const handleClick = React.useCallback(() => {
+    if (!dataChannel) return; 
+    dataChannel.send({
+      type: "message",
+      data: "hello"
+    })
+  }, [])
+
+  React.useEffect(() => {
+    window.addEventListener('click', handleClick)
+
+    return () => {
+      window.removeEventListener('click', handleClick)
+    }
+  })
+
   React.useEffect(() => {
     handleResize()
     window.addEventListener('resize', handleResize)

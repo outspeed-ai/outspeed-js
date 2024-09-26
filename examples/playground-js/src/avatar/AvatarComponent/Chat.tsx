@@ -13,25 +13,7 @@ export function RealtimeChat(props: RealtimeChatProps) {
     { content?: string; text?: string; type: "user" | "bot" }[]
   >([]);
   const input = useRef<HTMLInputElement>(null);
-
-  function updateMessage(message: {
-    content?: string;
-    text?: string;
-    type: "user" | "bot";
-  }) {
-    setMessages((currentMessages) => [...currentMessages, message]);
-
-    setTimeout(() => {
-      chatRef.current?.scroll({
-        top: chatRef.current?.scrollHeight,
-        behavior: "smooth",
-      });
-    }, 300);
-  }
-
   function sendMessage(msg: string) {
-    updateMessage({ content: msg, type: "user" });
-
     dataChannel.send({
       type: "message",
       data: msg,
