@@ -30,6 +30,18 @@ const data = [
       },
     ],
   },
+  {
+    title: "3D Avatar",
+    description:
+      "This example uses a 3D avatar to visualize speech and facial expressions, and respond to audio input.",
+    id: "avatar",
+    icons: [
+      {
+        title: "Audio",
+        children: <AudioLinesIcon />,
+      },
+    ],
+  },
 ];
 
 export type TRealtimeExamples = {

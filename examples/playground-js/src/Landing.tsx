@@ -52,6 +52,9 @@ export function Landing(props: TLandingProps) {
           {selectedExample === "websocket" && (
             <WebSocketTakeInput onSubmit={onSubmit} />
           )}
+          {selectedExample === "avatar" && (
+            <WebSocketTakeInput onSubmit={onSubmit} />
+          )}
         </div>
       </div>
       <div className="w-full justify-center mt-16 flex md:hidden">

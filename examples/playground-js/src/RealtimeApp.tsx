@@ -2,6 +2,7 @@ import { TRealtimeConfig } from "@outspeed/core";
 import { TRealtimeWebSocketConfig } from "@outspeed/core";
 import { WebRTCRealtimeApp } from "./webrtc";
 import { WebSocketRealtimeApp } from "./websocket";
+import { AvatarRealtimeApp } from "./avatar";
 
 export type TRealtimeAppProps = {
   selected: string;
@@ -26,6 +27,12 @@ export function RealtimeApp(props: TRealtimeAppProps) {
           )}
           {selected === "websocket" && (
             <WebSocketRealtimeApp
+              config={config as TRealtimeWebSocketConfig}
+              onDisconnect={onDisconnect}
+            />
+          )}
+          {selected === "avatar" && (
+            <AvatarRealtimeApp
               config={config as TRealtimeWebSocketConfig}
               onDisconnect={onDisconnect}
             />
