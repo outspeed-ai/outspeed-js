@@ -21,7 +21,7 @@ export class WebRTCDataChannel implements DataChannel<RTCDataChannel> {
     this.dataChannel.removeEventListener(type, listener);
   }
 
-  send(payload: { type: string } & { [k in string]: unknown }) {
+  send(payload: { type: string; data: string }) {
     try {
       this.dataChannel.send(JSON.stringify(payload));
     } catch (error) {

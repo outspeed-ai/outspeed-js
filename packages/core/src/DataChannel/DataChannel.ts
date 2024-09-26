@@ -39,5 +39,5 @@ export abstract class DataChannel<T> {
    *
    * @param data - The data to send over the data channel
    */
-  abstract send(payload: { type: string } & { [k in string]: unknown }): void;
+  abstract send(payload: { type: string; data: string }): void;
 }
