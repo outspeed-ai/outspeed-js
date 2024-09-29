@@ -63,7 +63,6 @@ export function AvatarRealtimeApp(props: TRealtimeAppProps) {
     );
   }
 
-  getLocalAudioTrack()?.pause();
 
   return (
     <div className="h-full flex flex-1 justify-center items-center">
