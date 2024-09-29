@@ -6,6 +6,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import Stats from 'three/examples/jsm/libs/stats.module.js';
+import { SceneManager } from './SceneManager';
 
 
   type TalkingHeadOptions = {
@@ -345,6 +346,11 @@ class TalkingHead {
     // Avatar height in meters
     // NOTE: The actual value is calculated based on the eye level on avatar load
     this.avatarHeight = 1.7;
+
+    this.sceneManager = new SceneManager(this.nodeAvatar, {
+      ...this.opt,
+      avatarHeight: this.avatarHeight
+  });
 
 
     // Animation templates
@@ -719,46 +725,51 @@ class TalkingHead {
     this.isSpeaking = false;
 
     // Setup 3D Animation
-    this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    this.renderer.setPixelRatio( this.opt.modelPixelRatio * window.devicePixelRatio );
-    this.renderer.setSize(this.nodeAvatar.clientWidth, this.nodeAvatar.clientHeight);
-    this.renderer.outputColorSpace = THREE.SRGBColorSpace;
-    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.shadowMap.enabled = false;
-    this.nodeAvatar.appendChild( this.renderer.domElement );
-    this.camera = new THREE.PerspectiveCamera( 10, this.nodeAvatar.clientWidth / this.nodeAvatar.clientHeight, 0.1, 2000 );
-    this.scene = new THREE.Scene();
-    this.lightAmbient = new THREE.AmbientLight(
-      new THREE.Color( this.opt.lightAmbientColor ),
-      this.opt.lightAmbientIntensity
-    );
-    this.lightDirect = new THREE.DirectionalLight(
-      new THREE.Color( this.opt.lightDirectColor ),
-      this.opt.lightDirectIntensity
-    );
-    this.lightSpot = new THREE.SpotLight(
-      new THREE.Color( this.opt.lightSpotColor ),
-      this.opt.lightSpotIntensity,
-      0,
-      this.opt.lightSpotDispersion
-    );
-    // this.setLighting( this.opt );
-    const pmremGenerator = new THREE.PMREMGenerator( this.renderer );
-    pmremGenerator.compileEquirectangularShader();
-    this.scene.environment = pmremGenerator.fromScene( new RoomEnvironment() ).texture;
-    this.resizeobserver = new ResizeObserver(this.onResize.bind(this));
-    this.resizeobserver.observe(this.nodeAvatar);
+    // REM: this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    // REM: this.renderer.setPixelRatio( this.opt.modelPixelRatio * window.devicePixelRatio );
+    // REM: this.renderer.setSize(this.nodeAvatar.clientWidth, this.nodeAvatar.clientHeight);
+    // REM: this.renderer.outputColorSpace = THREE.SRGBColorSpace;
+    // REM: this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    // REM: this.renderer.shadowMap.enabled = false;
+    // REM: this.nodeAvatar.appendChild( this.renderer.domElement );
 
-    this.controls = new OrbitControls( this.camera, this.renderer.domElement );
-    this.controls.enableZoom = this.opt.cameraZoomEnable;
-    this.controls.enableRotate = this.opt.cameraRotateEnable;
-    this.controls.enablePan = this.opt.cameraPanEnable;
-    this.controls.minDistance = 2;
-    this.controls.maxDistance = 2000;
-    this.controls.autoRotateSpeed = 0;
-    this.controls.autoRotate = false;
-    this.controls.update();
-    this.cameraClock = null;
+    // REM: this.camera = new THREE.PerspectiveCamera( 10, this.nodeAvatar.clientWidth / this.nodeAvatar.clientHeight, 0.1, 2000 );
+
+    // REM: this.scene = new THREE.Scene();
+
+    // REM: this.lightAmbient = new THREE.AmbientLight(
+    // REM:   new THREE.Color( this.opt.lightAmbientColor ),
+    // REM:   this.opt.lightAmbientIntensity
+    // REM: );
+    // REM: this.lightDirect = new THREE.DirectionalLight(
+    // REM:   new THREE.Color( this.opt.lightDirectColor ),
+    // REM:   this.opt.lightDirectIntensity
+    // REM: );
+    // REM: this.lightSpot = new THREE.SpotLight(
+    // REM:   new THREE.Color( this.opt.lightSpotColor ),
+    // REM:   this.opt.lightSpotIntensity,
+    // REM:   0,
+    // REM:   this.opt.lightSpotDispersion
+    // REM: );
+
+    // REM: this.setLighting( this.opt );
+    // REM: const pmremGenerator = new THREE.PMREMGenerator( this.renderer );
+    // REM: pmremGenerator.compileEquirectangularShader();
+    // REM: this.scene.environment = pmremGenerator.fromScene( new RoomEnvironment() ).texture;
+
+    // REM: this.resizeobserver = new ResizeObserver(this.onResize.bind(this));
+    // REM: this.resizeobserver.observe(this.nodeAvatar);
+
+    // REM: this.controls = new OrbitControls( this.camera, this.renderer.domElement );
+    // REM: this.controls.enableZoom = this.opt.cameraZoomEnable;
+    // REM: this.controls.enableRotate = this.opt.cameraRotateEnable;
+    // REM: this.controls.enablePan = this.opt.cameraPanEnable;
+    // REM: this.controls.minDistance = 2;
+    // REM: this.controls.maxDistance = 2000;
+    // REM: this.controls.autoRotateSpeed = 0;
+    // REM: this.controls.autoRotate = false;
+    // REM: this.controls.update();
+    // REM: this.cameraClock = null;
 
     // IK Mesh
     this.ikMesh = new THREE.SkinnedMesh();
@@ -943,12 +954,16 @@ class TalkingHead {
     // Clear previous scene, if avatar was previously loaded
     this.mixer = null;
     if ( this.armature ) {
-      this.clearThree( this.scene );
+      this.clearThree( this.sceneManager.scene );
     }
 
     // Avatar full-body
     this.armature = gltf.scene.getObjectByName( this.opt.modelRoot );
     this.armature.scale.setScalar(1);
+
+
+    // set in sceneManager
+    this.sceneManager.setArmature(this.armature);
 
     // Morph targets
     this.morphs = [];
@@ -1003,13 +1018,13 @@ class TalkingHead {
     });
 
     // Add avatar to scene
-    this.scene.add(gltf.scene);
+    this.sceneManager.scene.add(gltf.scene);
 
     // Add lights
-    this.scene.add( this.lightAmbient );
-    this.scene.add( this.lightDirect );
-    this.scene.add( this.lightSpot );
-    this.lightSpot.target = this.armature.getObjectByName('Head');
+    this.sceneManager.scene.add( this.sceneManager.lightAmbient );
+    this.sceneManager.scene.add( this.sceneManager.lightDirect );
+    this.sceneManager.scene.add( this.sceneManager.lightSpot );
+    this.sceneManager.lightSpot.target = this.armature.getObjectByName('Head');
 
     // Estimate avatar height based on eye level
     const plEye = new THREE.Vector3();
@@ -1017,7 +1032,7 @@ class TalkingHead {
     this.avatarHeight = plEye.y + 0.2;
 
     // Set pose, view and start animation
-    if ( !this.viewName ) this.setView( this.opt.cameraView );
+    if ( !this.viewName ) this.sceneManager.setView( this.opt.cameraView );
     this.setMood( this.avatar.avatarMood || this.moodName || this.opt.avatarMood );
     this.start();
 
@@ -1046,97 +1061,51 @@ class TalkingHead {
   * @param {string} [view=null] Camera view. If null, reset current view
   * @param {Object} [opt=null] Options
   */
-  setView(view, opt = null) {
-    // IMP: console.log(`setView function called at ${new Date().toISOString()}`);
-    if ( view !== 'full' && view !== 'upper' && view !== 'head' && view !== 'mid' ) return;
-    if ( !this.armature ) {
-      this.opt.cameraView = view;
-      return;
-    }
+  // REM:setView(view, opt = null) {
+  // REM:  // IMP: console.log(`setView function called at ${new Date().toISOString()}`);
+  // REM:  if ( view !== 'full' && view !== 'upper' && view !== 'head' && view !== 'mid' ) return;
+  // REM:  if ( !this.armature ) {
+  // REM:    this.opt.cameraView = view;
+  // REM:    return;
+  // REM:  }
 
-    this.viewName = view || this.viewName;
-    opt = opt || {};
+  // REM:  this.viewName = view || this.viewName;
+  // REM:  opt = opt || {};
 
-    const fov = this.camera.fov * ( Math.PI / 180 );
-    let x = - (opt.cameraX || this.opt.cameraX) * Math.tan( fov / 2 );
-    let y = ( 1 - (opt.cameraY || this.opt.cameraY)) * Math.tan( fov / 2 );
-    let z = (opt.cameraDistance || this.opt.cameraDistance);
-    if ( this.viewName === 'head' ) {
-      z += 2;
-      y = y * z + 4 * this.avatarHeight / 5;
-    } else if ( this.viewName === 'upper' ) {
-      z += 4.5;
-      y = y * z + 2 * this.avatarHeight / 3;
-    } else if ( this.viewName === 'mid' ) {
-      z += 8;
-      y = y * z + this.avatarHeight / 3;
-    } else {
-      z += 12;
-      y = y * z;
-    }
-    x = x * z;
+  // REM:  const fov = this.camera.fov * ( Math.PI / 180 );
+  // REM:  let x = - (opt.cameraX || this.opt.cameraX) * Math.tan( fov / 2 );
+  // REM:  let y = ( 1 - (opt.cameraY || this.opt.cameraY)) * Math.tan( fov / 2 );
+  // REM:  let z = (opt.cameraDistance || this.opt.cameraDistance);
+  // REM:  if ( this.viewName === 'head' ) {
+  // REM:    z += 2;
+  // REM:    y = y * z + 4 * this.avatarHeight / 5;
+  // REM:  } else if ( this.viewName === 'upper' ) {
+  // REM:    z += 4.5;
+  // REM:    y = y * z + 2 * this.avatarHeight / 3;
+  // REM:  } else if ( this.viewName === 'mid' ) {
+  // REM:    z += 8;
+  // REM:    y = y * z + this.avatarHeight / 3;
+  // REM:  } else {
+  // REM:    z += 12;
+  // REM:    y = y * z;
+  // REM:  }
+  // REM:  x = x * z;
 
-    this.controlsEnd = new THREE.Vector3(x, y, 0);
-    this.cameraEnd = new THREE.Vector3(x, y, z).applyEuler( new THREE.Euler( (opt.cameraRotateX || opt.cameraRotateX), (opt.cameraRotateY || this.opt.cameraRotateY), 0 ) );
+  // REM:  this.controlsEnd = new THREE.Vector3(x, y, 0);
+  // REM:  this.cameraEnd = new THREE.Vector3(x, y, z).applyEuler( new THREE.Euler( (opt.cameraRotateX || opt.cameraRotateX), (opt.cameraRotateY || this.opt.cameraRotateY), 0 ) );
 
-    if ( this.cameraClock === null ) {
-      this.controls.target.copy( this.controlsEnd );
-      this.camera.position.copy( this.cameraEnd );
-    }
-    this.controlsStart = this.controls.target.clone();
-    this.cameraStart = this.camera.position.clone();
-    this.cameraClock = 0;
+  // REM:  if ( this.cameraClock === null ) {
+  // REM:    this.controls.target.copy( this.controlsEnd );
+  // REM:    this.camera.position.copy( this.cameraEnd );
+  // REM:  }
+  // REM:  this.controlsStart = this.controls.target.clone();
+  // REM:  this.cameraStart = this.camera.position.clone();
+  // REM:  this.cameraClock = 0;
 
-  }
-
-  /**
-  * Change light colors and intensities.
-  * @param {Object} opt Options
-  */
-  // setLighting(opt) {
-  //   console.log(`setLighting function called at ${new Date().toISOString()}`);
-  //   opt = opt || {};
-
-  //   // Ambient light
-  //   if ( opt.hasOwnProperty("lightAmbientColor") ) {
-  //     this.lightAmbient.color.set( new THREE.Color( opt.lightAmbientColor ) );
-  //   }
-  //   if ( opt.hasOwnProperty("lightAmbientIntensity") ) {
-  //     this.lightAmbient.intensity = opt.lightAmbientIntensity;
-  //     this.lightAmbient.visible = (opt.lightAmbientIntensity !== 0);
-  //   }
-
-  //   // Directional light
-  //   if ( opt.hasOwnProperty("lightDirectColor") ) {
-  //     this.lightDirect.color.set( new THREE.Color( opt.lightDirectColor ) );
-  //   }
-  //   if ( opt.hasOwnProperty("lightDirectIntensity") ) {
-  //     this.lightDirect.intensity = opt.lightDirectIntensity;
-  //     this.lightDirect.visible = (opt.lightDirectIntensity !== 0);
-  //   }
-  //   if ( opt.hasOwnProperty("lightDirectPhi") && opt.hasOwnProperty("lightDirectTheta") ) {
-  //     this.lightDirect.position.setFromSphericalCoords(2, opt.lightDirectPhi, opt.lightDirectTheta);
-  //   }
-
-  //   // Spot light
-  //   if ( opt.hasOwnProperty("lightSpotColor") ) {
-  //     this.lightSpot.color.set( new THREE.Color( opt.lightSpotColor ) );
-  //   }
-  //   if ( opt.hasOwnProperty("lightSpotIntensity") ) {
-  //     this.lightSpot.intensity = opt.lightSpotIntensity;
-  //     this.lightSpot.visible = (opt.lightSpotIntensity !== 0);
-  //   }
-  //   if ( opt.hasOwnProperty("lightSpotPhi") && opt.hasOwnProperty("lightSpotTheta") ) {
-  //     this.lightSpot.position.setFromSphericalCoords( 2, opt.lightSpotPhi, opt.lightSpotTheta );
-  //     this.lightSpot.position.add( new THREE.Vector3(0,1.5,0) );
-  //   }
-  //   if ( opt.hasOwnProperty("lightSpotDispersion") ) {
-  //     this.lightSpot.angle = opt.lightSpotDispersion;
-  //   }
-  // }
+  // REM:}
 
   /**
-  * Render scene.
+  *  //Render scene.
   */
   render() {
     // console.log(`render function called at ${new Date().toISOString()}`);
@@ -1151,7 +1120,8 @@ class TalkingHead {
       this.setValue( "eyeBlinkLeft", Math.max(blinkl,limitl) );
       this.setValue( "eyeBlinkRight", Math.max(blinkr,limitr) );
 
-      this.renderer.render( this.scene, this.camera );
+      this.sceneManager.render()
+      // REM: this.renderer.render( this.scene, this.camera );
 
       // Restore eyelid values
       this.setValue( "eyeBlinkLeft", blinkl );
@@ -1163,14 +1133,14 @@ class TalkingHead {
   /**
   * Resize avatar.
   */
-  onResize() {
-    // IMP: console.log(`onResize function called at ${new Date().toISOString()}`);
-    this.camera.aspect = this.nodeAvatar.clientWidth / this.nodeAvatar.clientHeight;
-    this.camera.updateProjectionMatrix();
-    this.renderer.setSize( this.nodeAvatar.clientWidth, this.nodeAvatar.clientHeight );
-    this.controls.update();
-    this.renderer.render( this.scene, this.camera );
-  }
+  // REM: onResize() {
+  // REM:   // IMP: console.log(`onResize function called at ${new Date().toISOString()}`);
+  // REM:   this.camera.aspect = this.nodeAvatar.clientWidth / this.nodeAvatar.clientHeight;
+  // REM:   this.camera.updateProjectionMatrix();
+  // REM:   this.renderer.setSize( this.nodeAvatar.clientWidth, this.nodeAvatar.clientHeight );
+  // REM:   this.controls.update();
+  // REM:   this.renderer.render( this.scene, this.camera );
+  // REM: }
 
   /**
   * Update avatar pose.
@@ -2030,33 +2000,7 @@ class TalkingHead {
     hips.position.z -= (ltoePos.z+rtoePos.z)/2;
 
     // Camera
-    if ( this.cameraClock !== null && this.cameraClock < 1000 ) {
-      this.cameraClock += dt;
-      if ( this.cameraClock > 1000 ) this.cameraClock = 1000;
-      let s = new THREE.Spherical().setFromVector3(this.cameraStart);
-      let sEnd = new THREE.Spherical().setFromVector3(this.cameraEnd);
-      s.phi += this.easing(this.cameraClock / 1000) * (sEnd.phi - s.phi);
-      s.theta += this.easing(this.cameraClock / 1000) * (sEnd.theta - s.theta);
-      s.radius += this.easing(this.cameraClock / 1000) * (sEnd.radius - s.radius);
-      s.makeSafe();
-      this.camera.position.setFromSpherical( s );
-      if ( this.controlsStart.x !== this.controlsEnd.x ) {
-        this.controls.target.copy( this.controlsStart.lerp( this.controlsEnd, this.easing(this.cameraClock / 1000) ) );
-      } else {
-        s.setFromVector3(this.controlsStart);
-        sEnd.setFromVector3(this.controlsEnd);
-        s.phi += this.easing(this.cameraClock / 1000) * (sEnd.phi - s.phi);
-        s.theta += this.easing(this.cameraClock / 1000) * (sEnd.theta - s.theta);
-        s.radius += this.easing(this.cameraClock / 1000) * (sEnd.radius - s.radius);
-        s.makeSafe();
-        this.controls.target.setFromSpherical( s );
-      }
-      this.controls.update();
-    }
-
-    // Autorotate
-    if ( this.controls.autoRotate ) this.controls.update();
-
+    this.sceneManager.updateCamera(dt, this.easing)
     // Statistics end
     if ( this.stats ) {
       this.stats.end();
@@ -2387,24 +2331,24 @@ class TalkingHead {
   * @param {number} t Time in milliseconds
   */
   lookAt(x,y,t) {
-    // IMP: console.log(`lookAt function called at ${new Date().toISOString()}`);
+    // // IMP: console.log(`lookAt function called at ${new Date().toISOString()}`);
 
-    // Eyes position
-    const rect = this.nodeAvatar.getBoundingClientRect();
-    const lEye = this.armature.getObjectByName('LeftEye');
-    const rEye = this.armature.getObjectByName('RightEye');
-    lEye.updateMatrixWorld(true);
-    rEye.updateMatrixWorld(true);
-    const plEye = new THREE.Vector3().setFromMatrixPosition(lEye.matrixWorld);
-    const prEye = new THREE.Vector3().setFromMatrixPosition(rEye.matrixWorld);
-    const pEyes = new THREE.Vector3().addVectors( plEye, prEye ).divideScalar( 2 );
-    pEyes.project(this.camera);
-    let eyesx = (pEyes.x + 1) / 2 * rect.width + rect.left;
-    let eyesy  = -(pEyes.y - 1) / 2 * rect.height + rect.top;
+    // // Eyes position
+    // REM: const rect = this.nodeAvatar.getBoundingClientRect();
+    // REM: const lEye = this.armature.getObjectByName('LeftEye');
+    // REM: const rEye = this.armature.getObjectByName('RightEye');
+    // REM: lEye.updateMatrixWorld(true);
+    // REM: rEye.updateMatrixWorld(true);
+    // REM: const plEye = new THREE.Vector3().setFromMatrixPosition(lEye.matrixWorld);
+    // REM: const prEye = new THREE.Vector3().setFromMatrixPosition(rEye.matrixWorld);
+    // REM: const pEyes = new THREE.Vector3().addVectors( plEye, prEye ).divideScalar( 2 );
+    // REM: pEyes.project(this.camera);
+    // REM: let eyesx = (pEyes.x + 1) / 2 * rect.width + rect.left;
+    // REM: let eyesy  = -(pEyes.y - 1) / 2 * rect.height + rect.top;
 
-    // if coordinate not specified, look at the camera
-    if ( x === null ) x = eyesx;
-    if ( y === null ) y = eyesy;
+    // REM: // if coordinate not specified, look at the camera
+    // REM: if ( x === null ) x = eyesx;
+    // REM: if ( y === null ) y = eyesy;
 
     // Use body/camera rotation to determine the required head rotation
     let q = this.poseTarget.props['Hips.quaternion'].clone();
@@ -2413,23 +2357,27 @@ class TalkingHead {
     q.multiply( this.poseTarget.props['Spine2.quaternion'] );
     q.multiply( this.poseTarget.props['Neck.quaternion'] );
     q.multiply( this.poseTarget.props['Head.quaternion'] );
-    let e = new THREE.Euler().setFromQuaternion(q);
-    let rx = e.x / (40/24); // Refer to setValue(headRotateX)
-    let ry = e.y / (9/4); // Refer to setValue(headRotateY)
-    let camerarx = Math.min(0.4, Math.max(-0.4,this.camera.rotation.x));
-    let camerary = Math.min(0.4, Math.max(-0.4,this.camera.rotation.y));
+    // Convert the quaternion q to Euler angles, representing the combined rotation of the avatar's spine, neck, and head
+    let currentHeadRotation = new THREE.Euler().setFromQuaternion(q);
 
-    // Calculate new delta
-    let maxx = Math.max( window.innerWidth - eyesx, eyesx );
-    let maxy = Math.max( window.innerHeight - eyesy, eyesy );
-    let rotx = this.convertRange(y,[eyesy-maxy,eyesy+maxy],[-0.3,0.6]) - rx + camerarx;
-    let roty = this.convertRange(x,[eyesx-maxx,eyesx+maxx],[-0.8,0.8]) - ry + camerary;
-    rotx = Math.min(0.6,Math.max(-0.3,rotx));
-    roty = Math.min(0.8,Math.max(-0.8,roty));
+    // REM: let rx = e.x / (40/24); // Refer to setValue(headRotateX)
+    // REM: let ry = e.y / (9/4); // Refer to setValue(headRotateY)
+    // REM: let camerarx = Math.min(0.4, Math.max(-0.4,this.camera.rotation.x));
+    // REM: let camerary = Math.min(0.4, Math.max(-0.4,this.camera.rotation.y));
 
-    // Randomize head/eyes ratio
-    let drotx = (Math.random() - 0.5) / 4;
-    let droty = (Math.random() - 0.5) / 4;
+    // REM: // Calculate new delta
+    // REM: let maxx = Math.max( window.innerWidth - eyesx, eyesx );
+    // REM: let maxy = Math.max( window.innerHeight - eyesy, eyesy );
+    // REM: let rotx = this.convertRange(y,[eyesy-maxy,eyesy+maxy],[-0.3,0.6]) - rx + camerarx;
+    // REM: let roty = this.convertRange(x,[eyesx-maxx,eyesx+maxx],[-0.8,0.8]) - ry + camerary;
+    // REM: rotx = Math.min(0.6,Math.max(-0.3,rotx));
+    // REM: roty = Math.min(0.8,Math.max(-0.8,roty));
+
+    // REM: // Randomize head/eyes ratio
+    // REM: let drotx = (Math.random() - 0.5) / 4;
+    // REM: let droty = (Math.random() - 0.5) / 4;
+    const lookAtData = this.sceneManager.lookAt(x, y, t, currentHeadRotation);
+
 
     if ( t ) {
 
@@ -2444,10 +2392,10 @@ class TalkingHead {
         name: 'lookat',
         dt: [750,t],
         vs: {
-          headRotateX: [ rotx + drotx ],
-          headRotateY: [ roty + droty ],
-          eyesRotateX: [ - 3 * drotx + 0.1 ],
-          eyesRotateY: [ - 5 * droty ],
+          headRotateX: [lookAtData.headRotateX],
+          headRotateY: [lookAtData.headRotateY],
+          eyesRotateX: [lookAtData.eyesRotateX],
+          eyesRotateY: [lookAtData.eyesRotateY],
           browInnerUp: [[0,0.7]],
           mouthLeft: [[0,0.7]],
           mouthRight: [[0,0.7]]
@@ -2473,7 +2421,7 @@ class TalkingHead {
       - ( (y - rect.top) / rect.height ) * 2 + 1
     );
     const raycaster = new THREE.Raycaster();
-    raycaster.setFromCamera(pointer,this.camera);
+    raycaster.setFromCamera(pointer,this.sceneManager.camera);
     const intersects = raycaster.intersectObject(this.armature);
     if ( intersects.length > 0 ) {
       const target = intersects[0].point;
@@ -2619,10 +2567,10 @@ class TalkingHead {
   * Set autorotate.
   * @param {numeric} speed Autorotate speed, e.g. value 2 = 30 secs per orbit at 60fps.
   */
-  setAutoRotateSpeed(speed) {
-    this.controls.autoRotateSpeed = speed;
-    this.controls.autoRotate = (speed > 0);
-  }
+  // REM: setAutoRotateSpeed(speed) {
+  // REM:   this.controls.autoRotateSpeed = speed;
+  // REM:   this.controls.autoRotate = (speed > 0);
+  // REM: }
 
   /**
   * Start animation cycle.

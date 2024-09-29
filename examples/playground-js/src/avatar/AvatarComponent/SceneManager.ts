@@ -1,3 +1,4 @@
+// @ts-nocheck
 // SceneManager.js
 
 import * as THREE from 'three';
@@ -64,9 +65,9 @@ export class SceneManager {
         this.setLighting();
 
         // done in showAvatar
-        this.scene.add(this.lightAmbient);
-        this.scene.add(this.lightDirect);
-        this.scene.add(this.lightSpot);
+        // this.scene.add(this.lightAmbient);
+        // this.scene.add(this.lightDirect);
+        // this.scene.add(this.lightSpot);
     }
 
 
@@ -74,7 +75,7 @@ export class SceneManager {
      * Change light colors and intensities.
      */
     setLighting() {
-        opt = this.options || {};
+        let opt = this.options || {};
 
         // Ambient light
         if ( opt.hasOwnProperty("lightAmbientColor") ) {
@@ -151,9 +152,9 @@ export class SceneManager {
     opt = opt || {};
 
     const fov = this.camera.fov * ( Math.PI / 180 );
-    let x = - (opt.cameraX || this.opt.cameraX) * Math.tan( fov / 2 );
-    let y = ( 1 - (opt.cameraY || this.opt.cameraY)) * Math.tan( fov / 2 );
-    let z = (opt.cameraDistance || this.opt.cameraDistance);
+    let x = - (opt.cameraX || this.options.cameraX) * Math.tan( fov / 2 );
+    let y = ( 1 - (opt.cameraY || this.options.cameraY)) * Math.tan( fov / 2 );
+    let z = (opt.cameraDistance || this.options.cameraDistance);
     if ( this.viewName === 'head' ) {
       z += 2;
       y = y * z + 4 * this.avatarHeight / 5;
@@ -170,7 +171,7 @@ export class SceneManager {
     x = x * z;
 
     this.controlsEnd = new THREE.Vector3(x, y, 0);
-    this.cameraEnd = new THREE.Vector3(x, y, z).applyEuler( new THREE.Euler( (opt.cameraRotateX || opt.cameraRotateX), (opt.cameraRotateY || this.opt.cameraRotateY), 0 ) );
+    this.cameraEnd = new THREE.Vector3(x, y, z).applyEuler( new THREE.Euler( (opt.cameraRotateX || opt.cameraRotateX), (opt.cameraRotateY || this.options.cameraRotateY), 0 ) );
 
     if ( this.cameraClock === null ) {
       this.controls.target.copy( this.controlsEnd );

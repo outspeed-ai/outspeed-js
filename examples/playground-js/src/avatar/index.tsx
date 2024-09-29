@@ -17,8 +17,6 @@ export function AvatarRealtimeApp(props: TRealtimeAppProps) {
   const {
     connect,
     disconnect,
-    getRemoteAudioTrack,
-    getLocalAudioTrack,
     dataChannel,
     connectionStatus,
   } = useWebSocket({
@@ -62,7 +60,6 @@ export function AvatarRealtimeApp(props: TRealtimeAppProps) {
       </div>
     );
   }
-
 
   return (
     <div className="h-full flex flex-1 justify-center items-center">
