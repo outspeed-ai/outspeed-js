@@ -1,16 +1,21 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react"
 
-import { DataChannel, isMessageEvent } from "@outspeed/core";
-import { Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react"
 // @ts-ignore
-import { TalkingHead } from "./talkinghead";
-import { Progress } from "../../components/progress";
+import { TalkingHead } from "./talking-head/talkinghead"
+import { Progress } from "../components/progress"
+import { WebSocketDataChannel, isMessageEvent } from "@outspeed/core"
 
-export type RealtimeAvatarProps = {
-  dataChannel?: DataChannel<unknown>;
-};
+export type AvatarProps = {
+  dataChannel: WebSocketDataChannel,
+  avatarConfig: {
+    url: string;
+    body: "F" | "M";
+    avatarMood?: "neutral" | "happy" | "angry" | "sad" | "fear" | "disgust" | "love" | "sleep";
+  };
+}
 
-export function RealtimeAvatar(props: RealtimeAvatarProps) {
+export function Avatar(props: AvatarProps) {
   const { dataChannel } = props;
   const avatarRef = useRef<HTMLDivElement>(null);
   const [avatar, setAvatar] = useState<TalkingHead | null>(null);
@@ -23,10 +28,6 @@ export function RealtimeAvatar(props: RealtimeAvatarProps) {
         cameraPanEnable: true,
         cameraView: "head",
         avatarMood: "neutral",
-        // Stats display that can be used when testing performance
-        statsNode: document.body,
-        statsStyle:
-          "position: fixed; bottom: 0px; left: 0px; cursor: pointer; opacity: 0.9; z-index: 10000;",
       });
       setAvatar(head);
     }

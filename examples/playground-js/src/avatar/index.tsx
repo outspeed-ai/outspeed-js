@@ -1,10 +1,10 @@
 import React from "react";
 import { useWebSocket } from "@outspeed/react";
-import { DataChannel, TRealtimeWebSocketConfig } from "@outspeed/core";
+import { TRealtimeWebSocketConfig } from "@outspeed/core";
 import { Loader2 } from "lucide-react";
 import { Button } from "../components/button";
-import { RealtimeChat } from "./AvatarComponent/Chat";
-import { RealtimeAvatar } from "./AvatarComponent/Avatar";
+import { MessageBox } from "../components/message-box";
+import { Avatar } from "./avatar";
 
 export type TRealtimeAppProps = {
   onDisconnect: () => void;
@@ -66,9 +66,17 @@ export function AvatarRealtimeApp(props: TRealtimeAppProps) {
     <div className="max-w-lg space-y-4 rounded-md border w-full flex flex-col items-center py-4">
       {dataChannel && (
         <>
-        <RealtimeAvatar dataChannel={dataChannel} />
+
+        <Avatar 
+          dataChannel={dataChannel} 
+          avatarConfig={{
+            url: "https://models.readyplayer.me/6694986c34432ca7edeb2d33.glb?morphTargets=ARKit,Oculus+Visemes,mouthOpen,mouthSmile,eyesClosed,eyesLookUp,eyesLookDown&textureSizeLimit=1024&textureFormat=png",
+            body: "F",
+            avatarMood: "neutral"
+          }}
+        />
         <div className="w-full px-4 hidden md:block mt-auto">
-          <RealtimeChat dataChannel={dataChannel} />
+          <MessageBox dataChannel={dataChannel} />
         </div>
         </>
       )}

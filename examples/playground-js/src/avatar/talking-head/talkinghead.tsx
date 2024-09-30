@@ -8,50 +8,6 @@ import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment
 import Stats from 'three/examples/jsm/libs/stats.module.js';
 import { Base64Converter, gaussianRandom, sigmoidFactory, convertRange } from './utils';
 
-
-  type TalkingHeadOptions = {
-    ttsEndpoint: string | null;
-    ttsApikey: string | null;
-    ttsTrimStart: number;
-    ttsTrimEnd: number;
-    ttsRate: number;
-    ttsPitch: number;
-    ttsVolume: number;
-    mixerGainSpeech: number | null;
-    mixerGainBackground: number | null;
-    lipsyncModules: string[];
-    pcmSampleRate: number;
-    modelRoot: string;
-    modelPixelRatio: number;
-    modelFPS: number;
-    modelMovementFactor: number;
-    cameraView: string;
-    cameraDistance: number;
-    cameraX: number;
-    cameraY: number;
-    cameraRotateX: number;
-    cameraRotateY: number;
-    cameraRotateEnable: boolean;
-    cameraPanEnable: boolean;
-    cameraZoomEnable: boolean;
-    lightAmbientColor: number;
-    lightAmbientIntensity: number;
-    lightDirectColor: number;
-    lightDirectIntensity: number;
-    lightDirectPhi: number;
-    lightDirectTheta: number;
-    lightSpotIntensity: number;
-    lightSpotColor: number;
-    lightSpotPhi: number;
-    lightSpotTheta: number;
-    lightSpotDispersion: number;
-    avatarMood: string;
-    avatarMute: boolean;
-    markedOptions: { mangle: boolean; headerIds: boolean; breaks: boolean };
-    statsNode: HTMLElement | null;
-    statsStyle: string | null;
-  };
-
 /**
 * @class Talking Head
 * @author Mika Suominen
@@ -84,9 +40,6 @@ class TalkingHead {
   * @typedef {Object} Avatar
   * @property {string} url URL for the GLB file
   * @property {string} [body] Body form 'M' or 'F'
-  * @property {numeric} [ttsRate] Voice rate.
-  * @property {numeric} [ttsPitch] Voice pitch.
-  * @property {numeric} [ttsVolume] Voice volume.
   * @property {string} [avatarMood] Initial mood.
   * @property {boolean} [avatarMute] If true, muted.
   */
@@ -142,13 +95,8 @@ class TalkingHead {
   constructor(node: HTMLDivElement, opt: Partial<TalkingHeadOptions> | null = null) {
     this.nodeAvatar = node;
     this.opt = {
-      ttsEndpoint: null,
-      ttsApikey: null,
       ttsTrimStart: 0,
       ttsTrimEnd: 400,
-      ttsRate: 1,
-      ttsPitch: 0,
-      ttsVolume: 0,
       mixerGainSpeech: null,
       mixerGainBackground: null,
       lipsyncModules: ['fi','en','lt'],
@@ -617,7 +565,7 @@ class TalkingHead {
       '😁': { dt: [300,2000], vs: { browInnerUp: [0.3], eyeSquintLeft: [1], eyeSquintRight: [1], jawOpen: [0.3], mouthDimpleLeft: [0.2], mouthDimpleRight: [0.2], mouthPressLeft: [0.5], mouthPressRight: [0.5], mouthShrugUpper: [0.4], mouthSmile: [0.7], mouthUpperUpLeft: [0.3], mouthUpperUpRight: [0.3], noseSneerLeft: [0.4], noseSneerRight: [0.4] } },
       '😆': { dt: [300,2000], vs: { browInnerUp: [0.3], eyeSquintLeft: [1], eyeSquintRight: [1], eyesClosed: [0.6], jawOpen: [0.3], mouthDimpleLeft: [0.2], mouthDimpleRight: [0.2], mouthPressLeft: [0.5], mouthPressRight: [0.5], mouthShrugUpper: [0.4], mouthSmile: [0.7], mouthUpperUpLeft: [0.3], mouthUpperUpRight: [0.3], noseSneerLeft: [0.4], noseSneerRight: [0.4] } },
       '😝': { dt: [300,100,1500,500,500], vs: { browInnerUp: [0.8], eyesClosed: [1], jawOpen: [0.7], mouthFunnel: [0.5], mouthSmile: [1], tongueOut: [0,1,1,0] } },
-      '😋': { link:  '😝' }, '😛': { link:  '😝' }, '😛': { link:  '😝' }, '😜': { link:  '😝' }, '🤪': { link:  '😝' },
+      '😋': { link:  '😝' }, '😛': { link:  '😝' }, '😜': { link:  '😝' }, '🤪': { link:  '😝' },
       '😂': { dt: [300,2000], vs: { browInnerUp: [0.3], eyeSquintLeft: [1], eyeSquintRight: [1], eyesClosed: [0.6], jawOpen: [0.3], mouthDimpleLeft: [0.2], mouthDimpleRight: [0.2], mouthPressLeft: [0.5], mouthPressRight: [0.5], mouthShrugUpper: [0.4], mouthSmile: [0.7], mouthUpperUpLeft: [0.3], mouthUpperUpRight: [0.3], noseSneerLeft: [0.4], noseSneerRight: [0.4] } },
       '🤣': { link:  '😂' }, '😅': { link:  '😂' },
       '😉': { dt: [500,200,500,500], vs: { mouthSmile: [0.5], mouthOpen: [0.2], mouthSmileLeft: [0,0.5,0], eyeBlinkLeft: [0,0.7,0], eyeBlinkRight: [0,0,0], headRotateX: [0.05,0.05,0.05,0], headRotateZ: [-0.05,-0.05,-0.05,0], browDownLeft: [0,0.7,0], cheekSquintLeft: [0,0.7,0], eyeSquintLeft: [0,1,0], eyesClosed: [0] } },
@@ -741,7 +689,7 @@ class TalkingHead {
       0,
       this.opt.lightSpotDispersion
     );
-    // this.setLighting( this.opt );
+
     const pmremGenerator = new THREE.PMREMGenerator( this.renderer );
     pmremGenerator.compileEquirectangularShader();
     this.scene.environment = pmremGenerator.fromScene( new RoomEnvironment() ).texture;
@@ -1053,52 +1001,6 @@ class TalkingHead {
     this.cameraClock = 0;
 
   }
-
-  /**
-  * Change light colors and intensities.
-  * @param {Object} opt Options
-  */
-  // setLighting(opt) {
-  //   console.log(`setLighting function called at ${new Date().toISOString()}`);
-  //   opt = opt || {};
-
-  //   // Ambient light
-  //   if ( opt.hasOwnProperty("lightAmbientColor") ) {
-  //     this.lightAmbient.color.set( new THREE.Color( opt.lightAmbientColor ) );
-  //   }
-  //   if ( opt.hasOwnProperty("lightAmbientIntensity") ) {
-  //     this.lightAmbient.intensity = opt.lightAmbientIntensity;
-  //     this.lightAmbient.visible = (opt.lightAmbientIntensity !== 0);
-  //   }
-
-  //   // Directional light
-  //   if ( opt.hasOwnProperty("lightDirectColor") ) {
-  //     this.lightDirect.color.set( new THREE.Color( opt.lightDirectColor ) );
-  //   }
-  //   if ( opt.hasOwnProperty("lightDirectIntensity") ) {
-  //     this.lightDirect.intensity = opt.lightDirectIntensity;
-  //     this.lightDirect.visible = (opt.lightDirectIntensity !== 0);
-  //   }
-  //   if ( opt.hasOwnProperty("lightDirectPhi") && opt.hasOwnProperty("lightDirectTheta") ) {
-  //     this.lightDirect.position.setFromSphericalCoords(2, opt.lightDirectPhi, opt.lightDirectTheta);
-  //   }
-
-  //   // Spot light
-  //   if ( opt.hasOwnProperty("lightSpotColor") ) {
-  //     this.lightSpot.color.set( new THREE.Color( opt.lightSpotColor ) );
-  //   }
-  //   if ( opt.hasOwnProperty("lightSpotIntensity") ) {
-  //     this.lightSpot.intensity = opt.lightSpotIntensity;
-  //     this.lightSpot.visible = (opt.lightSpotIntensity !== 0);
-  //   }
-  //   if ( opt.hasOwnProperty("lightSpotPhi") && opt.hasOwnProperty("lightSpotTheta") ) {
-  //     this.lightSpot.position.setFromSphericalCoords( 2, opt.lightSpotPhi, opt.lightSpotTheta );
-  //     this.lightSpot.position.add( new THREE.Vector3(0,1.5,0) );
-  //   }
-  //   if ( opt.hasOwnProperty("lightSpotDispersion") ) {
-  //     this.lightSpot.angle = opt.lightSpotDispersion;
-  //   }
-  // }
 
   /**
   * Render scene.
@@ -2115,6 +2017,7 @@ class TalkingHead {
       this.startSpeakingHttp(true);
     }
   }
+
   async speakTextHttp(line) {
     console.log("Called speak text with line : ", line)
     try {
