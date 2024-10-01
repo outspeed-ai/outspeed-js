@@ -36,14 +36,12 @@
   "peerDependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-native": "^0.75.3"
+    "react-native": "^0.75.3",
+    "@outspeed/core": "workspace:^",
+    "@outspeed/react": "workspace:^"
   },
   "devDependencies": {
     "@types/react": "^18.3.10",
     "tsup": "8.2.4"
-  },
-  "dependencies": {
-    "@outspeed/core": "workspace:^",
-    "@outspeed/react": "workspace:^"
   }
 }
