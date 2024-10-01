@@ -229,3 +229,100 @@ export const blobToBase64 = (blob: Blob): Promise<string | null> => {
     reader.readAsDataURL(blob);
   });
 };
+
+/**
+ * Converts a Base64 encoded string to an ArrayBuffer.
+ *
+ * @param base64 - The Base64 encoded string to convert.
+ * @returns An ArrayBuffer representation of the Base64 encoded string.
+ */
+export function base64ToArrayBuffer(base64: string): ArrayBufferLike {
+  // Decode the Base64 string into a binary string
+  const binaryString = atob(base64);
+
+  // Get the length of the binary string
+  const length = binaryString.length;
+
+  // Create a Uint8Array to hold the bytes
+  const bytes = new Uint8Array(length);
+
+  // Convert each character of the binary string to a byte
+  for (let i = 0; i < length; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+
+  // Return the underlying ArrayBuffer of the Uint8Array
+  return bytes.buffer;
+}
+
+/**
+ * Creates a WAV file header for raw PCM data.
+ *
+ * @param sampleRate - The number of samples per second (Hz).
+ * @param numChannels - The number of audio channels (1 = mono, 2 = stereo).
+ * @param numFrames - The total number of audio frames in the data.
+ * @returns The ArrayBuffer containing the WAV file header.
+ */
+export function createWavHeader(
+  sampleRate: number,
+  numChannels: number,
+  numFrames: number
+): ArrayBuffer {
+  // Create a buffer of 44 bytes for the WAV header
+  const buffer = new ArrayBuffer(44);
+  const view = new DataView(buffer);
+
+  // Write the "RIFF" identifier
+  writeString(view, 0, "RIFF");
+
+  // Write the file length (36 + data length)
+  view.setUint32(4, 36 + numFrames * numChannels * 2, true);
+
+  // Write the "WAVE" format identifier
+  writeString(view, 8, "WAVE");
+
+  // Write the format chunk identifier "fmt "
+  writeString(view, 12, "fmt ");
+
+  // Write the length of the format chunk (16 for PCM)
+  view.setUint32(16, 16, true);
+
+  // Write the audio format (1 for PCM - raw uncompressed audio)
+  view.setUint16(20, 1, true);
+
+  // Write the number of channels (mono = 1, stereo = 2)
+  view.setUint16(22, numChannels, true);
+
+  // Write the sample rate (samples per second)
+  view.setUint32(24, sampleRate, true);
+
+  // Write the byte rate (sampleRate * numChannels * bytesPerSample)
+  view.setUint32(28, sampleRate * numChannels * 2, true);
+
+  // Write the block align (numChannels * bytesPerSample)
+  view.setUint16(32, numChannels * 2, true);
+
+  // Write the bits per sample (16 bits for PCM)
+  view.setUint16(34, 16, true);
+
+  // Write the data chunk identifier "data"
+  writeString(view, 36, "data");
+
+  // Write the length of the data chunk (numFrames * numChannels * bytesPerSample)
+  view.setUint32(40, numFrames * numChannels * 2, true);
+
+  return buffer;
+}
+
+/**
+ * Writes a string to a DataView at the specified byte offset.
+ *
+ * @param view - The DataView representing the buffer.
+ * @param offset - The byte offset to start writing the string.
+ * @param str - The string to write.
+ */
+export function writeString(view: DataView, offset: number, str: string): void {
+  for (let i = 0; i < str.length; i++) {
+    view.setUint8(offset + i, str.charCodeAt(i) & 0xff);
+  }
+}

@@ -58,7 +58,7 @@ export function useWebSocket(options: TUseWebSocketOptions) {
     if (remoteTrack) return remoteTrack;
     if (!connection) return null;
 
-    const response = connection.mediaManager.getRemoteAudioTrack();
+    const response = connection.mediaManager.player.getRemoteAudioTrack();
 
     if (!response.ok || !response.data) return null;
 

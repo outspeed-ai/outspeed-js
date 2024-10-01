@@ -72,7 +72,8 @@ export function WebSocketRealtimeApp(props: TWebSocketRealtimeAppProps) {
           localTrack={null}
           remoteTrack={null}
           localAudioTrack={getLocalAudioTrack()}
-          remoteAudioTrack={getRemoteAudioTrack()}
+          // remoteAudioTrack={getRemoteAudioTrack()}
+          remoteAudioTrack={null}
           dataChannel={dataChannel}
         />
       </div>
