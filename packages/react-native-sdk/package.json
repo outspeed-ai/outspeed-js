@@ -24,7 +24,7 @@
   ],
   "scripts": {
     "build": "tsup",
-    "watch:types": "tsc --watch --project tsconfig.types.json"
+    "dev": "tsup --watch"
   },
   "repository": {
     "type": "git",
@@ -39,11 +39,11 @@
     "react-native": "^0.75.3"
   },
   "devDependencies": {
+    "@types/react": "^18.3.10",
     "tsup": "8.2.4"
   },
   "dependencies": {
     "@outspeed/core": "workspace:^",
-    "@outspeed/react": "workspace:^",
-    "@types/react": "^18.3.10"
+    "@outspeed/react": "workspace:^"
   }
 }
