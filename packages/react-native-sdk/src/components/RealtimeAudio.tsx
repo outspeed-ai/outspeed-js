@@ -1,5 +1,13 @@
-import { Text } from "react-native";
+import { RTCView } from "react-native-webrtc";
+import InCallManager from "react-native-incall-manager";
+import React from "react";
 
-export function RealtimeAudio() {
-  return <Text>This is Realtime Audio Container.</Text>;
+export type TRealtimeAudioProps = typeof RTCView.defaultProps;
+
+export function RealtimeAudio(props: TRealtimeAudioProps) {
+  React.useEffect(() => {
+    InCallManager.setSpeakerphoneOn(true);
+  }, []);
+
+  return <RTCView {...props} />;
 }
