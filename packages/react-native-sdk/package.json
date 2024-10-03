@@ -37,8 +37,9 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-native": "^0.75.3",
-    "@outspeed/core": "workspace:^",
-    "@outspeed/react": "workspace:^"
+    "react-native-incall-manager": "^4.2.0",
+    "react-native-webrtc": "^124.0.4",
+    "@outspeed/core": "workspace:^"
   },
   "devDependencies": {
     "@types/react": "^18.3.10",
