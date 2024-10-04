@@ -24,7 +24,7 @@ npm i @outspeed/core @outspeed/react
 # or
 yarn add @outspeed/core @outspeed/react
 
-# or 
+# or
 pnpm i @outspeed/core @outspeed/react
 ```
 
@@ -53,14 +53,14 @@ export default function App() {
   return (
     <div>
       <span>Connection Status: {connectionStatus}</span>
-      
+
       {connectionStatus === "SetupCompleted" && (
         <button onClick={connect}>Connect</button>
       )}
 
       {/* To show remote video stream */}
       <RealtimeVideo track={getRemoteVideoTrack()} />
-      
+
       {/* To show local video stream */}
       <RealtimeVideo track={getLocalVideoTrack()} />
     </div>
@@ -69,7 +69,6 @@ export default function App() {
 ```
 
 The code establishes a peer connection with the backend and streams local audio and video to it. If the backend is configured to return the audio and video, they will be displayed as well.
-
 
 # Development
 
@@ -98,7 +97,6 @@ pnpm install
 ```
 
 This will install dependencies for all the packages in the monorepo.
-
 
 #### Step 3: Run the playground
 
@@ -148,11 +146,12 @@ pnpm playground:serve
 
 This project is licensed under the Apache License, Version 2.0. You may obtain a copy of the License at [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
 
-
 ---
 
 Feel free to explore the source code, contribute, and experiment with the playground. If you’re new to WebRTC or WebSocket, you may find it helpful to refer to additional learning resources like Mozilla’s [WebRTC](https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API) documentation and [WebSocket](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket) specification.
 
+# Publishing
 
-
-
+```bash
+pnpm publish -r --no-git-checks  --access public
+```
