@@ -12,6 +12,7 @@
   "keywords": [],
   "author": "",
   "devDependencies": {
+    "@changesets/cli": "^2.27.9",
     "concurrently": "^9.0.1"
   },
   "homepage": "https://outspeed.com"
