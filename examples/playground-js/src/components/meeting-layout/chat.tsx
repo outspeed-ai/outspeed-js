@@ -19,7 +19,6 @@ export function Chat(props: TChatProps) {
     }
 
     chatContainerRef.current.style.height = `${window.innerHeight - 225}px`;
-
   }, []);
 
   React.useEffect(() => {

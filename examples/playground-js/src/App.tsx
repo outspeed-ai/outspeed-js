@@ -5,15 +5,16 @@ import { TRealtimeWebSocketConfig } from "@outspeed/core";
 import { TRealtimeConfig } from "@outspeed/core";
 import { RealtimeApp } from "./RealtimeApp";
 import { ThankYouScreen } from "./ThankYou";
+import { TRoutes } from "./constants";
 import { isSafari, isChrome } from "react-device-detect";
 import { BrowserNotSupported } from "./components/browser-not-supported";
-
 
 export default function App() {
   const [config, setConfig] = React.useState<
     TRealtimeWebSocketConfig | TRealtimeConfig
   >();
-  const [selectedExample, setSelectedExample] = React.useState("webrtc");
+  const [selectedExample, setSelectedExample] =
+    React.useState<TRoutes>("webrtc");
   const [showThankYou, setShowThankYou] = React.useState(false);
 
   const onDisconnect = React.useCallback(() => {

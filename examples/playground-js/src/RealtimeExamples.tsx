@@ -1,7 +1,19 @@
 import clsx from "clsx";
-import { AudioLinesIcon, VideoIcon } from "lucide-react";
+import { AudioLinesIcon, ScreenShare, VideoIcon } from "lucide-react";
+import { TRoutes } from "./constants";
+import React from "react";
 
-const data = [
+type TExampleData = {
+  id: TRoutes;
+  title: string;
+  description: string;
+  icons: {
+    title: string;
+    children: React.ReactNode;
+  }[];
+};
+
+const data: TExampleData[] = [
   {
     title: "WebRTC",
     description:
@@ -30,10 +42,26 @@ const data = [
       },
     ],
   },
+  {
+    title: "Screen Share",
+    description:
+      "In this example, we will set up a WebRTC connection to stream both screen recording and a local audio track.",
+    id: "webrtc-screen=share",
+    icons: [
+      {
+        title: "Audio",
+        children: <AudioLinesIcon />,
+      },
+      {
+        title: "Screen Share",
+        children: <ScreenShare />,
+      },
+    ],
+  },
 ];
 
 export type TRealtimeExamples = {
-  onClick: (id: string) => void;
+  onClick: (id: TRoutes) => void;
   selected: string;
 };
 
@@ -42,7 +70,7 @@ export function RealtimeExamples(props: TRealtimeExamples) {
 
   return (
     <div className="flex-1 mt-20">
-      <div className="flex flex-wrap gap-4 flex-col sm:flex-row">
+      <div className="flex flex-wrap gap-4 flex-col md:flex-row">
         {data.map((item) => (
           <div
             className={clsx(

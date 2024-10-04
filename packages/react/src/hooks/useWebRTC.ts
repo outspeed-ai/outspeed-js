@@ -191,7 +191,7 @@ export function useWebRTC(options: TUseWebRTCOptions) {
   }, [actor, send, removeEventListener, removeAllOnPacketReceiveListeners]);
 
   const getLocalTracks = React.useCallback(
-    (type: ETrackKind | "screen"): TUseWebRTCReturn<Track[] | null> => {
+    (type: ETrackKind): TUseWebRTCReturn<Track[] | null> => {
       const connection = actor.context.connection;
 
       if (!connection) {

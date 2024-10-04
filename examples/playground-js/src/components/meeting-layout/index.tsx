@@ -33,26 +33,25 @@ export function MeetingLayout(props: TMeetingLayoutProps) {
   } = props;
 
   const [isChatOpened, setIsChatOpened] = React.useState(false);
-  const container = React.useRef<HTMLDivElement>(null)
+  const container = React.useRef<HTMLDivElement>(null);
 
   const handleResize = React.useCallback(() => {
-    if(!container.current) return
-    
-    const parent = container.current.parentElement
-    if(!parent) return
+    if (!container.current) return;
 
-    container.current.style.maxWidth = parent.clientWidth + 'px'
-  }, [])
+    const parent = container.current.parentElement;
+    if (!parent) return;
+
+    container.current.style.maxWidth = parent.clientWidth + "px";
+  }, []);
 
   React.useEffect(() => {
-    handleResize()
-    window.addEventListener('resize', handleResize)
+    handleResize();
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      window.removeEventListener('resize', handleResize)  
-    }
-
-  }, [handleResize])
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [handleResize]);
 
   return (
     <div className="flex flex-col flex-1 relative max-w-[calc(100vw-32px)]">
