@@ -5,6 +5,9 @@ import { TRealtimeWebSocketConfig } from "@outspeed/core";
 import { TRealtimeConfig } from "@outspeed/core";
 import { RealtimeApp } from "./RealtimeApp";
 import { ThankYouScreen } from "./ThankYou";
+import { isSafari, isChrome } from "react-device-detect";
+import { BrowserNotSupported } from "./components/browser-not-supported";
+
 
 export default function App() {
   const [config, setConfig] = React.useState<
@@ -17,6 +20,10 @@ export default function App() {
     setConfig(undefined);
     setShowThankYou(true);
   }, []);
+
+  if (!isChrome && !isSafari) {
+    return <BrowserNotSupported />;
+  }
 
   if (showThankYou) {
     return (
