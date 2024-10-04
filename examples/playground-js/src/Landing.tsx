@@ -48,6 +48,9 @@ export function Landing(props: TLandingProps) {
       </div>
       <div className="flex-1 flex w-full justify-center md:justify-start">
         <div className="flex-1 flex flex-col max-w-lg justify-center md:px-10 md:max-w-2xl p-4">
+          <div className="mb-4 p-4 text-red-500 text-lg border border-red-500 rounded">
+            Please ensure that the app is running and Function URL is correct.
+          </div>
           {selectedExample === "webrtc" && (
             <WebRTCTakeInput onSubmit={onSubmit} />
           )}
