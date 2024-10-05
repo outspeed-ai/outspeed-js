@@ -6,7 +6,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import Stats from 'three/examples/jsm/libs/stats.module.js';
-import { Base64Converter, gaussianRandom, sigmoidFactory, convertRange } from './utils';
+import { gaussianRandom, sigmoidFactory, convertRange } from './utils';
 import { SpeechHandler } from './speech-handler';
 
 /**
@@ -64,20 +64,6 @@ class TalkingHead {
   /**
   * Callback when the speech queue processes this marker item.
   * @callback markerfn
-  */
-
-  /**
-  * Audio object.
-  * @typedef {Object} Audio
-  * @property {ArrayBuffer|ArrayBuffer[]} audio Audio buffer or array of buffers
-  * @property {string[]} words Words
-  * @property {number[]} wtimes Starting times of words
-  * @property {number[]} wdurations Durations of words
-  * @property {string[]} [visemes] Oculus lip-sync viseme IDs
-  * @property {number[]} [vtimes] Starting times of visemes
-  * @property {number[]} [vdurations] Durations of visemes
-  * @property {string[]} [markers] Timed callback functions
-  * @property {number[]} [mtimes] Starting times of markers
   */
 
   /**

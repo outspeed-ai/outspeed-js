@@ -1,4 +1,5 @@
 import { Base64Converter } from './utils'
+
 export class SpeechHandler {
   private talkingHead: any;
   private audioCtx: AudioContext;
