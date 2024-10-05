@@ -645,23 +645,8 @@ class TalkingHead {
 
     this.speechHandler = new SpeechHandler(this)
 
-    // Audio context and playlist
-    this.audioCtx = new AudioContext();
-    this.audioSpeechSource = this.audioCtx.createBufferSource();
-    this.audioBackgroundSource = this.audioCtx.createBufferSource();
-    this.audioBackgroundGainNode = this.audioCtx.createGain();
-    this.audioSpeechGainNode = this.audioCtx.createGain();
-    this.audioReverbNode = this.audioCtx.createConvolver();
-    this.setReverb(null); // Set dry impulse as default
-    this.audioBackgroundGainNode.connect(this.audioReverbNode);
-    this.audioSpeechGainNode.connect(this.audioReverbNode);
-    this.audioReverbNode.connect(this.audioCtx.destination);
-    this.setMixerGain( this.opt.mixerGainSpeech, this.opt.mixerGainBackground ); // Volume
-    this.audioPlaylist = [];
-
     // Speech queue
     this.stateName = 'idle';
-    this.speechQueue = [];
     this.isSpeaking = false;
 
     // Setup 3D Animation
@@ -751,31 +736,12 @@ class TalkingHead {
 
 
   /**
-  * Convert PCM buffer to AudioBuffer.
-  * NOTE: Only signed 16bit little endian supported.
-  * @param {ArrayBuffer} buf PCM buffer
-  * @return {AudioBuffer} AudioBuffer
-  */
-  pcmToAudioBuffer(buf) {
-    const arr = new Int16Array(buf);
-    const floats = new Float32Array(arr.length);
-    for( let i=0; i<arr.length; i++ ) {
-      floats[i] = (arr[i] >= 0x8000) ? -(0x10000 - arr[i]) / 0x8000 : arr[i] / 0x7FFF;
-    }
-    const audio = this.audioCtx.createBuffer(1, floats.length, this.opt.pcmSampleRate );
-    audio.copyToChannel( floats, 0 , 0 );
-    return audio;
-  }
-
-
-  /**
   * Convert internal notation to THREE objects.
   * NOTE: All rotations are converted to quaternions.
   * @param {Object} p Pose
   * @return {Object} A new pose object.
   */
   propsToThreeObjects(p) {
-    // IMP: console.log(`propsToThreeObjects called at ${new Date().toISOString()}`);
     const r = {};
     for( let [key,val] of Object.entries(p) ) {
       const ids = key.split('.');
@@ -807,7 +773,6 @@ class TalkingHead {
   * @param {Object} obj Object
   */
   clearThree(obj){
-    // IMP: console.log(`clearThree called at ${new Date().toISOString()}`);
     while( obj.children.length ){
       this.clearThree(obj.children[0]);
       obj.remove(obj.children[0]);
@@ -940,7 +905,6 @@ class TalkingHead {
   * @return {string[]} Supported view names.
   */
   getViewNames() {
-    // IMP: console.log(`getViewNames called at ${new Date().toISOString()}`);
     return ['full', 'mid', 'upper', 'head'];
   }
 
@@ -949,7 +913,6 @@ class TalkingHead {
   * @return {string} View name.
   */
   getView() {
-    // IMP: console.log(`getView called at ${new Date().toISOString()}`);
     return this.viewName;
   }
 
@@ -959,7 +922,6 @@ class TalkingHead {
   * @param {Object} [opt=null] Options
   */
   setView(view, opt = null) {
-    // IMP: console.log(`setView function called at ${new Date().toISOString()}`);
     if ( view !== 'full' && view !== 'upper' && view !== 'head' && view !== 'mid' ) return;
     if ( !this.armature ) {
       this.opt.cameraView = view;
@@ -1030,7 +992,6 @@ class TalkingHead {
   * Resize avatar.
   */
   onResize() {
-    // IMP: console.log(`onResize function called at ${new Date().toISOString()}`);
     this.camera.aspect = this.nodeAvatar.clientWidth / this.nodeAvatar.clientHeight;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize( this.nodeAvatar.clientWidth, this.nodeAvatar.clientHeight );
@@ -1085,7 +1046,6 @@ class TalkingHead {
   * @return {string} Pose as a string
   */
   getPoseString(pose,prec=1000){
-    // IMP: console.log(`getPoseString function called at ${new Date().toISOString()}`);
     let s = '{';
     Object.entries(pose).forEach( (x,i) => {
       const ids = x[0].split('.');
@@ -1110,7 +1070,6 @@ class TalkingHead {
   * @return {Quaternion|Vector3} Position or rotation
   */
   getPoseTemplateProp(key) {
-    // IMP: console.log(`getPoseTemplateProp function called at ${new Date().toISOString()}`);
 
     const ids = key.split('.');
     let target = ids[0] + '.' + (ids[1] === 'rotation' ? 'quaternion' : ids[1]);
@@ -1157,7 +1116,6 @@ class TalkingHead {
   * @return {Object} Mirrored pose.
   */
   mirrorPose(p) {
-    // IMP: console.log(`mirrorPose function called at ${new Date().toISOString()}`);
     const r = {};
     for( let [key,v] of Object.entries(p) ) {
 
@@ -1188,7 +1146,6 @@ class TalkingHead {
   * @return {Object} A new pose object.
   */
   poseFactory(template, ms=2000) {
-    // IMP: console.log(`poseFactory function called at ${new Date().toISOString()}`);
 
     // Pose object
     const o = {
@@ -1224,7 +1181,6 @@ class TalkingHead {
   * @param {number} [ms=2000] Transition time in milliseconds
   */
   setPoseFromTemplate(template, ms=2000) {
-    // IMP: console.log(`setPoseFromTemplate function called at ${new Date().toISOString()}`);
 
     // Special cases
     const isIntermediate = template && this.poseTarget && this.poseTarget.template && ((this.poseTarget.template.standing && template.lying) || (this.poseTarget.template.lying && template.standing));
@@ -1419,7 +1375,6 @@ class TalkingHead {
   * @return {string[]} Morph target names.
   */
   getMorphTargetNames() {
-    // IMP: console.log(`getMorphTargetNames function called at ${new Date().toISOString()}`);
     return [
       'headRotateX', 'headRotateY', 'headRotateZ',
       'eyesRotateX', 'eyesRotateY', 'chestInhale',
@@ -1545,7 +1500,6 @@ class TalkingHead {
   * @return {Object} New animation object.
   */
   animFactory( t, loop = false, scaleTime = 1, scaleValue = 1 ) {
-    // IMP: console.log(`animFactory function called at ${new Date().toISOString()}`);
     const o = { template: t, ts: [0], vs: {} };
 
     // Follow the hierarchy of objects
@@ -1898,7 +1852,6 @@ class TalkingHead {
   * Reset all the visemes
   */
   resetLips() {
-    // IMP: console.log(`resetLips function called at ${new Date().toISOString()}`);
     this.visemeNames.forEach( x => {
       this.morphs.forEach( y => {
         const ndx = y.morphTargetDictionary['viseme_'+x];
@@ -1920,112 +1873,16 @@ class TalkingHead {
   }
 
   /**
-  * Setup the convolver node based on an impulse.
-  * @param {string} [url=null] URL for the impulse, dry impulse if null
-  */
-  async setReverb( url=null ) {
-    if ( url ) {
-      // load impulse response from file
-      let response = await fetch(url);
-      let arraybuffer = await response.arrayBuffer();
-      this.audioReverbNode.buffer = await this.audioCtx.decodeAudioData(arraybuffer);
-    } else {
-      // dry impulse
-      const samplerate = this.audioCtx.sampleRate;
-      const impulse = this.audioCtx.createBuffer(2, samplerate, samplerate);
-      impulse.getChannelData(0)[0] = 1;
-      impulse.getChannelData(1)[0] = 1;
-      this.audioReverbNode.buffer = impulse;
-    }
-  }
-
-  /**
   * Set audio gain.
   * @param {number} speech Gain for speech, if null do not change
   * @param {number} background Gain for background audio, if null do not change
   */
   setMixerGain( speech, background ) {
-    if ( speech !== null ) {
-      this.audioSpeechGainNode.gain.value = speech || 0;
-    }
-    if ( background !== null ) {
-      this.audioBackgroundGainNode.gain.value = background || 0;
-    }
+    this.speechHandler.setMixerGain(speech, background)
   }
 
-  /**
-  * Play audio playlist using Web Audio API.
-  * @param {boolean} [force=false] If true, forces to proceed
-  */
-  async playAudioHttp(force=false) {
-    console.log(`playAudioHttp function called at ${new Date().toISOString()}`);
-    if ( !this.armature || (this.isAudioPlaying && !force) ) return;
-    this.isAudioPlaying = true;
-    if ( this.audioPlaylist.length ) {
-      const item = this.audioPlaylist.shift();
-
-      // If Web Audio API is suspended, try to resume it
-      if ( this.audioCtx.state === "suspended" || this.audioCtx.state === "interrupted" ) {
-        const resume = this.audioCtx.resume();
-        const timeout = new Promise((_r, rej) => setTimeout(() => rej("p2"), 1000));
-        try {
-          await Promise.race([resume, timeout]);
-        } catch(e) {
-          console.log("Can't play audio. Web Audio API suspended. This is often due to calling some speak method before the first user action, which is typically prevented by the browser.");
-          this.playAudioHttp(true);
-          return;
-        }
-      }
-
-      // AudioBuffer
-      let audio;
-      if ( Array.isArray(item.audio) ) {
-        // Convert from PCM samples
-        let buf = this.concatArrayBuffers( item.audio );
-        audio = this.pcmToAudioBuffer(buf);
-      } else {
-        audio = item.audio;
-      }
-
-      // Create audio source
-      this.audioSpeechSource = this.audioCtx.createBufferSource();
-      this.audioSpeechSource.buffer = audio;
-      this.audioSpeechSource.playbackRate.value = 1 / this.animSlowdownRate;
-      this.audioSpeechSource.connect(this.audioSpeechGainNode);
-      this.audioSpeechSource.addEventListener('ended', () => {
-        this.audioSpeechSource.disconnect();
-        this.playAudioHttp(true);
-      }, { once: true });
-
-      // Rescale lipsync and push to queue
-      const delay = 100;
-      if ( item.anim ) {
-        item.anim.forEach( x => {
-          for(let i=0; i<x.ts.length; i++) {
-            x.ts[i] = this.animClock + x.ts[i] + delay;
-          }
-          this.animQueue.push(x);
-        });
-      }
-
-      // Play
-      this.audioSpeechSource.start(delay/1000);
-
-    } else {
-      this.isAudioPlaying = false;
-      this.startSpeakingHttp(true);
-    }
-  }
 
   async speakTextHttp(line) {
-    // console.log("Called speak text with line : ", line)
-    // try {
-    //   this.speechQueue.push(line);
-    //   // Start speaking (if not already)
-    //   this.startSpeakingHttp();
-    // } catch (error) {
-    //   console.error('Error in speakTextHttp:', error);
-    // }
     this.speechHandler.push(line)
     this.speechHandler.start()
   }
@@ -2035,12 +1892,10 @@ class TalkingHead {
   * Pause speaking.
   */
   pauseSpeaking() {
-    // IMP: console.log(`pauseSpeaking function called at ${new Date().toISOString()}`);
-    try { this.audioSpeechSource.stop(); } catch(error) {}
-    this.audioPlaylist.length = 0;
+    this.speechHandler.pause()
+
     this.stateName = 'idle';
     this.isSpeaking = false;
-    this.isAudioPlaying = false;
     this.animQueue = this.animQueue.filter( x  => x.template.name !== 'viseme' && x.template.name !== 'subtitles' );
     if ( this.armature ) {
       this.resetLips();
@@ -2052,14 +1907,11 @@ class TalkingHead {
   * Stop speaking and clear the speech queue.
   */
   stopSpeaking() {
-    // IMP: console.log(`stopSpeaking function called at ${new Date().toISOString()}`);
-    try { this.audioSpeechSource.stop(); } catch(error) {}
-    this.audioPlaylist.length = 0;
-    this.speechQueue.length = 0;
+    this.speechHandler.stop()
+
     this.animQueue = this.animQueue.filter( x  => x.template.name !== 'viseme' && x.template.name !== 'subtitles' );
     this.stateName = 'idle';
     this.isSpeaking = false;
-    this.isAudioPlaying = false;
     if ( this.armature ) {
       this.resetLips();
       this.render();
@@ -2071,7 +1923,6 @@ class TalkingHead {
   * @param {number} t Time in milliseconds
   */
   lookAtCamera(t) {
-    // IMP: console.log(`lookAtCamera function called at ${new Date().toISOString()}`);
     this.lookAt( null, null, t );
   }
 
@@ -2082,8 +1933,6 @@ class TalkingHead {
   * @param {number} t Time in milliseconds
   */
   lookAt(x,y,t) {
-    // IMP: console.log(`lookAt function called at ${new Date().toISOString()}`);
-
     // Eyes position
     const rect = this.nodeAvatar.getBoundingClientRect();
     const lEye = this.armature.getObjectByName('LeftEye');
@@ -2160,7 +2009,6 @@ class TalkingHead {
   * @return {Boolean} If true, (x,y) touch the avatar
   */
   touchAt(x,y) {
-    // IMP: console.log(`touchAt function called at ${new Date().toISOString()}`);
 
     const rect = this.nodeAvatar.getBoundingClientRect();
     const pointer = new THREE.Vector2(
@@ -2217,7 +2065,6 @@ class TalkingHead {
   * @param {number} [prob=1] Probability of hand movement
   */
   speakWithHands(delay=0,prob=0.5) {
-    // IMP: console.log(`speakWithHands function called at ${new Date().toISOString()}`);
 
     // Only if we are standing and not bending and probabilities match up
     if ( this.mixer || this.gesture || !this.poseTarget.template.standing || this.poseTarget.template.bend || Math.random()>prob ) return;
@@ -2287,7 +2134,6 @@ class TalkingHead {
   * @return {numeric} Slowdown factor.
   */
   getSlowdownRate(k) {
-    // IMP: console.log(`getSlowdownRate function called at ${new Date().toISOString()}`);
     return this.animSlowdownRate;
   }
 
@@ -2296,7 +2142,6 @@ class TalkingHead {
   * @param {numeric} k Slowdown factor.
   */
   setSlowdownRate(k) {
-    // IMP: console.log(`setSlowdownRate function called at ${new Date().toISOString()} with value: ${k}`);
     this.animSlowdownRate = k;
     this.audioSpeechSource.playbackRate.value = 1 / this.animSlowdownRate;
     this.audioBackgroundSource.playbackRate.value = 1 / this.animSlowdownRate;
@@ -2324,7 +2169,7 @@ class TalkingHead {
   */
   start() {
     if ( this.armature && this.isRunning === false ) {
-      this.audioCtx.resume();
+      this.speechHandler.resume();
       this.animTimeLast = performance.now();
       this.isRunning = true;
       requestAnimationFrame( this.animate.bind(this) );
@@ -2336,7 +2181,7 @@ class TalkingHead {
   */
   stop() {
     this.isRunning = false;
-    this.audioCtx.suspend();
+    this.speechHandler.suspend();
   }
 
   /**
@@ -2348,7 +2193,6 @@ class TalkingHead {
   * @param {number} [scale=0.01] Position scale factor
   */
   async playAnimation(url, onprogress=null, dur=10, ndx=0, scale=0.01) {
-    // IMP: console.log(`playAnimation called at ${new Date().toISOString()}`);
     if ( !this.armature ) return;
 
     let item = this.animClips.find( x => x.url === url+'-'+ndx );
@@ -2472,7 +2316,6 @@ class TalkingHead {
   * @param {number} [scale=0.01] Position scale factor
   */
   async playPose(url, onprogress=null, dur=5, ndx=0, scale=0.01) {
-    // IMP: console.log(`playPose function called at ${new Date().toISOString()}`);
 
     if ( !this.armature ) return;
 
@@ -2551,7 +2394,6 @@ class TalkingHead {
   * Stop the pose. (Functionality is the same as in stopAnimation.)
   */
   stopPose() {
-    // IMP: console.log(`stopPose function called at ${new Date().toISOString()}`);
     this.stopAnimation();
   }
 
@@ -2564,7 +2406,6 @@ class TalkingHead {
   * @param {number} [ms=1000] Transition time in milliseconds
   */
   playGesture(name, dur=3, mirror=false, ms=1000) {
-    // IMP: console.log(`playGesture function called at ${new Date().toISOString()}`);
 
     if ( !this.armature ) return;
 
@@ -2648,7 +2489,6 @@ class TalkingHead {
   * @param {number} [ms=1000] Transition time in milliseconds
   */
   stopGesture(ms=1000) {
-    // IMP: console.log(`stopGesture called with time: ${new Date().toISOString()}ms`);
 
     // Stop gesture timer
     if ( this.gestureTimeout ) {
@@ -2687,7 +2527,6 @@ class TalkingHead {
   * @param {numeric} [d=null] If set, apply in d milliseconds
   */
   ikSolve(ik, target=null, relative=false, d=null) {
-    // IMP: console.log(`ikSolve called with time: ${new Date().toISOString()}ms`);
     const q = new THREE.Quaternion();
     const targetVec = new THREE.Vector3();
     const effectorPos = new THREE.Vector3();
