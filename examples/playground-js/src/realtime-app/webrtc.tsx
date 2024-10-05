@@ -39,6 +39,8 @@ export function WebRTCRealtimeApp() {
         description: "Failed to connect.",
         variant: "destructive",
       });
+      disconnect();
+      onDisconnect();
     }
   }, [connectionStatus, connect, onDisconnect, config]);
 

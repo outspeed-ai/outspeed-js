@@ -37,6 +37,8 @@ export function WebRTCScreenShareRealtimeApp() {
         description: "Failed to connect.",
         variant: "destructive",
       });
+      disconnect();
+      onDisconnect();
     }
   }, [connectionStatus, connect, onDisconnect, config]);
 
