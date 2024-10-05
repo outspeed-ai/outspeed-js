@@ -45,8 +45,8 @@ export function RealtimeShareScreenInput(
   const {
     value,
     onChange,
-    placeholder = "Do you want to share your screen",
-    label = "Screen",
+    placeholder = "Select resolution. 512p is recommended for now.",
+    label = "Video Resolution",
     description,
     isError,
     errorMsg,
@@ -63,8 +63,8 @@ export function RealtimeShareScreenInput(
         </SelectTrigger>
         <SelectContent>
           {[
-            { label: "Yes", value: "yes" },
-            { label: "No", value: "no" },
+            { label: "512p", value: "512p" },
+            { label: "1080p", value: "1080p" },
           ].map(({ value, label }) => (
             <SelectItem key={value} value={value}>
               {label}

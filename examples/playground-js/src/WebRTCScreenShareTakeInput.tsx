@@ -45,7 +45,7 @@ export function WebRTCScreenShareTakeInput(
       isFormValid = false;
     }
 
-    if (screenShareInput !== "yes") {
+    if (screenShareInput !== "512p" && screenShareInput !== "1080p") {
       setIsScreenShareInputMissing(true);
       isFormValid = false;
     }
@@ -59,7 +59,11 @@ export function WebRTCScreenShareTakeInput(
         functionURL,
         audioDeviceId,
         screenConstraints: {
-          video: true,
+          video: {
+            width: screenShareInput === "512p" ? 512 : 1080,
+            height: screenShareInput === "512p" ? 512 : 1080,
+            frameRate: 1,
+          },
         },
         logger: ConsoleLogger.getLogger(),
       });
@@ -93,13 +97,13 @@ export function WebRTCScreenShareTakeInput(
       <RealtimeShareScreenInput
         onChange={(value) => {
           setScreenShareInput(value);
-          if (value === "yes") {
+          if (value === "512p" || value === "1080p") {
             setIsScreenShareInputMissing(false);
           }
         }}
         value={screenShareInput}
         isError={isScreenShareInputMissing}
-        description='Select "Yes" to confirm that you want to share your screen.'
+        description="Select the resolution of shared video. 512x512 is recommended for now."
         errorMsg={
           isScreenShareInputMissing
             ? "In this example, please agree to share your screen as we will need this to proceed."
@@ -107,7 +111,9 @@ export function WebRTCScreenShareTakeInput(
         }
       />
 
-      <RealtimeFormButton onClick={handleFormSubmit}>Run</RealtimeFormButton>
+      <RealtimeFormButton onClick={handleFormSubmit}>
+        Share Screen
+      </RealtimeFormButton>
     </div>
   );
 }
