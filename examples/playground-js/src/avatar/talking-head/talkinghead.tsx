@@ -7,6 +7,7 @@ import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import Stats from 'three/examples/jsm/libs/stats.module.js';
 import { Base64Converter, gaussianRandom, sigmoidFactory, convertRange } from './utils';
+import { SpeechHandler } from './speech-handler';
 
 /**
 * @class Talking Head
@@ -642,6 +643,7 @@ class TalkingHead {
       'nn', 'RR', 'CH', 'sil'
     ];
 
+    this.speechHandler = new SpeechHandler(this)
 
     // Audio context and playlist
     this.audioCtx = new AudioContext();
@@ -656,9 +658,6 @@ class TalkingHead {
     this.audioReverbNode.connect(this.audioCtx.destination);
     this.setMixerGain( this.opt.mixerGainSpeech, this.opt.mixerGainBackground ); // Volume
     this.audioPlaylist = [];
-
-    // Create a lookup table for base64 decoding
-    this.b64Converter = new Base64Converter()
 
     // Speech queue
     this.stateName = 'idle';
@@ -1800,7 +1799,7 @@ class TalkingHead {
           this.onSubtitles(""+x);
         }
       } else if ( mt === 'speak' ) {
-        this.speakText(""+x);
+        this.speakTextHttp(""+x);
       } else if ( mt === 'pose' ) {
         this.poseName = ""+x;
         this.setPoseFromTemplate( this.poseTemplates[ this.poseName ] );
@@ -2019,152 +2018,18 @@ class TalkingHead {
   }
 
   async speakTextHttp(line) {
-    console.log("Called speak text with line : ", line)
-    try {
-      this.speechQueue.push(line);
-      // Start speaking (if not already)
-      this.startSpeakingHttp();
-    } catch (error) {
-      console.error('Error in speakTextHttp:', error);
-    }
+    // console.log("Called speak text with line : ", line)
+    // try {
+    //   this.speechQueue.push(line);
+    //   // Start speaking (if not already)
+    //   this.startSpeakingHttp();
+    // } catch (error) {
+    //   console.error('Error in speakTextHttp:', error);
+    // }
+    this.speechHandler.push(line)
+    this.speechHandler.start()
   }
 
-    /**
-  * Take the next queue item from the speech queue, convert it to text, and
-  * load the audio file.
-  * @param {boolean} [force=false] If true, forces to proceed (e.g. after break)
-  */
-    async startSpeakingHttp(force = false ) {
-      console.log("in start speaking!")
-      if ( !this.armature || (this.isSpeaking && !force) ) return;
-      this.stateName = 'talking';
-      this.isSpeaking = true;
-      // wait for a message otherwise do the idle thing
-      if ( this.speechQueue.length ) {
-        let line = this.speechQueue.shift();
-        if ( line.emoji ) {
-  
-          // Look at the camera
-          this.lookAtCamera(500);
-  
-          // Only emoji
-          let duration = line.emoji.dt.reduce((a,b) => a+b,0);
-          this.animQueue.push( this.animFactory( line.emoji ) );
-          setTimeout( this.startSpeakingHttp.bind(this), duration, true );
-        } else if ( line.break ) {
-          console.log("in break!")
-          // Break
-          setTimeout( this.startSpeakingHttp.bind(this), line.break, true );
-        } else if ( line.audio ) {
-          console.log("in line.audio!")
-  
-          // Look at the camera
-          this.lookAtCamera(500);
-          this.speakWithHands();
-  
-          // Make a playlist
-          this.audioPlaylist.push({ anim: line.anim, audio: line.audio });
-          this.onSubtitles = line.onSubtitles || null;
-          this.resetLips();
-          if ( line.mood ) this.setMood( line.mood );
-          this.playAudioHttp();
-  
-        } else if ( line.text ) {
-          // Look at the camera
-          console.log("in line.text!")
-          this.lookAtCamera(500);
-  
-          // Spoken text
-          try {
-            const data = line.data
-  
-            // if ( res.ok && data && data.audioContent ) {
-            if ( data && data.audioContent ) {
-  
-              // Audio data
-              const buf = this.b64Converter.b64ToArrayBuffer(data.audioContent);
-              const audio = await this.audioCtx.decodeAudioData( buf );
-              this.speakWithHands();
-  
-              // Workaround for Google TTS not providing all timepoints
-              const times = [ 0 ];
-              let markIndex = 0;
-              line.text.forEach( (x,i) => {
-                if ( i > 0 ) {
-                  let ms = times[ times.length - 1 ];
-                  if ( data.timepoints[markIndex] ) {
-                    ms = data.timepoints[markIndex].timeSeconds * 1000;
-                    if ( data.timepoints[markIndex].markName === ""+x.mark ) {
-                      markIndex++;
-                    }
-                  }
-                  times.push( ms );
-                }
-              });
-  
-              // Word-to-audio alignment
-              const timepoints = [ { mark: 0, time: 0 } ];
-              times.forEach( (x,i) => {
-                if ( i>0 ) {
-                  let prevDuration = x - times[i-1];
-                  if ( prevDuration > 150 ) prevDuration - 150; // Trim out leading space
-                  timepoints[i-1].duration = prevDuration;
-                  timepoints.push( { mark: i, time: x });
-                }
-              });
-              let d = 1000 * audio.duration; // Duration in ms
-              if ( d > this.opt.ttsTrimEnd ) d = d - this.opt.ttsTrimEnd; // Trim out silence at the end
-              timepoints[timepoints.length-1].duration = d - timepoints[timepoints.length-1].time;
-  
-              // Re-set animation starting times and rescale durations
-              line.anim.forEach( x => {
-                const timepoint = timepoints[x.mark];
-                if ( timepoint ) {
-                  for(let i=0; i<x.ts.length; i++) {
-                    x.ts[i] = timepoint.time + (x.ts[i] * timepoint.duration) + this.opt.ttsTrimStart;
-                  }
-                }
-              });
-  
-              // Add to the playlist
-              this.audioPlaylist.push({ anim: line.anim, audio: audio });
-              this.onSubtitles = line.onSubtitles || null;
-              this.resetLips();
-              if ( line.mood ) this.setMood( line.mood );
-              this.playAudioHttp();
-  
-            } else {
-              this.startSpeakingHttp(true);
-            }
-          } catch (error) {
-            console.error("Error:", error);
-            this.startSpeakingHttp(true);
-          }
-        } else if ( line.anim ) {
-          // Only subtitles
-          this.onSubtitles = line.onSubtitles || null;
-          this.resetLips();
-          if ( line.mood ) this.setMood( line.mood );
-          line.anim.forEach( (x,i) => {
-            for(let j=0; j<x.ts.length; j++) {
-              x.ts[j] = this.animClock  + 10 * i;
-            }
-            this.animQueue.push(x);
-          });
-          setTimeout( this.startSpeakingHttp.bind(this), 10 * line.anim.length, true );
-        } else if ( line.marker ) {
-          if ( typeof line.marker === "function" ) {
-            line.marker();
-          }
-          this.startSpeakingHttp(true);
-        } else {
-          this.startSpeakingHttp(true);
-        }
-      } else {
-        this.stateName = 'idle';
-        this.isSpeaking = false;
-      }
-    }
 
   /**
   * Pause speaking.
