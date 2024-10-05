@@ -4,7 +4,7 @@ import {
   RealtimeAudioInput,
   RealtimeFormButton,
 } from "@outspeed/react";
-import { TRealtimeWebSocketConfig, ConsoleLogger } from "@outspeed/core";
+import { TRealtimeWebSocketConfig } from "@outspeed/core";
 import { useOutletContext } from "react-router-dom";
 import { TLayoutOutletContext } from "./type";
 import { WEBSOCKET_APP_ROUTE } from "../constants/routes";

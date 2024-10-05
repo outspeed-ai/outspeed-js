@@ -5,7 +5,7 @@ import {
   RealtimeVideoInput,
   RealtimeFormButton,
 } from "@outspeed/react";
-import { createConfig, ConsoleLogger } from "@outspeed/core";
+import { createConfig } from "@outspeed/core";
 import { useOutletContext } from "react-router-dom";
 import { TLayoutOutletContext } from "./type";
 import { WEB_RTC_APP_ROUTE } from "../constants/routes";

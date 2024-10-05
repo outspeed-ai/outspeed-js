@@ -5,7 +5,7 @@ import {
   RealtimeFormButton,
   RealtimeShareScreenInput,
 } from "@outspeed/react";
-import { createConfig, ConsoleLogger } from "@outspeed/core";
+import { createConfig } from "@outspeed/core";
 import { useOutletContext } from "react-router-dom";
 import { TLayoutOutletContext } from "./type";
 import { SCREEN_SHARE_APP_ROUTE } from "../constants/routes";
