@@ -1,17 +1,13 @@
 import React from "react";
 import { useWebRTC, useRealtimeToast } from "@outspeed/react";
-import { TRealtimeConfig } from "@outspeed/core";
 import { Loader2 } from "lucide-react";
 import { Button } from "../components/button";
 import { MeetingLayout } from "../components/meeting-layout";
+import { useOutletContext } from "react-router-dom";
+import { TRealtimeAppContext } from "./types";
 
-export type TWebRTCRealtimeApp = {
-  onDisconnect: () => void;
-  config: TRealtimeConfig;
-};
-
-export function WebRTCRealtimeApp(props: TWebRTCRealtimeApp) {
-  const { config, onDisconnect } = props;
+export function WebRTCScreenShareRealtimeApp() {
+  const { config, onDisconnect } = useOutletContext<TRealtimeAppContext>();
   const { toast } = useRealtimeToast();
 
   const {
@@ -41,6 +37,8 @@ export function WebRTCRealtimeApp(props: TWebRTCRealtimeApp) {
         description: "Failed to connect.",
         variant: "destructive",
       });
+      disconnect();
+      onDisconnect();
     }
   }, [connectionStatus, connect, onDisconnect, config]);
 

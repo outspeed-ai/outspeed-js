@@ -5,16 +5,13 @@ import {
   RealtimeFormButton,
   RealtimeShareScreenInput,
 } from "@outspeed/react";
-import { TRealtimeConfig, createConfig, ConsoleLogger } from "@outspeed/core";
+import { createConfig, ConsoleLogger } from "@outspeed/core";
+import { useOutletContext } from "react-router-dom";
+import { TLayoutOutletContext } from "./type";
+import { SCREEN_SHARE_APP_ROUTE } from "../constants/routes";
 
-export type TWebRTCScreenShareTakeInputProps = {
-  onSubmit: (config: TRealtimeConfig) => void;
-};
-
-export function WebRTCScreenShareTakeInput(
-  props: TWebRTCScreenShareTakeInputProps
-) {
-  const { onSubmit } = props;
+export function WebRTCScreenShareTakeInput() {
+  const { onSubmit } = useOutletContext<TLayoutOutletContext>();
   const [audioDeviceId, setAudioDeviceId] = React.useState("");
   const [functionURL, setFunctionURL] = React.useState("http://localhost:8080");
   const [isMediaMissing, setIsMediaMissing] = React.useState(false);
@@ -65,9 +62,8 @@ export function WebRTCScreenShareTakeInput(
             frameRate: 1,
           },
         },
-        logger: ConsoleLogger.getLogger(),
       });
-      onSubmit(config);
+      onSubmit(config, SCREEN_SHARE_APP_ROUTE);
     } catch (error) {
       console.error("Unable to create config", error);
     }

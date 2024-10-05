@@ -5,13 +5,12 @@ import {
   RealtimeFormButton,
 } from "@outspeed/react";
 import { TRealtimeWebSocketConfig, ConsoleLogger } from "@outspeed/core";
+import { useOutletContext } from "react-router-dom";
+import { TLayoutOutletContext } from "./type";
+import { WEBSOCKET_APP_ROUTE } from "../constants/routes";
 
-export type TWebSocketTakeInputProps = {
-  onSubmit: (config: TRealtimeWebSocketConfig) => void;
-};
-
-export function WebSocketTakeInput(props: TWebSocketTakeInputProps) {
-  const { onSubmit } = props;
+export function WebSocketTakeInput() {
+  const { onSubmit } = useOutletContext<TLayoutOutletContext>();
   const [audioDeviceId, setAudioDeviceId] = React.useState("");
   const [functionURL, setFunctionURL] = React.useState(
     "http://localhost:8080/"
@@ -41,10 +40,9 @@ export function WebSocketTakeInput(props: TWebSocketTakeInputProps) {
           deviceId: audioDeviceId,
           echoCancellation: true,
         },
-        logger: ConsoleLogger.getLogger(),
       } satisfies TRealtimeWebSocketConfig;
 
-      onSubmit(config);
+      onSubmit(config, WEBSOCKET_APP_ROUTE);
     } catch (error) {
       console.error("Unable to create config", error);
     }
