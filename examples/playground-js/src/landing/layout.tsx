@@ -1,22 +1,53 @@
-import { RealtimeExamples } from "./RealtimeExamples";
-import { buttonVariants } from "./components/button";
+import clsx from "clsx";
+import { Outlet, useNavigate } from "react-router-dom";
+
+import { buttonVariants } from "../components/button";
 import { FileIcon, Github } from "lucide-react";
-import { WebRTCTakeInput } from "./WebRTCTakeInput";
+import { TAppRouteLocationState, TLayoutOutletContext } from "./type";
+import React from "react";
 import { TRealtimeConfig } from "@outspeed/core";
 import { TRealtimeWebSocketConfig } from "@outspeed/core";
-import { WebSocketTakeInput } from "./WebSocketTakeInput";
-import clsx from "clsx";
-import { TRoutes } from "./constants";
-import { WebRTCScreenShareTakeInput } from "./WebRTCScreenShareTakeInput";
+import { RealtimeExamples } from "./RealtimeExamples";
+import { isChrome, isSafari } from "react-device-detect";
+import { BROWSER_NOT_SUPPORTED_ROUTE } from "../constants/routes";
+import { BrowserNotSupported } from "../components/browser-not-supported";
 
-export type TLandingProps = {
-  selectedExample: TRoutes;
-  setSelectedExample: (selected: TRoutes) => void;
-  onSubmit: (data: TRealtimeConfig | TRealtimeWebSocketConfig) => void;
-};
+export type TLandingProps = {};
 
-export function Landing(props: TLandingProps) {
-  const { onSubmit, selectedExample, setSelectedExample } = props;
+export function LandingLayout() {
+  const navigate = useNavigate();
+  const [isBrowserSupported, setIsBrowserSupported] = React.useState(false);
+
+  const handleOnSubmit = React.useCallback(
+    (config: TRealtimeConfig | TRealtimeWebSocketConfig, pathname: string) => {
+      navigate(pathname, {
+        state: { config } satisfies TAppRouteLocationState,
+      });
+    },
+    [navigate]
+  );
+
+  const checkBrowser = React.useCallback(() => {
+    if (!isChrome && !isSafari) {
+      setIsBrowserSupported(false);
+      navigate(BROWSER_NOT_SUPPORTED_ROUTE);
+    } else {
+      setIsBrowserSupported(true);
+    }
+  }, [navigate]);
+
+  React.useEffect(() => {
+    checkBrowser();
+  }, [checkBrowser]);
+
+  if (!isBrowserSupported) {
+    /**
+     * Ideally we will be redirected to `/not_supported` route.
+     * Having this here as a fallback.
+     */
+    return <BrowserNotSupported />;
+  }
+
   return (
     <div className="flex h-dvh w-dvw flex-col items-center md:items-stretch md:flex-row">
       <div className="flex-1 bg-[hsl(204,80%,5%)] w-full flex justify-center md:justify-end">
@@ -39,10 +70,7 @@ export function Landing(props: TLandingProps) {
               the right, and click "Run" to see it in action.
             </p>
           </div>
-          <RealtimeExamples
-            selected={selectedExample}
-            onClick={(id) => setSelectedExample(id)}
-          />
+          <RealtimeExamples />
           <Links className="hidden md:block" />
         </div>
       </div>
@@ -51,15 +79,11 @@ export function Landing(props: TLandingProps) {
           <div className="mb-4 p-4 text-red-500 text-lg border border-red-500 rounded">
             Please ensure that the app is running and Function URL is correct.
           </div>
-          {selectedExample === "webrtc" && (
-            <WebRTCTakeInput onSubmit={onSubmit} />
-          )}
-          {selectedExample === "websocket" && (
-            <WebSocketTakeInput onSubmit={onSubmit} />
-          )}
-          {selectedExample === "webrtc-screen=share" && (
-            <WebRTCScreenShareTakeInput onSubmit={onSubmit} />
-          )}
+          <Outlet
+            context={
+              { onSubmit: handleOnSubmit } satisfies TLayoutOutletContext
+            }
+          />
         </div>
       </div>
       <div className="w-full justify-center mt-16 flex md:hidden">
