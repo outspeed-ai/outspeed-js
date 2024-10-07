@@ -59,7 +59,7 @@ export function WebRTCScreenShareTakeInput() {
           video: {
             width: screenShareInput === "512p" ? 512 : 1080,
             height: screenShareInput === "512p" ? 512 : 1080,
-            frameRate: 1,
+            frameRate: 5,
           },
         },
       });
