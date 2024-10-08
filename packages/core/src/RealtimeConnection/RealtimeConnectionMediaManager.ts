@@ -44,7 +44,7 @@ export class RealtimeConnectionMediaManager {
   private readonly _logLabel = "RealtimeConnectionMediaManager";
 
   // To store all the local streams.
-  localStreams: Record<ETrackKind | "screen", Track[]>;
+  localStreams: Record<ETrackKind, Track[]>;
 
   constructor(peerConnection: RTCPeerConnection, config: TRealtimeConfig) {
     this._peerConnection = peerConnection;
@@ -53,7 +53,6 @@ export class RealtimeConnectionMediaManager {
     this.localStreams = {
       audio: [],
       video: [],
-      screen: [],
     };
   }
 
@@ -221,7 +220,13 @@ export class RealtimeConnectionMediaManager {
       const stream = await navigator.mediaDevices.getDisplayMedia(config);
       stream.getTracks().forEach((track) => {
         this._peerConnection.addTrack(track, stream);
-        this.localStreams.screen.push(new Track(track, ETrackOrigin.Local));
+        const _trackInstance = new Track(track, ETrackOrigin.Local);
+
+        if (_trackInstance.kind === ETrackKind.Audio) {
+          this.localStreams.audio.push(_trackInstance);
+        } else if (_trackInstance.kind === ETrackKind.Video) {
+          this.localStreams.video.push(_trackInstance);
+        }
       });
 
       return {
@@ -259,16 +264,14 @@ export class RealtimeConnectionMediaManager {
    */
   releaseAllLocalStream(): TResponse {
     try {
-      [
-        ...this.localStreams.audio,
-        ...this.localStreams.video,
-        ...this.localStreams.screen,
-      ].forEach((media) => {
-        media.track.stop();
-        media.stream.getTracks().forEach((track) => {
-          track.stop();
-        });
-      });
+      [...this.localStreams.audio, ...this.localStreams.video].forEach(
+        (media) => {
+          media.track.stop();
+          media.stream.getTracks().forEach((track) => {
+            track.stop();
+          });
+        }
+      );
 
       this._isSetupCompleted = false;
       return {

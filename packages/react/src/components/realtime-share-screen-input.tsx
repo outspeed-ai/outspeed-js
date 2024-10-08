@@ -28,6 +28,15 @@ export type TRealtimeShareScreenInputProps = {
    * Callback when the value changes.
    */
   onChange: (value: string) => void;
+  /**
+   * If then border and label color will be red.
+   */
+  isError?: boolean;
+
+  /**
+   * If defined then error msg will be shown below description.
+   */
+  errorMsg?: string;
 };
 
 export function RealtimeShareScreenInput(
@@ -36,22 +45,26 @@ export function RealtimeShareScreenInput(
   const {
     value,
     onChange,
-    placeholder = "Do you want to share your screen",
-    label = "Screen",
+    placeholder = "Select resolution. 512p is recommended for now.",
+    label = "Video Resolution",
     description,
+    isError,
+    errorMsg,
   } = props;
 
   return (
     <FormItem>
-      <FormLabel htmlFor="share-screen">{label}</FormLabel>
+      <FormLabel htmlFor="share-screen" isError={isError}>
+        {label}
+      </FormLabel>
       <Select onValueChange={onChange} value={value}>
-        <SelectTrigger id="share-screen">
+        <SelectTrigger isError={isError} id="share-screen">
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent>
           {[
-            { label: "Yes", value: "yes" },
-            { label: "No", value: "no" },
+            { label: "512p", value: "512p" },
+            { label: "1080p", value: "1080p" },
           ].map(({ value, label }) => (
             <SelectItem key={value} value={value}>
               {label}
@@ -60,6 +73,7 @@ export function RealtimeShareScreenInput(
         </SelectContent>
       </Select>
       {description && <FormDescription>{description}</FormDescription>}
+      {errorMsg && <FormDescription isError>{errorMsg}</FormDescription>}
     </FormItem>
   );
 }

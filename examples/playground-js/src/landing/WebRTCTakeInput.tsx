@@ -5,14 +5,13 @@ import {
   RealtimeVideoInput,
   RealtimeFormButton,
 } from "@outspeed/react";
-import { TRealtimeConfig, createConfig, ConsoleLogger } from "@outspeed/core";
+import { createConfig } from "@outspeed/core";
+import { useOutletContext } from "react-router-dom";
+import { TLayoutOutletContext } from "./type";
+import { WEB_RTC_APP_ROUTE } from "../constants/routes";
 
-export type TWebRTCTakeInputProps = {
-  onSubmit: (config: TRealtimeConfig) => void;
-};
-
-export function WebRTCTakeInput(props: TWebRTCTakeInputProps) {
-  const { onSubmit } = props;
+export function WebRTCTakeInput() {
+  const { onSubmit } = useOutletContext<TLayoutOutletContext>();
   const [audioDeviceId, setAudioDeviceId] = React.useState("");
   const [videoDeviceId, setVideoDeviceId] = React.useState("");
   const [functionURL, setFunctionURL] = React.useState("http://localhost:8080");
@@ -53,9 +52,8 @@ export function WebRTCTakeInput(props: TWebRTCTakeInputProps) {
         functionURL,
         audioDeviceId,
         videoDeviceId,
-        logger: ConsoleLogger.getLogger(),
       });
-      onSubmit(config);
+      onSubmit(config, WEB_RTC_APP_ROUTE);
     } catch (error) {
       console.error("Unable to create config", error);
     }

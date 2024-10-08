@@ -1,11 +1,9 @@
-import { Button } from "./components/button";
+import { useNavigate } from "react-router-dom";
+import { Button } from "./button";
+import { BASE_ROUTE } from "../constants/routes";
 
-export type TThankYouScreenProps = {
-  onClick: () => void;
-};
-export function ThankYouScreen(props: TThankYouScreenProps) {
-  const { onClick } = props;
-
+export function ThankYouScreen() {
+  const navigate = useNavigate();
   return (
     <div className="flex justify-center h-dvh w-dvw">
       <div className="flex flex-1 max-w-[1344px] p-4">
@@ -19,7 +17,10 @@ export function ThankYouScreen(props: TThankYouScreenProps) {
               <h2 className="text-3xl font-light">
                 Thanks for trying the example.
               </h2>
-              <Button className="inline-flex" onClick={onClick}>
+              <Button
+                className="inline-flex"
+                onClick={() => navigate(BASE_ROUTE)}
+              >
                 Go to homepage
               </Button>
             </div>

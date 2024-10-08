@@ -1,17 +1,15 @@
 import React from "react";
 import { useWebSocket } from "@outspeed/react";
-import { TRealtimeWebSocketConfig } from "@outspeed/core";
 import { Loader2 } from "lucide-react";
 import { Button } from "../components/button";
 import { MeetingLayout } from "../components/meeting-layout";
+import { useOutletContext } from "react-router-dom";
+import { TRealtimeAppContext } from "./types";
+import { ConsoleLogger } from "@outspeed/core";
+import { TRealtimeWebSocketConfig } from "@outspeed/core";
 
-export type TWebSocketRealtimeAppProps = {
-  onDisconnect: () => void;
-  config: TRealtimeWebSocketConfig;
-};
-
-export function WebSocketRealtimeApp(props: TWebSocketRealtimeAppProps) {
-  const { config, onDisconnect } = props;
+export function WebSocketRealtimeApp() {
+  const { config, onDisconnect } = useOutletContext<TRealtimeAppContext>();
 
   const {
     connect,
@@ -21,7 +19,10 @@ export function WebSocketRealtimeApp(props: TWebSocketRealtimeAppProps) {
     dataChannel,
     connectionStatus,
   } = useWebSocket({
-    config,
+    config: {
+      ...config,
+      logger: ConsoleLogger.getLogger(),
+    } as TRealtimeWebSocketConfig,
   });
 
   const handleDisconnect = React.useCallback(() => {

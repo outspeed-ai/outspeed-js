@@ -21,7 +21,7 @@ export type TMeetingLayoutProps = {
   title: string;
 };
 
-export function MeetingLayout(props: TMeetingLayoutProps) {
+export function ScreenShareLayout(props: TMeetingLayoutProps) {
   const {
     localTrack,
     localAudioTrack,
@@ -54,7 +54,7 @@ export function MeetingLayout(props: TMeetingLayoutProps) {
   }, [handleResize]);
 
   return (
-    <div className="flex flex-col flex-1 relative max-w-[calc(100vw-32px)]">
+    <div className="flex flex-col flex-1 relative">
       {/* Video section */}
       <div className="flex-1 items-center flex py-4" ref={container}>
         <div className="flex-1 justify-center overflow-hidden flex flex-col space-y-6 sm:flex-row sm:space-x-6 sm:space-y-0">
@@ -65,25 +65,15 @@ export function MeetingLayout(props: TMeetingLayoutProps) {
               hasControls={{ audio: remoteAudioTrack }}
             />
           )}
-          {!remoteTrack && (
-            <>
-              <AudioVisualizerContainer
-                track={remoteAudioTrack}
-                label="Outspeed"
-                hasControls
-                threshold={120}
-              />
-              <RealtimeAudio track={remoteAudioTrack} />
-            </>
-          )}
-          {localTrack && <VideContainer track={localTrack} label="You" />}
-          {!localTrack && (
+          <>
             <AudioVisualizerContainer
-              track={localAudioTrack}
-              label="You"
-              threshold={250}
+              track={remoteAudioTrack}
+              label="Outspeed"
+              hasControls
+              threshold={120}
             />
-          )}
+            <RealtimeAudio track={remoteAudioTrack} />
+          </>
         </div>
         {dataChannel && (
           <Chat
