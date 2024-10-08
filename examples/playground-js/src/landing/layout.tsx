@@ -9,7 +9,6 @@ import { TRealtimeConfig } from "@outspeed/core";
 import { TRealtimeWebSocketConfig } from "@outspeed/core";
 import { RealtimeExamples } from "./RealtimeExamples";
 import { isChrome, isSafari } from "react-device-detect";
-import { BROWSER_NOT_SUPPORTED_ROUTE } from "../constants/routes";
 import { BrowserNotSupported } from "../components/browser-not-supported";
 
 export type TLandingProps = {};
@@ -30,21 +29,16 @@ export function LandingLayout() {
   const checkBrowser = React.useCallback(() => {
     if (!isChrome && !isSafari) {
       setIsBrowserSupported(false);
-      navigate(BROWSER_NOT_SUPPORTED_ROUTE);
     } else {
       setIsBrowserSupported(true);
     }
-  }, [navigate]);
+  }, []);
 
   React.useEffect(() => {
     checkBrowser();
   }, [checkBrowser]);
 
   if (!isBrowserSupported) {
-    /**
-     * Ideally we will be redirected to `/not_supported` route.
-     * Having this here as a fallback.
-     */
     return <BrowserNotSupported />;
   }
 
