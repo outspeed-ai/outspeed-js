@@ -87,6 +87,9 @@ const router = createBrowserRouter([
   },
   {
     path: THANK_YOU_ROUTE,
+    loader: () => {
+      return json({ sessionID });
+    },
     element: <ThankYouScreen />,
   },
   {

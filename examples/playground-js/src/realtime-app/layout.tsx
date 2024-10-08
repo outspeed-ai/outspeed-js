@@ -20,7 +20,7 @@ export function RealtimeAppLayout() {
   const navigate = useNavigate();
 
   const handleDisconnect = React.useCallback(() => {
-    navigate(THANK_YOU_ROUTE);
+    navigate(THANK_YOU_ROUTE, { state: { sessionID } });
   }, [navigate]);
 
   React.useEffect(() => {
