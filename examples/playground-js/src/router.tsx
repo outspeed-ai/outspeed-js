@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, json } from "react-router-dom";
 import { LandingLayout } from "./landing/layout";
 import {
   APP_ROUTE,
@@ -24,11 +24,21 @@ import { ThankYouScreen } from "./components/thank-you";
 import { SomethingWentWrong } from "./components/something-went-wrong";
 import { PageNotFound } from "./components/page-not-found";
 
+/**
+ * Every time the browser reloads, we will get a new sessionID.
+ * We will use this sessionID to track whether the browser is
+ * reloaded.
+ */
+const sessionID = new Date().getTime();
+
 const router = createBrowserRouter([
   {
     path: BASE_ROUTE,
     element: <LandingLayout />,
     errorElement: <SomethingWentWrong />,
+    loader: () => {
+      return json({ sessionID });
+    },
     children: [
       {
         path: "/",
@@ -52,6 +62,9 @@ const router = createBrowserRouter([
     path: APP_ROUTE,
     element: <RealtimeAppLayout />,
     errorElement: <SomethingWentWrong />,
+    loader: () => {
+      return json({ sessionID });
+    },
     children: [
       {
         path: WEB_RTC_APP_ROUTE,

@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLoaderData, useNavigate } from "react-router-dom";
 
 import { buttonVariants } from "../components/button";
 import { FileIcon, Github } from "lucide-react";
@@ -11,17 +11,23 @@ import { RealtimeExamples } from "./RealtimeExamples";
 import { isChrome, isSafari } from "react-device-detect";
 import { BROWSER_NOT_SUPPORTED_ROUTE } from "../constants/routes";
 import { BrowserNotSupported } from "../components/browser-not-supported";
+import { TLoaderData } from "../types";
 
 export type TLandingProps = {};
 
 export function LandingLayout() {
   const navigate = useNavigate();
+  const { sessionID } = useLoaderData() as TLoaderData;
+
   const [isBrowserSupported, setIsBrowserSupported] = React.useState(false);
 
   const handleOnSubmit = React.useCallback(
     (config: TRealtimeConfig | TRealtimeWebSocketConfig, pathname: string) => {
       navigate(pathname, {
-        state: { config } satisfies TAppRouteLocationState,
+        state: {
+          config,
+          sessionID,
+        } satisfies TAppRouteLocationState,
       });
     },
     [navigate]
