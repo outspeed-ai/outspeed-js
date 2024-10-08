@@ -14,6 +14,7 @@ export function WebRTCTakeInput() {
   const { onSubmit } = useOutletContext<TLayoutOutletContext>();
   const [audioDeviceId, setAudioDeviceId] = React.useState("");
   const [videoDeviceId, setVideoDeviceId] = React.useState("");
+  const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const initialFunctionURL =
     queryParams.get("functionURL") || "http://localhost:8080";
