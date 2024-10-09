@@ -36,7 +36,7 @@ export function ThankYouScreen() {
               </h2>
               <Button
                 className="inline-flex"
-                onClick={() => navigate(BASE_ROUTE)}
+                onClick={() => navigate(state?.formURL || BASE_ROUTE)}
               >
                 Go to homepage
               </Button>
