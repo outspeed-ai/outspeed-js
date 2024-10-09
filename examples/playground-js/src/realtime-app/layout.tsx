@@ -20,7 +20,9 @@ export function RealtimeAppLayout() {
   const navigate = useNavigate();
 
   const handleDisconnect = React.useCallback(() => {
-    navigate(THANK_YOU_ROUTE, { state: { sessionID } });
+    navigate(THANK_YOU_ROUTE, {
+      state: { sessionID, formURL: state?.formURL },
+    });
   }, [navigate]);
 
   React.useEffect(() => {
@@ -33,11 +35,11 @@ export function RealtimeAppLayout() {
      * `state.sessionID` not matching `sessionID` indicates a browser reload.
      */
     if (!state || state.sessionID !== sessionID) {
-      navigate(BASE_ROUTE);
+      navigate(state?.formURL || BASE_ROUTE);
     }
   }, [state, sessionID]);
 
-  if (!state || !state.config) {
+  if (!state || !state.config || state.sessionID !== sessionID) {
     return null;
   }
 

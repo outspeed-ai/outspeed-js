@@ -17,7 +17,7 @@ export function ThankYouScreen() {
      * page, hence redirecting the user to the homepage.
      */
     if (!state || state.sessionID !== sessionID) {
-      navigate(BASE_ROUTE);
+      navigate(state?.formURL || BASE_ROUTE);
     }
   }, []);
 

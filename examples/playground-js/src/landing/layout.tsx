@@ -1,5 +1,10 @@
 import clsx from "clsx";
-import { Outlet, useLoaderData, useNavigate } from "react-router-dom";
+import {
+  Outlet,
+  useLoaderData,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 
 import { buttonVariants } from "../components/button";
 import { FileIcon, Github } from "lucide-react";
@@ -17,6 +22,7 @@ export type TLandingProps = {};
 
 export function LandingLayout() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { sessionID } = useLoaderData() as TLoaderData;
 
   const [isBrowserSupported, setIsBrowserSupported] = React.useState(false);
@@ -27,10 +33,11 @@ export function LandingLayout() {
         state: {
           config,
           sessionID,
+          formURL: location.pathname,
         } satisfies TAppRouteLocationState,
       });
     },
-    [navigate]
+    [navigate, location.pathname]
   );
 
   const checkBrowser = React.useCallback(() => {
