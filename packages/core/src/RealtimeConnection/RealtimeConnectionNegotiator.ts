@@ -40,6 +40,7 @@ export class RealtimeConnectionNegotiator {
       const response = await this._getOfferURL(this._config.functionURL);
       if (!response.ok) {
         return {
+          ...response,
           error: "Failed during getting offer URL.",
         };
       }
@@ -52,6 +53,7 @@ export class RealtimeConnectionNegotiator {
         "Neither offerURL nor functionURL is provided"
       );
       return {
+        ...response,
         error: "Neither offerURL nor functionURL is provided",
       };
     }
@@ -62,6 +64,7 @@ export class RealtimeConnectionNegotiator {
 
     if (!response.ok) {
       return {
+        ...response,
         error: "Failed during modifying sdp before sending offer.",
       };
     }
@@ -77,6 +80,7 @@ export class RealtimeConnectionNegotiator {
 
     if (!response.ok) {
       return {
+        ...response,
         error:
           "Failed during sending offer or during setting remote description.",
       };
@@ -144,6 +148,13 @@ export class RealtimeConnectionNegotiator {
   private async _getOfferURL(functionURL: string): Promise<TResponse> {
     try {
       const response = await fetchWithRetry(functionURL, undefined, 7);
+
+      if (!response.ok) {
+        return {
+          error: "Failed to get offerURL.",
+          data: await response.json(),
+        };
+      }
 
       const payload = (await response.json()) as unknown;
 
@@ -272,8 +283,18 @@ export class RealtimeConnectionNegotiator {
           },
           method: "POST",
         },
-        7
+        7,
+        undefined,
+        [400]
       );
+
+      if (!response.ok) {
+        this._logger?.error(this._logLabel, "Unable to get the offer URL.");
+        return {
+          error: "Unable to get the offer.",
+          data: await response.json(),
+        };
+      }
 
       const answer = (await response.json()) as unknown;
 

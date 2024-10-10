@@ -60,6 +60,10 @@ export class RealtimeWebSocketConnection {
         retryOnFail
       );
 
+      if (!response.ok) {
+        return response;
+      }
+
       const payload = (await response.json()) as unknown;
 
       // Waiting for connection to start.
@@ -67,8 +71,14 @@ export class RealtimeWebSocketConnection {
       await fetchWithRetry(
         functionURL.replace(/\/$/, "") + "/connections",
         undefined,
-        retryOnFail
+        retryOnFail,
+        undefined,
+        [400]
       );
+
+      if (!response.ok) {
+        return response;
+      }
 
       if (!payload || typeof payload !== "object") {
         throw new Error(
@@ -214,10 +224,8 @@ export class RealtimeWebSocketConnection {
         `Failed to connect to ${config.functionURL}`,
         response
       );
-      return { error: "Failed to connect" };
+      return { ...response, error: "Failed to connect" };
     }
-
-    console.log("So", response.data);
 
     this.socket = new WebSocket(response.data, config.protocols);
     this.dataChannel = new WebSocketDataChannel(this.socket);
