@@ -6,7 +6,7 @@ import {
   StateValue,
 } from "xstate";
 import { RealtimeConnection } from "../RealtimeConnection/RealtimeConnection";
-import { TRealtimeConfig } from "../shared/@types";
+import { TRealtimeConfig, TResponse } from "../shared/@types";
 
 export type TRealtimeConnectionMachinePossibleState = {
   Init: StateValue;
@@ -31,6 +31,7 @@ export type TRealtimeConnectionMachineEvents =
 
 export type TRealtimeConnectionMachineContext = {
   connection: RealtimeConnection | null;
+  connectionResponse: TResponse;
 };
 
 export type TRealtimeConnectionMachineActor = MachineSnapshot<
@@ -56,6 +57,19 @@ export const realtimeConnectionMachine = setup({
     states: TRealtimeConnectionMachinePossibleState;
     context: TRealtimeConnectionMachineContext;
   },
+  actions: {
+    storeConnectionReponse: assign({
+      connectionResponse: ({ event }) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const response = event as any;
+        if (typeof response === "object" && response) {
+          return response.output || response.error;
+        }
+
+        return { error: "Unknown error." };
+      },
+    }),
+  },
   actors: {
     connect: fromPromise(
       async ({ input }: { input: TRealtimeConnectionMachineContext }) => {
@@ -70,6 +84,10 @@ export const realtimeConnectionMachine = setup({
 
         if (response.ok) {
           return response;
+        }
+
+        if (response) {
+          throw response;
         }
 
         throw new Error("Unable to connect");
@@ -98,6 +116,7 @@ export const realtimeConnectionMachine = setup({
   /** @xstate-layout N4IgpgJg5mDOIC5QAoC2BDAxgCwJYDswBKAOgEl9cAXAYgGUBRAFQFUAFAfQGEB5AOT4MuTMvwDaABgC6iUAAcA9rGq4F+WSAAeiAIwA2CSQCcJowHYAHDrNmATLYkBmCwBoQAT0QWLJPX7MSEkaOAKyBFiEALAC+0W5oWHiEpFxqhJhUBFA0vAJCTAwAIpIySCCKyplqGtoIIQ4kOraRRnomOpG2ZpEhbp4IFrYktmFOTo6Oeo5dFrHxGDgExCSp+OmZ+NkAYgCCZAAyRSUaFSrVZbX1hk0tbUYdXT19up0kgYFGEe1GLY5zIAlFskVmkwBlIDRCmQ6LlBMIyHwAOLHMqnKrqC5eCbDKxdCR2IwSWx6MzPAZDEaBRzjSbTSz-QFJZaFXCwTCgjJZSHQ2H5I7SE5KM4Y0C1HQ6KwkEI6EJ6EJmcU2WwWPRkwbDUbUia0maxOIgfAKCBwDSMpZEQWVVQirSIAC0qo89r0DIWTNIFGoluFNUQnTVRkafj0KpatmpZhCf31ZuBq3WWW96N9CGcOhIX1CtmCEkikQkvSdA0D+j8oaM4fxstdiXNILWYKokCT1pTIb0w061hsOip3jVQ0jgTzNimE0jNaBzNZ7IbnM2LfOot0RMHjjzHTz+KVA5IQ9zkVH2qsk-dJBZbI5TYgi5tYsmkRIjkJJNzIWCecd-Ulo3e4sJxKRDop51ls6C4AANs2qJCsmmIICSPjKjcXT6CEIQRGSHTppSEi9noOiOJYeZ6tEQA */
   context: {
     connection: null,
+    connectionResponse: {},
   },
   initial: "Init",
   states: {
@@ -136,9 +155,11 @@ export const realtimeConnectionMachine = setup({
         input: ({ context }) => context,
         onDone: {
           target: "Connected",
+          actions: "storeConnectionReponse",
         },
         onError: {
           target: "Failed",
+          actions: "storeConnectionReponse",
         },
       },
       description: "The machine is connecting to the backend.",
