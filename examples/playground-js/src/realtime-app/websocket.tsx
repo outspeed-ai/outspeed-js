@@ -13,6 +13,7 @@ export function WebSocketRealtimeApp() {
 
   const {
     connect,
+    response,
     disconnect,
     getRemoteAudioTrack,
     getLocalAudioTrack,
@@ -51,8 +52,17 @@ export function WebSocketRealtimeApp() {
       <div className="h-full flex flex-1 justify-center items-center">
         <div className="flex items-center space-y-4 flex-col">
           <h2 className="text-3xl font-light">
-            Failed to connect. Please try again.
+            Failed to connect.{" "}
+            {(response?.data as any)?.detail || "Please try again."}
           </h2>
+          <details className="max-w-lg overflow-auto">
+            <summary>See Response</summary>
+            <pre className="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto">
+              <code className="language-js text-sm">
+                {JSON.stringify(response, undefined, 2)}
+              </code>
+            </pre>
+          </details>
           <Button
             className="inline-flex max-w-24"
             onClick={() => window.location.reload()}
