@@ -1,7 +1,6 @@
 export const BASE_ROUTE = "/";
 
 // Misc
-export const BROWSER_NOT_SUPPORTED_ROUTE = BASE_ROUTE + "not_supported";
 export const THANK_YOU_ROUTE = BASE_ROUTE + "thank_you";
 
 // Form

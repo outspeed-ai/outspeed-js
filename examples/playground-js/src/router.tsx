@@ -3,7 +3,6 @@ import { LandingLayout } from "./landing/layout";
 import {
   APP_ROUTE,
   BASE_ROUTE,
-  BROWSER_NOT_SUPPORTED_ROUTE,
   SCREEN_SHARE_APP_ROUTE,
   SCREEN_SHARE_TAKE_INPUT_ROUTE,
   THANK_YOU_ROUTE,
@@ -19,7 +18,6 @@ import { RealtimeAppLayout } from "./realtime-app/layout";
 import { WebRTCRealtimeApp } from "./realtime-app/webrtc";
 import { WebSocketRealtimeApp } from "./realtime-app/websocket";
 import { WebRTCScreenShareRealtimeApp } from "./realtime-app/webrtc-screen-share";
-import { BrowserNotSupported } from "./components/browser-not-supported";
 import { ThankYouScreen } from "./components/thank-you";
 import { SomethingWentWrong } from "./components/something-went-wrong";
 import { PageNotFound } from "./components/page-not-found";
@@ -81,10 +79,6 @@ const router = createBrowserRouter([
     ],
   },
   // Misc
-  {
-    path: BROWSER_NOT_SUPPORTED_ROUTE,
-    element: <BrowserNotSupported />,
-  },
   {
     path: THANK_YOU_ROUTE,
     loader: () => {
