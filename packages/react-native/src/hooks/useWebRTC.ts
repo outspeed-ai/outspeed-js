@@ -1,5 +1,6 @@
 import React from "react";
 import { MediaStream, MediaStreamTrack } from "react-native-webrtc";
+import InCallManager from "react-native-incall-manager";
 import { TRealtimeConfig } from "@outspeed/core";
 
 import {
@@ -15,7 +16,6 @@ export type TUseWebRTCConnectionPossibleStates =
   | "Init"
   | "Connecting"
   | "Connected"
-  | "Disconnecting"
   | "Disconnected"
   | "Failed";
 
@@ -51,6 +51,7 @@ export function useWebRTC() {
       const _connection = new RealtimeConnection(config);
       _connection.peerConnection.addEventListener("track", _handleOnTrack);
 
+      InCallManager.setForceSpeakerphoneOn(true);
       const response = await _connection.connect();
 
       if (response.ok) {
@@ -58,6 +59,7 @@ export function useWebRTC() {
         setConnection(_connection);
         setConnectionStatus("Connected");
       } else {
+        InCallManager.setForceSpeakerphoneOn(false);
         setConnectionStatus("Failed");
       }
     },
@@ -69,6 +71,7 @@ export function useWebRTC() {
 
     connection.peerConnection.removeEventListener("track", _handleOnTrack);
     connection.disconnect();
+    setConnectionStatus("Disconnected");
   }, [connection, _handleOnTrack]);
 
   const getLocalAudioStream = React.useCallback(() => {
