@@ -23,7 +23,7 @@ export function useWebRTC() {
   const [connection, setConnection] = React.useState<RealtimeConnection>();
   const [connectionStatus, setConnectionStatus] =
     React.useState<TUseWebRTCConnectionPossibleStates>("Init");
-  const [remoteTracks, setRemoteTracks] = React.useState<MediaStream[]>([]);
+  const [remoteStreams, setRemoteStreams] = React.useState<MediaStream[]>([]);
   const [dataChannel, setDataChannel] =
     React.useState<TRealtimeConnectionDataChannel | null>(null);
 
@@ -38,7 +38,7 @@ export function useWebRTC() {
       return;
     }
 
-    setRemoteTracks((prev) => [
+    setRemoteStreams((prev) => [
       ...prev,
       new MediaStream([track as MediaStreamTrack]),
     ]);
@@ -92,7 +92,7 @@ export function useWebRTC() {
     connection,
     connectionStatus,
     dataChannel,
-    remoteTracks,
+    remoteStreams,
     getLocalAudioStream,
     getLocalVideoStream,
   };
