@@ -87,7 +87,6 @@ export function RealtimeChat(props: RealtimeChatProps) {
               <div dangerouslySetInnerHTML={{ __html: message.render }} />
             ),
           });
-          console.log();
         }
 
         updateMessage({ ...message, type: "bot" });

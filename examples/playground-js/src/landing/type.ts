@@ -10,4 +10,6 @@ export type TLayoutOutletContext = {
 
 export type TAppRouteLocationState = {
   config: TRealtimeConfig | TRealtimeWebSocketConfig;
+  sessionID: number;
+  formURL: string;
 };

@@ -1,5 +1,10 @@
 import clsx from "clsx";
-import { Outlet, useNavigate } from "react-router-dom";
+import {
+  Outlet,
+  useLoaderData,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 
 import { buttonVariants } from "../components/button";
 import { FileIcon, Github } from "lucide-react";
@@ -9,42 +14,44 @@ import { TRealtimeConfig } from "@outspeed/core";
 import { TRealtimeWebSocketConfig } from "@outspeed/core";
 import { RealtimeExamples } from "./RealtimeExamples";
 import { isChrome, isSafari } from "react-device-detect";
-import { BROWSER_NOT_SUPPORTED_ROUTE } from "../constants/routes";
 import { BrowserNotSupported } from "../components/browser-not-supported";
+import { TLoaderData } from "../types";
 
 export type TLandingProps = {};
 
 export function LandingLayout() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { sessionID } = useLoaderData() as TLoaderData;
+
   const [isBrowserSupported, setIsBrowserSupported] = React.useState(false);
 
   const handleOnSubmit = React.useCallback(
     (config: TRealtimeConfig | TRealtimeWebSocketConfig, pathname: string) => {
       navigate(pathname, {
-        state: { config } satisfies TAppRouteLocationState,
+        state: {
+          config,
+          sessionID,
+          formURL: location.pathname,
+        } satisfies TAppRouteLocationState,
       });
     },
-    [navigate]
+    [navigate, location.pathname]
   );
 
   const checkBrowser = React.useCallback(() => {
     if (!isChrome && !isSafari) {
       setIsBrowserSupported(false);
-      navigate(BROWSER_NOT_SUPPORTED_ROUTE);
     } else {
       setIsBrowserSupported(true);
     }
-  }, [navigate]);
+  }, []);
 
   React.useEffect(() => {
     checkBrowser();
   }, [checkBrowser]);
 
   if (!isBrowserSupported) {
-    /**
-     * Ideally we will be redirected to `/not_supported` route.
-     * Having this here as a fallback.
-     */
     return <BrowserNotSupported />;
   }
 

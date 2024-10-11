@@ -3,6 +3,7 @@ import {
   RealtimeWebSocketConnection,
   Track,
   TRealtimeWebSocketConfig,
+  TResponse,
 } from "@outspeed/core";
 
 export type TUseWebSocketOptions = {
@@ -22,6 +23,7 @@ export function useWebSocket(options: TUseWebSocketOptions) {
     React.useState<RealtimeWebSocketConnection | null>(null);
   const [connectionStatus, setConnectionStatus] =
     React.useState<TWebSocketConnectionStatus>("new");
+  const [response, setResponse] = React.useState<TResponse>({});
   const [remoteTrack, setRemoteTrack] = React.useState<Track | null>(null);
 
   const connect = React.useCallback(async () => {
@@ -32,10 +34,12 @@ export function useWebSocket(options: TUseWebSocketOptions) {
       // This will release media, if it is setup.
       await ws.disconnect();
       setConnectionStatus("failed");
+      setResponse(response);
       return console.error("Failed to connect", response);
     }
     setConnection(ws);
     setConnectionStatus("connected");
+    setResponse(response);
   }, [config]);
 
   const disconnect = React.useCallback(async () => {
@@ -74,5 +78,6 @@ export function useWebSocket(options: TUseWebSocketOptions) {
     getLocalAudioTrack,
     getRemoteAudioTrack,
     connection,
+    response,
   };
 }

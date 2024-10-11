@@ -156,6 +156,7 @@ export class RealtimeConnection {
 
     if (!response.ok) {
       return {
+        ...response,
         error: `Failed during negotiating connection. Response: ${response.error}.`,
       };
     }

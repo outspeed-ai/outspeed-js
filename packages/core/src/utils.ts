@@ -84,7 +84,8 @@ export async function fetchWithRetry(
   url: string,
   options: RequestInit = {},
   retries: number = 3,
-  backoff: number = 1000
+  backoff: number = 1000,
+  ignoreRetryIfStatusCodeIs: number[] = []
 ): Promise<Response> {
   for (let i = 0; i < retries; i++) {
     try {
@@ -93,6 +94,8 @@ export async function fetchWithRetry(
 
       // If the response is ok (status in the range 200-299), return it
       if (response.ok) {
+        return response;
+      } else if (ignoreRetryIfStatusCodeIs.includes(response.status)) {
         return response;
       } else {
         throw new Error(`Request failed with status ${response.status}`);

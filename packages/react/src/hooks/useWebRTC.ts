@@ -323,6 +323,7 @@ export function useWebRTC(options: TUseWebRTCOptions) {
 
   return {
     connectionStatus: actor.value,
+    response: actor.context.connectionResponse,
     connect,
     disconnect,
     reset,

@@ -6,7 +6,7 @@ import {
   RealtimeFormButton,
 } from "@outspeed/react";
 import { createConfig } from "@outspeed/core";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useLocation } from "react-router-dom";
 import { TLayoutOutletContext } from "./type";
 import { WEB_RTC_APP_ROUTE } from "../constants/routes";
 
@@ -14,7 +14,11 @@ export function WebRTCTakeInput() {
   const { onSubmit } = useOutletContext<TLayoutOutletContext>();
   const [audioDeviceId, setAudioDeviceId] = React.useState("");
   const [videoDeviceId, setVideoDeviceId] = React.useState("");
-  const [functionURL, setFunctionURL] = React.useState("http://localhost:8080");
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const initialFunctionURL =
+    queryParams.get("functionURL") || "http://localhost:8080";
+  const [functionURL, setFunctionURL] = React.useState(initialFunctionURL);
   const [isMediaMissing, setIsMediaMissing] = React.useState(false);
   const [isFunctionURLMissing, setIsFunctionURLMissing] = React.useState(false);
 
