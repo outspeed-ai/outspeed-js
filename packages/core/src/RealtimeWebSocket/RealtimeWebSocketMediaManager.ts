@@ -124,23 +124,39 @@ export class RealtimeWebSocketMediaManager {
         await register(this.wavEncoderPort);
       }
 
-      const audioContext = new AudioContext({ sampleRate: 16000 });
+      // Define desired sample rate
+      const desiredSampleRate = 16000;
+
+      // Request user media with explicit sample rate constraints
       const stream = await navigator.mediaDevices.getUserMedia({
-        /**
-         * If this._config.audio is not defined, then we will use the default
-         * audio device. By setting audio to `true`, the browser
-         * will pick the default audio device for the user.
-         *
-         */
-        audio: this._config.audio || true,
+        audio: {
+          sampleRate: { ideal: desiredSampleRate },
+          channelCount: { ideal: 1 }, // Mono audio is often sufficient and reduces data
+          // You can add more constraints as needed
+          ...this._config.audio, // Merge with existing audio config if any
+        },
       });
+
       this.stream = stream;
       this.track = new Track(stream.getTracks()[0], ETrackOrigin.Local);
       this.recorder = new MediaRecorder(stream, {
         mimeType: "audio/wav",
       });
+
+      // Create AudioContext with the desired sample rate
+      const audioContext = new AudioContext({ sampleRate: desiredSampleRate });
       this.audioContext = audioContext;
+
+      this.remoteAudioDestination =
+        this.audioContext.createMediaStreamDestination();
+
       this._logger?.info(this._logLabel, "Created Audio context");
+
+      // Log the actual sample rate to verify
+      this._logger?.info(
+        this._logLabel,
+        `Actual AudioContext sample rate: ${this.audioContext.sampleRate}`
+      );
 
       /**
        * Setup the AudioWorklet `audioProcessor`. It decodes the b64 encoded audio, and plays it.
@@ -168,13 +184,11 @@ export class RealtimeWebSocketMediaManager {
             this._logger?.info(this._logLabel, "Received agent_start_talking");
             this.isPlaying = true;
             this.audioStartTime = new Date().getTime() / 1000;
-            this.audioWorkletNode?.connect(this.remoteAudioDestination);
             break;
           case "agent_stop_talking":
             this._logger?.info(this._logLabel, "Received agent_stop_talking");
             this.isPlaying = false;
             this.audioStartTime = 0;
-            this.audioWorkletNode?.disconnect(this.remoteAudioDestination);
             break;
           default:
             this._logger?.warn(
@@ -184,6 +198,8 @@ export class RealtimeWebSocketMediaManager {
             );
         }
       };
+
+      this.audioWorkletNode?.connect(this.remoteAudioDestination);
 
       this._logger?.info(this._logLabel, "Audio setup complete");
       return {
@@ -271,10 +287,8 @@ export class RealtimeWebSocketMediaManager {
     }
 
     try {
-      this.remoteAudioDestination =
-        this.audioContext.createMediaStreamDestination();
       const track = new Track(
-        this.remoteAudioDestination.stream.getTracks()[0],
+        this.remoteAudioDestination?.stream.getTracks()[0]!,
         ETrackOrigin.Remote
       );
 
