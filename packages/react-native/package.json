@@ -5,16 +5,56 @@
   "module": "./dist/index.mjs",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "development": "./src/index.ts",
-      "require": "./dist/index.js",
-      "import": "./dist/index.mjs"
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
     },
-    "./*": {
-      "types": "./dist/*",
-      "development": "./src/*",
-      "require": "./dist/*",
-      "import": "./dist/*"
+    "./components/RealtimePlayer": {
+      "types": "./dist/components/RealtimePlayer.d.ts",
+      "import": "./dist/components/RealtimePlayer.mjs",
+      "require": "./dist/components/RealtimePlayer.js",
+      "default": "./dist/components/RealtimePlayer.js"
+    },
+    "./connection/isAValidRTCSessionDescription": {
+      "types": "./dist/connection/isAValidRTCSessionDescription.d.ts",
+      "import": "./dist/connection/isAValidRTCSessionDescription.mjs",
+      "require": "./dist/connection/isAValidRTCSessionDescription.js",
+      "default": "./dist/connection/isAValidRTCSessionDescription.js"
+    },
+    "./connection/RealtimeConnection": {
+      "types": "./dist/connection/RealtimeConnection.d.ts",
+      "import": "./dist/connection/RealtimeConnection.mjs",
+      "require": "./dist/connection/RealtimeConnection.js",
+      "default": "./dist/connection/RealtimeConnection.js"
+    },
+    "./connection/RealtimeConnectionMediaManager": {
+      "types": "./dist/connection/RealtimeConnectionMediaManager.d.ts",
+      "import": "./dist/connection/RealtimeConnectionMediaManager.mjs",
+      "require": "./dist/connection/RealtimeConnectionMediaManager.js",
+      "default": "./dist/connection/RealtimeConnectionMediaManager.js"
+    },
+    "./connection/RealtimeConnectionNegotiator": {
+      "types": "./dist/connection/RealtimeConnectionNegotiator.d.ts",
+      "import": "./dist/connection/RealtimeConnectionNegotiator.mjs",
+      "require": "./dist/connection/RealtimeConnectionNegotiator.js",
+      "default": "./dist/connection/RealtimeConnectionNegotiator.js"
+    },
+    "./hooks/useAvailableMediaDevices": {
+      "types": "./dist/hooks/useAvailableMediaDevices.d.ts",
+      "import": "./dist/hooks/useAvailableMediaDevices.mjs",
+      "require": "./dist/hooks/useAvailableMediaDevices.js",
+      "default": "./dist/hooks/useAvailableMediaDevices.js"
+    },
+    "./hooks/useWebRTC": {
+      "types": "./dist/hooks/useWebRTC.d.ts",
+      "import": "./dist/hooks/useWebRTC.mjs",
+      "require": "./dist/hooks/useWebRTC.js",
+      "default": "./dist/hooks/useWebRTC.js"
     }
   },
   "files": [
@@ -24,12 +64,13 @@
   ],
   "scripts": {
     "build": "tsup",
-    "dev": "tsup --watch"
+    "watch": "tsup --watch",
+    "check-exports": "node ../../scripts/check-exports.js"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/outspeed-ai/outspeed-js",
-    "directory": "packages/react"
+    "directory": "packages/react-native"
   },
   "keywords": [],
   "author": "",
