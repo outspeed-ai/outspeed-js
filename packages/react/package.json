@@ -6,22 +6,13 @@
   "module": "./dist/index.mjs",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "development": "./src/index.ts",
       "require": "./dist/index.js",
       "import": "./dist/index.mjs"
     },
-    "./*": {
-      "types": "./dist/*",
-      "development": "./src/*",
-      "require": "./dist/*",
-      "import": "./dist/*"
-    },
-    "./styles.css": "./styles.css"
+    "./styles.css": "./dist/styles.css"
   },
   "files": [
     "dist/",
-    "style.css",
     "LICENSE",
     "README.md"
   ],
