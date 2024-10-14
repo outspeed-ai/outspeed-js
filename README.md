@@ -116,6 +116,30 @@ Running the packages in dev mode ensures that any changes you make to the packag
 pnpm dev
 ```
 
+### Step 5: [Optional] Updating the Exports
+
+If you've added, removed, or relocated any files, it's essential to update the exports accordingly. For example, if you moved a file in `@outspeed/core`, ensure you run the following command before submitting a pull request:
+
+```bash
+# Navigate to the core package directory
+cd packages/core
+
+# Check and display exports
+pnpm check-exports
+```
+
+This command will verify the exports and print them to the console. You then need to manually copy the output and update the `exports` field in your `package.json` as shown below:
+
+```json5
+{
+  "name": "@outspeed/core",
+  "exports": {
+    // Paste the console output here.
+  }
+}
+```
+
+
 # Build
 
 To build the packages for production, follow these steps:
