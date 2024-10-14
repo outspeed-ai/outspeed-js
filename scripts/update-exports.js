@@ -8,7 +8,7 @@ const dist = path.resolve(path.join(process.cwd(), "dist"));
 
 if (!fs.existsSync(dist)) {
   throw new Error(
-    `${dist} doesn't exist. Make sure to run pnpm build before running pnpm update-exports`
+    `${dist} doesn't exist. Make sure to run pnpm build before running pnpm update-exports. If you have run pnpm build, then make sure you are running pnpm update-exports from the packages/<package-name> directory.`
   );
 }
 
