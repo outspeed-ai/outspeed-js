@@ -1,16 +1,14 @@
 import { useActor } from "@xstate/react";
 import React from "react";
 import {
-  isRTCTrackEvent,
-  realtimeConnectionMachine,
   TRealtimeConnectionListener,
   TRealtimeConnectionListenerType,
-  TRealtimeConfig,
-  Track,
-  WebRTCDataChannel,
-  ETrackOrigin,
-  ETrackKind,
-} from "@outspeed/core";
+} from "@outspeed/core/RealtimeConnection";
+import { isRTCTrackEvent } from "@outspeed/core/utils";
+import { realtimeConnectionMachine } from "@outspeed/core/realtime-connection";
+import { WebRTCDataChannel } from "@outspeed/core/WebRTCDataChannel";
+import { Track, ETrackOrigin, ETrackKind } from "@outspeed/core/Track";
+import { TRealtimeConfig } from "@outspeed/core/@types";
 
 export type TUseWebRTCReturn<T = unknown> = {
   ok?: boolean;

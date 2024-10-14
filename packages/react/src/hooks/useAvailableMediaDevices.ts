@@ -1,5 +1,5 @@
 import React from "react";
-import { getAllUserMedia } from "@outspeed/core";
+import { getAllUserMedia } from "@outspeed/core/utils";
 
 export function useAvailableMediaDevices() {
   const [availableAudioDevices, setAvailableAudioDevices] = React.useState(
