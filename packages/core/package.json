@@ -14,6 +14,108 @@
         "types": "./dist/index.d.ts",
         "default": "./dist/index.js"
       }
+    },
+    "./constants": {
+      "types": "./dist/constants.d.ts",
+      "import": "./dist/constants.mjs",
+      "require": "./dist/constants.js",
+      "default": "./dist/constants.js"
+    },
+    "./create-config": {
+      "types": "./dist/create-config.d.ts",
+      "import": "./dist/create-config.mjs",
+      "require": "./dist/create-config.js",
+      "default": "./dist/create-config.js"
+    },
+    "./DataChannel/DataChannel": {
+      "types": "./dist/DataChannel/DataChannel.d.ts",
+      "import": "./dist/DataChannel/DataChannel.mjs",
+      "require": "./dist/DataChannel/DataChannel.js",
+      "default": "./dist/DataChannel/DataChannel.js"
+    },
+    "./DataChannel/WebRTCDataChannel": {
+      "types": "./dist/DataChannel/WebRTCDataChannel.d.ts",
+      "import": "./dist/DataChannel/WebRTCDataChannel.mjs",
+      "require": "./dist/DataChannel/WebRTCDataChannel.js",
+      "default": "./dist/DataChannel/WebRTCDataChannel.js"
+    },
+    "./DataChannel/WebSocketDataChannel": {
+      "types": "./dist/DataChannel/WebSocketDataChannel.d.ts",
+      "import": "./dist/DataChannel/WebSocketDataChannel.mjs",
+      "require": "./dist/DataChannel/WebSocketDataChannel.js",
+      "default": "./dist/DataChannel/WebSocketDataChannel.js"
+    },
+    "./Logger/ConsoleLogger": {
+      "types": "./dist/Logger/ConsoleLogger.d.ts",
+      "import": "./dist/Logger/ConsoleLogger.mjs",
+      "require": "./dist/Logger/ConsoleLogger.js",
+      "default": "./dist/Logger/ConsoleLogger.js"
+    },
+    "./Logger/Logger": {
+      "types": "./dist/Logger/Logger.d.ts",
+      "import": "./dist/Logger/Logger.mjs",
+      "require": "./dist/Logger/Logger.js",
+      "default": "./dist/Logger/Logger.js"
+    },
+    "./machine/realtime-connection": {
+      "types": "./dist/machine/realtime-connection.d.ts",
+      "import": "./dist/machine/realtime-connection.mjs",
+      "require": "./dist/machine/realtime-connection.js",
+      "default": "./dist/machine/realtime-connection.js"
+    },
+    "./RealtimeConnection/RealtimeConnection": {
+      "types": "./dist/RealtimeConnection/RealtimeConnection.d.ts",
+      "import": "./dist/RealtimeConnection/RealtimeConnection.mjs",
+      "require": "./dist/RealtimeConnection/RealtimeConnection.js",
+      "default": "./dist/RealtimeConnection/RealtimeConnection.js"
+    },
+    "./RealtimeConnection/RealtimeConnectionMediaManager": {
+      "types": "./dist/RealtimeConnection/RealtimeConnectionMediaManager.d.ts",
+      "import": "./dist/RealtimeConnection/RealtimeConnectionMediaManager.mjs",
+      "require": "./dist/RealtimeConnection/RealtimeConnectionMediaManager.js",
+      "default": "./dist/RealtimeConnection/RealtimeConnectionMediaManager.js"
+    },
+    "./RealtimeConnection/RealtimeConnectionNegotiator": {
+      "types": "./dist/RealtimeConnection/RealtimeConnectionNegotiator.d.ts",
+      "import": "./dist/RealtimeConnection/RealtimeConnectionNegotiator.mjs",
+      "require": "./dist/RealtimeConnection/RealtimeConnectionNegotiator.js",
+      "default": "./dist/RealtimeConnection/RealtimeConnectionNegotiator.js"
+    },
+    "./RealtimeWebSocket/RealtimeWebsocketAudioProcessor.worklet": {
+      "types": "./dist/RealtimeWebSocket/RealtimeWebsocketAudioProcessor.worklet.d.ts",
+      "import": "./dist/RealtimeWebSocket/RealtimeWebsocketAudioProcessor.worklet.mjs",
+      "require": "./dist/RealtimeWebSocket/RealtimeWebsocketAudioProcessor.worklet.js",
+      "default": "./dist/RealtimeWebSocket/RealtimeWebsocketAudioProcessor.worklet.js"
+    },
+    "./RealtimeWebSocket/RealtimeWebSocketConnection": {
+      "types": "./dist/RealtimeWebSocket/RealtimeWebSocketConnection.d.ts",
+      "import": "./dist/RealtimeWebSocket/RealtimeWebSocketConnection.mjs",
+      "require": "./dist/RealtimeWebSocket/RealtimeWebSocketConnection.js",
+      "default": "./dist/RealtimeWebSocket/RealtimeWebSocketConnection.js"
+    },
+    "./RealtimeWebSocket/RealtimeWebSocketMediaManager": {
+      "types": "./dist/RealtimeWebSocket/RealtimeWebSocketMediaManager.d.ts",
+      "import": "./dist/RealtimeWebSocket/RealtimeWebSocketMediaManager.mjs",
+      "require": "./dist/RealtimeWebSocket/RealtimeWebSocketMediaManager.js",
+      "default": "./dist/RealtimeWebSocket/RealtimeWebSocketMediaManager.js"
+    },
+    "./SDP/SDP": {
+      "types": "./dist/SDP/SDP.d.ts",
+      "import": "./dist/SDP/SDP.mjs",
+      "require": "./dist/SDP/SDP.js",
+      "default": "./dist/SDP/SDP.js"
+    },
+    "./shared/Track": {
+      "types": "./dist/shared/Track.d.ts",
+      "import": "./dist/shared/Track.mjs",
+      "require": "./dist/shared/Track.js",
+      "default": "./dist/shared/Track.js"
+    },
+    "./utils": {
+      "types": "./dist/utils.d.ts",
+      "import": "./dist/utils.mjs",
+      "require": "./dist/utils.js",
+      "default": "./dist/utils.js"
     }
   },
   "files": [
@@ -24,7 +126,8 @@
   "scripts": {
     "build": "tsup",
     "watch": "tsup --watch",
-    "test": "vitest"
+    "test": "vitest",
+    "update-exports": "node ../../scripts/update-exports.js"
   },
   "repository": {
     "type": "git",
