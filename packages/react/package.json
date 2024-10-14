@@ -121,7 +121,7 @@
   "scripts": {
     "build": "tsup",
     "watch": "tsup --watch",
-    "update-exports": "node ../../scripts/update-exports.js styles.css"
+    "check-exports": "node ../../scripts/check-exports.js styles.css"
   },
   "repository": {
     "type": "git",
