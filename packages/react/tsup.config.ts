@@ -15,6 +15,8 @@ export default defineConfig({
   onSuccess: async () => {
     const destPath = join(__dirname, "dist");
     const licensePath = join(__dirname, "..", "..", "LICENSE");
-    copyFileSync(resolve(licensePath), join(destPath, "LICENSE"));
+    const styles = join(__dirname, "styles.css");
+    copyFileSync(resolve(licensePath), join(__dirname, "LICENSE"));
+    copyFileSync(resolve(styles), join(destPath, "styles.css"));
   },
 });

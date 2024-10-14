@@ -2,12 +2,12 @@
   "scripts": {
     "build": "pnpm -r --stream --filter @outspeed/* build",
     "release": "pnpm publish -r",
-    "watch:types:core": "cd packages/core && pnpm run watch:types",
-    "watch:types:react": "cd packages/react && pnpm run watch:types",
+    "watch:core": "cd packages/core && pnpm run watch",
+    "watch:react": "cd packages/react && pnpm run watch",
     "playground:dev": "cd examples/playground-js && pnpm dev",
     "playground:build": "pnpm build && cd examples/playground-js && pnpm build",
     "playground:serve": "cd examples/playground-js && pnpm preview",
-    "dev": "concurrently \"pnpm run watch:types:core\" \"pnpm run watch:types:react\" \"pnpm run playground:dev\""
+    "dev": "concurrently \"pnpm run watch:core\" \"pnpm run watch:react\" \"pnpm run playground:dev\""
   },
   "keywords": [],
   "author": "",

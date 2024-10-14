@@ -13,8 +13,7 @@ export default defineConfig({
   minify: false,
   splitting: false,
   onSuccess: async () => {
-    const destPath = join(__dirname, "dist");
     const licensePath = join(__dirname, "..", "..", "LICENSE");
-    copyFileSync(resolve(licensePath), join(destPath, "LICENSE"));
+    copyFileSync(resolve(licensePath), join(__dirname, "LICENSE"));
   },
 });
