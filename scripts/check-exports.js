@@ -100,4 +100,4 @@ packageJson.exports = {
 console.log(
   "All exports exist, you can copy the following exports object into your package.json."
 );
-console.log(newExports);
+console.log(JSON.stringify(packageJson.exports, undefined, 2));
