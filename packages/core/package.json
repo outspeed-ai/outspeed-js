@@ -23,7 +23,7 @@
   ],
   "scripts": {
     "build": "tsup",
-    "watch": "tsup --watch --config tsup.config.watch.ts",
+    "watch": "tsup --watch",
     "test": "vitest"
   },
   "repository": {
