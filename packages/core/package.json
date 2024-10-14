@@ -13,10 +13,6 @@
       "require": {
         "types": "./dist/index.d.ts",
         "default": "./dist/index.js"
-      },
-      "development": {
-        "types": "./dist/index.d.ts",
-        "default": "./src/index.ts"
       }
     }
   },
@@ -27,7 +23,7 @@
   ],
   "scripts": {
     "build": "tsup",
-    "watch:types": "tsc --watch --project tsconfig.types.json",
+    "watch": "tsup --watch --config tsup.config.watch.ts",
     "test": "vitest"
   },
   "repository": {
