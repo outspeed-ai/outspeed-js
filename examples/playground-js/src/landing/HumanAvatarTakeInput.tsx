@@ -8,9 +8,9 @@ import {
 import { createConfig } from "@outspeed/core";
 import { useOutletContext, useLocation } from "react-router-dom";
 import { TLayoutOutletContext } from "./type";
-import { WEB_RTC_APP_ROUTE } from "../constants/routes";
+import { HUMAN_AVATAR_APP_ROUTE } from "../constants/routes";
 
-export function WebRTCTakeInput() {
+export function HumanAvatarTakeInput() {
   const { onSubmit } = useOutletContext<TLayoutOutletContext>();
   const [audioDeviceId, setAudioDeviceId] = React.useState("");
   const [videoDeviceId, setVideoDeviceId] = React.useState("");
@@ -57,7 +57,7 @@ export function WebRTCTakeInput() {
         audioDeviceId,
         videoDeviceId,
       });
-      onSubmit(config, WEB_RTC_APP_ROUTE);
+      onSubmit(config, HUMAN_AVATAR_APP_ROUTE);
     } catch (error) {
       console.error("Unable to create config", error);
     }
@@ -65,7 +65,7 @@ export function WebRTCTakeInput() {
 
   return (
     <div className="space-y-6 max-w-lg relative z-10">
-      <div className="font-bold text-3xl mb-8">WebRTC</div>
+      <div className="font-bold text-3xl mb-8">Human Avatar</div>
       <RealtimeFunctionURLInput
         isError={isFunctionURLMissing}
         onChange={(e) => {
@@ -73,7 +73,7 @@ export function WebRTCTakeInput() {
           setFunctionURL(e.currentTarget.value);
         }}
         value={functionURL}
-        description="Once you've deployed your WebRTC backend application, you'll receive a URL. If you are running your backend locally, use http://localhost:8080."
+        description="Once you've deployed your Human Avatar backend application, you'll receive a URL. If you are running your backend locally, use http://localhost:8080."
         errorMsg={isFunctionURLMissing ? "Function url is required." : ""}
       />
       <RealtimeAudioInput

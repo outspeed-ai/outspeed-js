@@ -8,9 +8,9 @@ import {
 import { createConfig } from "@outspeed/core";
 import { useOutletContext, useLocation } from "react-router-dom";
 import { TLayoutOutletContext } from "./type";
-import { SCREEN_SHARE_APP_ROUTE } from "../constants/routes";
+import { SPORTS_COMMENTATOR_APP_ROUTE } from "../constants/routes";
 
-export function WebRTCScreenShareTakeInput() {
+export function SportsCommentatorTakeInput() {
   const location = useLocation();
   // Parse URL parameters
   const queryParams = new URLSearchParams(location.search);
@@ -69,7 +69,7 @@ export function WebRTCScreenShareTakeInput() {
           },
         },
       });
-      onSubmit(config, SCREEN_SHARE_APP_ROUTE);
+      onSubmit(config, SPORTS_COMMENTATOR_APP_ROUTE);
     } catch (error) {
       console.error("Unable to create config", error);
     }
@@ -77,7 +77,7 @@ export function WebRTCScreenShareTakeInput() {
 
   return (
     <div className="space-y-6 max-w-lg relative z-10">
-      <div className="font-bold text-3xl mb-8">Screen Share</div>
+      <div className="font-bold text-3xl mb-8">Sports Commentator</div>
       <RealtimeFunctionURLInput
         isError={isFunctionURLMissing}
         onChange={(e) => {
@@ -85,7 +85,7 @@ export function WebRTCScreenShareTakeInput() {
           setFunctionURL(e.currentTarget.value);
         }}
         value={functionURL}
-        description="Once you've deployed your Screen Share backend application, you'll receive a URL. If you are running your backend locally, use http://localhost:8080."
+        description="Once you've deployed your Sports Commentator backend application, you'll receive a URL. If you are running your backend locally, use http://localhost:8080."
         errorMsg={isFunctionURLMissing ? "Function url is required." : ""}
       />
       <RealtimeAudioInput
