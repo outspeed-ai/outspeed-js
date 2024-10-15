@@ -7,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./__internal/select";
+import { useEffect } from "react";
 
 export type TRealtimeAudioInputProps = {
   /**
@@ -48,7 +49,7 @@ export function RealtimeAudioInput(props: TRealtimeAudioInputProps) {
   const {
     value,
     onChange,
-    placeholder = "Select audio device",
+    placeholder = null,
     label = "Audio",
     description,
     isError,
@@ -56,6 +57,12 @@ export function RealtimeAudioInput(props: TRealtimeAudioInputProps) {
   } = props;
 
   const { availableAudioDevices } = useAvailableMediaDevices();
+
+  useEffect(() => {
+    if (availableAudioDevices.length > 0 && !value && !placeholder) {
+      onChange(availableAudioDevices[0].deviceId);
+    }
+  }, [availableAudioDevices, placeholder]);
 
   return (
     <FormItem>
