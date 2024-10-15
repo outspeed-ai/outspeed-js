@@ -1,45 +1,54 @@
 import React from "react";
-import { useWebSocket } from "@outspeed/react";
+import { useRealtimeToast, useWebRTC } from "@outspeed/react";
 import { Loader2 } from "lucide-react";
 import { Button } from "../components/button";
 import { MeetingLayout } from "../components/meeting-layout";
 import { useOutletContext } from "react-router-dom";
 import { TRealtimeAppContext } from "./types";
 import { ConsoleLogger } from "@outspeed/core";
-import { TRealtimeWebSocketConfig } from "@outspeed/core";
 
 export function VoiceBotRealtimeApp() {
   const { config, onDisconnect } = useOutletContext<TRealtimeAppContext>();
+  const { toast } = useRealtimeToast();
 
   const {
-    connect,
+    connectionStatus,
     response,
+    connect,
     disconnect,
     getRemoteAudioTrack,
     getLocalAudioTrack,
     dataChannel,
-    connectionStatus,
-  } = useWebSocket({
-    config: {
-      ...config,
-      logger: ConsoleLogger.getLogger(),
-    } as TRealtimeWebSocketConfig,
-  });
-
-  const handleDisconnect = React.useCallback(() => {
-    disconnect();
-    onDisconnect();
-  }, [disconnect, onDisconnect]);
+  } = useWebRTC({ config: { ...config, logger: ConsoleLogger.getLogger() } });
 
   React.useEffect(() => {
-    connect();
+    switch (connectionStatus) {
+      case "SetupCompleted":
+        connect();
+        break;
+      case "Disconnected":
+        onDisconnect();
+        break;
+    }
 
-    return () => {
+    if (connectionStatus === "Failed") {
+      toast({
+        title: "Connection Status",
+        description: "Failed to connect.",
+        variant: "destructive",
+      });
+    }
+  }, [connectionStatus, connect, onDisconnect, config]);
+
+  function handleDisconnect() {
+    if (connectionStatus === "Connected") {
       disconnect();
-    };
-  }, []);
+    }
 
-  if (connectionStatus === "connecting") {
+    onDisconnect();
+  }
+
+  if (connectionStatus === "Connecting") {
     return (
       <div className="h-full flex flex-1 justify-center items-center">
         <Loader2 size={48} className="animate-spin" />
@@ -47,7 +56,7 @@ export function VoiceBotRealtimeApp() {
     );
   }
 
-  if (connectionStatus === "failed") {
+  if (connectionStatus === "Failed") {
     return (
       <div className="h-full flex flex-1 justify-center items-center">
         <div className="flex items-center space-y-4 flex-col">
