@@ -56,6 +56,7 @@ export function HumanAvatarTakeInput() {
         functionURL,
         audioDeviceId,
         videoDeviceId,
+        videoCodec: "H264/90000",
       });
       onSubmit(config, HUMAN_AVATAR_APP_ROUTE);
     } catch (error) {
