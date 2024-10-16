@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 
-import { DataChannel, isMessageEvent } from "@outspeed/core";
+import { DataChannel } from "@outspeed/core/DataChannel";
+import { isMessageEvent } from "@outspeed/core/utils";
 import { useRealtimeToast } from "../hooks";
 import { Cross1Icon } from "@radix-ui/react-icons";
 import { Input } from "./__internal/input";
