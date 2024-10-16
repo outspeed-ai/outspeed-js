@@ -3,21 +3,21 @@ import { LandingLayout } from "./landing/layout";
 import {
   APP_ROUTE,
   BASE_ROUTE,
-  SCREEN_SHARE_APP_ROUTE,
-  SCREEN_SHARE_TAKE_INPUT_ROUTE,
+  HUMAN_AVATAR_APP_ROUTE,
+  HUMAN_AVATAR_TAKE_INPUT_ROUTE,
+  VOICE_BOT_APP_ROUTE,
+  VOICE_BOT_TAKE_INPUT_ROUTE,
   THANK_YOU_ROUTE,
-  WEB_RTC_APP_ROUTE,
-  WEB_RTC_TAKE_INPUT_ROUTE,
-  WEBSOCKET_APP_ROUTE,
-  WEBSOCKET_TAKE_INPUT_ROUTE,
+  SPORTS_COMMENTATOR_APP_ROUTE,
+  SPORTS_COMMENTATOR_TAKE_INPUT_ROUTE,
 } from "./constants/routes";
-import { WebRTCTakeInput } from "./landing/WebRTCTakeInput";
-import { WebSocketTakeInput } from "./landing/WebSocketTakeInput";
-import { WebRTCScreenShareTakeInput } from "./landing/WebRTCScreenShareTakeInput";
+import { HumanAvatarTakeInput } from "./landing/HumanAvatarTakeInput";
+import { VoiceBotTakeInput } from "./landing/VoiceBotTakeInput";
+import { SportsCommentatorTakeInput } from "./landing/SportsCommentatorTakeInput";
 import { RealtimeAppLayout } from "./realtime-app/layout";
-import { WebRTCRealtimeApp } from "./realtime-app/webrtc";
-import { WebSocketRealtimeApp } from "./realtime-app/websocket";
-import { WebRTCScreenShareRealtimeApp } from "./realtime-app/webrtc-screen-share";
+import { VoiceBotRealtimeApp } from "./realtime-app/voice-bot";
+import { HumanAvatarRealtimeApp } from "./realtime-app/human-avatar";
+import { SportsCommentatorRealtimeApp } from "./realtime-app/sports-commentator";
 import { ThankYouScreen } from "./components/thank-you";
 import { SomethingWentWrong } from "./components/something-went-wrong";
 import { PageNotFound } from "./components/page-not-found";
@@ -40,19 +40,19 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <WebRTCTakeInput />,
+        element: <VoiceBotTakeInput />,
       },
       {
-        path: WEB_RTC_TAKE_INPUT_ROUTE,
-        element: <WebRTCTakeInput />,
+        path: HUMAN_AVATAR_TAKE_INPUT_ROUTE,
+        element: <HumanAvatarTakeInput />,
       },
       {
-        path: WEBSOCKET_TAKE_INPUT_ROUTE,
-        element: <WebSocketTakeInput />,
+        path: VOICE_BOT_TAKE_INPUT_ROUTE,
+        element: <VoiceBotTakeInput />,
       },
       {
-        path: SCREEN_SHARE_TAKE_INPUT_ROUTE,
-        element: <WebRTCScreenShareTakeInput />,
+        path: SPORTS_COMMENTATOR_TAKE_INPUT_ROUTE,
+        element: <SportsCommentatorTakeInput />,
       },
     ],
   },
@@ -65,16 +65,16 @@ const router = createBrowserRouter([
     },
     children: [
       {
-        path: WEB_RTC_APP_ROUTE,
-        element: <WebRTCRealtimeApp />,
+        path: VOICE_BOT_APP_ROUTE,
+        element: <VoiceBotRealtimeApp />,
       },
       {
-        path: WEBSOCKET_APP_ROUTE,
-        element: <WebSocketRealtimeApp />,
+        path: HUMAN_AVATAR_APP_ROUTE,
+        element: <HumanAvatarRealtimeApp />,
       },
       {
-        path: SCREEN_SHARE_APP_ROUTE,
-        element: <WebRTCScreenShareRealtimeApp />,
+        path: SPORTS_COMMENTATOR_APP_ROUTE,
+        element: <SportsCommentatorRealtimeApp />,
       },
     ],
   },

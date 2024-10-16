@@ -2,29 +2,25 @@ import React from "react";
 import {
   RealtimeFunctionURLInput,
   RealtimeAudioInput,
+  RealtimeVideoInput,
   RealtimeFormButton,
-  RealtimeShareScreenInput,
 } from "@outspeed/react";
 import { createConfig } from "@outspeed/core";
 import { useOutletContext, useLocation } from "react-router-dom";
 import { TLayoutOutletContext } from "./type";
-import { SCREEN_SHARE_APP_ROUTE } from "../constants/routes";
+import { HUMAN_AVATAR_APP_ROUTE } from "../constants/routes";
 
-export function WebRTCScreenShareTakeInput() {
+export function HumanAvatarTakeInput() {
+  const { onSubmit } = useOutletContext<TLayoutOutletContext>();
+  const [audioDeviceId, setAudioDeviceId] = React.useState("");
+  const [videoDeviceId, setVideoDeviceId] = React.useState("");
   const location = useLocation();
-  // Parse URL parameters
   const queryParams = new URLSearchParams(location.search);
   const initialFunctionURL =
     queryParams.get("functionURL") || "http://localhost:8080";
-
-  const { onSubmit } = useOutletContext<TLayoutOutletContext>();
-  const [audioDeviceId, setAudioDeviceId] = React.useState("");
   const [functionURL, setFunctionURL] = React.useState(initialFunctionURL);
   const [isMediaMissing, setIsMediaMissing] = React.useState(false);
   const [isFunctionURLMissing, setIsFunctionURLMissing] = React.useState(false);
-  const [screenShareInput, setScreenShareInput] = React.useState("");
-  const [isScreenShareInputMissing, setIsScreenShareInputMissing] =
-    React.useState(false);
 
   function handleOnMediaInputChange(kind: "audio" | "video", value: string) {
     setIsMediaMissing(false);
@@ -33,23 +29,21 @@ export function WebRTCScreenShareTakeInput() {
       case "audio":
         setAudioDeviceId(value);
         break;
+      case "video":
+        setVideoDeviceId(value);
+        break;
     }
   }
 
   function handleFormSubmit() {
     let isFormValid = true;
-    if (!audioDeviceId) {
+    if (!audioDeviceId && !videoDeviceId) {
       setIsMediaMissing(true);
       isFormValid = false;
     }
 
     if (!functionURL) {
       setIsFunctionURLMissing(true);
-      isFormValid = false;
-    }
-
-    if (screenShareInput !== "512p" && screenShareInput !== "1080p") {
-      setIsScreenShareInputMissing(true);
       isFormValid = false;
     }
 
@@ -61,15 +55,10 @@ export function WebRTCScreenShareTakeInput() {
       const config = createConfig({
         functionURL,
         audioDeviceId,
-        screenConstraints: {
-          video: {
-            width: screenShareInput === "512p" ? 512 : 1080,
-            height: screenShareInput === "512p" ? 512 : 1080,
-            frameRate: 5,
-          },
-        },
+        videoDeviceId,
+        videoCodec: "H264/90000",
       });
-      onSubmit(config, SCREEN_SHARE_APP_ROUTE);
+      onSubmit(config, HUMAN_AVATAR_APP_ROUTE);
     } catch (error) {
       console.error("Unable to create config", error);
     }
@@ -77,7 +66,7 @@ export function WebRTCScreenShareTakeInput() {
 
   return (
     <div className="space-y-6 max-w-lg relative z-10">
-      <div className="font-bold text-3xl mb-8">Screen Share</div>
+      <div className="font-bold text-3xl mb-8">Human Avatar</div>
       <RealtimeFunctionURLInput
         isError={isFunctionURLMissing}
         onChange={(e) => {
@@ -85,7 +74,7 @@ export function WebRTCScreenShareTakeInput() {
           setFunctionURL(e.currentTarget.value);
         }}
         value={functionURL}
-        description="Once you've deployed your Screen Share backend application, you'll receive a URL. If you are running your backend locally, use http://localhost:8080."
+        description="Once you've deployed your Human Avatar backend application, you'll receive a URL. If you are running your backend locally, use http://localhost:8080."
         errorMsg={isFunctionURLMissing ? "Function url is required." : ""}
       />
       <RealtimeAudioInput
@@ -93,29 +82,20 @@ export function WebRTCScreenShareTakeInput() {
         value={audioDeviceId}
         onChange={(value) => handleOnMediaInputChange("audio", value)}
         description="Select the microphone you want to use. If you don't see your microphone, make sure it is plugged in."
-        errorMsg={isMediaMissing ? "Audio device is required." : ""}
-      />
-
-      <RealtimeShareScreenInput
-        onChange={(value) => {
-          setScreenShareInput(value);
-          if (value === "512p" || value === "1080p") {
-            setIsScreenShareInputMissing(false);
-          }
-        }}
-        value={screenShareInput}
-        isError={isScreenShareInputMissing}
-        description="Select the resolution of shared video. 512x512 is recommended for now."
         errorMsg={
-          isScreenShareInputMissing
-            ? "In this example, please agree to share your screen as we will need this to proceed."
-            : ""
+          isMediaMissing ? "Either audio or video input is required." : ""
         }
       />
-
-      <RealtimeFormButton onClick={handleFormSubmit}>
-        Share Screen
-      </RealtimeFormButton>
+      <RealtimeVideoInput
+        isError={isMediaMissing}
+        value={videoDeviceId}
+        onChange={(value) => handleOnMediaInputChange("video", value)}
+        description="Select the camera you want to use. If you don't see your camera, make sure it is plugged in."
+        errorMsg={
+          isMediaMissing ? "Either audio or video input is required." : ""
+        }
+      />
+      <RealtimeFormButton onClick={handleFormSubmit}>Run</RealtimeFormButton>
     </div>
   );
 }
