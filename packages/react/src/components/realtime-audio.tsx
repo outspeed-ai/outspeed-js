@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { Track } from "@outspeed/core";
+import { Track } from "@outspeed/core/Track";
 
 export type RealtimeAudioProps = {
   track: Track | null;

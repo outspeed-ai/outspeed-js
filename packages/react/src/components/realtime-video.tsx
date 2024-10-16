@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { Track } from "@outspeed/core";
+import { Track } from "@outspeed/core/Track";
 
 export type RealtimeVideoProps = {
   track: Track | null;
