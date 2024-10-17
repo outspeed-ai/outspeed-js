@@ -1,10 +1,7 @@
 import React from "react";
-import {
-  RealtimeWebSocketConnection,
-  Track,
-  TRealtimeWebSocketConfig,
-  TResponse,
-} from "@outspeed/core";
+import { Track } from "@outspeed/core/Track";
+import { RealtimeWebSocketConnection } from "@outspeed/core/RealtimeWebSocketConnection";
+import { TRealtimeWebSocketConfig, TResponse } from "@outspeed/core/@types";
 
 export type TUseWebSocketOptions = {
   config: TRealtimeWebSocketConfig;

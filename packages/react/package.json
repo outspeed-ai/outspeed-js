@@ -1,6 +1,6 @@
 {
   "name": "@outspeed/react",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -15,103 +15,139 @@
         "default": "./dist/index.js"
       }
     },
-    "./components/realtime-audio-input": {
+    "./realtime-audio-input": {
       "types": "./dist/components/realtime-audio-input.d.ts",
       "import": "./dist/components/realtime-audio-input.mjs",
-      "require": "./dist/components/realtime-audio-input.js",
-      "default": "./dist/components/realtime-audio-input.js"
+      "require": "./dist/components/realtime-audio-input.js"
     },
-    "./components/realtime-audio-visualizer": {
+    "./realtime-audio-visualizer": {
       "types": "./dist/components/realtime-audio-visualizer.d.ts",
       "import": "./dist/components/realtime-audio-visualizer.mjs",
-      "require": "./dist/components/realtime-audio-visualizer.js",
-      "default": "./dist/components/realtime-audio-visualizer.js"
+      "require": "./dist/components/realtime-audio-visualizer.js"
     },
-    "./components/realtime-audio": {
+    "./realtime-audio": {
       "types": "./dist/components/realtime-audio.d.ts",
       "import": "./dist/components/realtime-audio.mjs",
-      "require": "./dist/components/realtime-audio.js",
-      "default": "./dist/components/realtime-audio.js"
+      "require": "./dist/components/realtime-audio.js"
     },
-    "./components/realtime-chat": {
+    "./realtime-chat": {
       "types": "./dist/components/realtime-chat.d.ts",
       "import": "./dist/components/realtime-chat.mjs",
-      "require": "./dist/components/realtime-chat.js",
-      "default": "./dist/components/realtime-chat.js"
+      "require": "./dist/components/realtime-chat.js"
     },
-    "./components/realtime-connection-status": {
+    "./realtime-connection-status": {
       "types": "./dist/components/realtime-connection-status.d.ts",
       "import": "./dist/components/realtime-connection-status.mjs",
-      "require": "./dist/components/realtime-connection-status.js",
-      "default": "./dist/components/realtime-connection-status.js"
+      "require": "./dist/components/realtime-connection-status.js"
     },
-    "./components/realtime-form": {
+    "./realtime-form": {
       "types": "./dist/components/realtime-form.d.ts",
       "import": "./dist/components/realtime-form.mjs",
-      "require": "./dist/components/realtime-form.js",
-      "default": "./dist/components/realtime-form.js"
+      "require": "./dist/components/realtime-form.js"
     },
-    "./components/realtime-function-url-input": {
+    "./realtime-function-url-input": {
       "types": "./dist/components/realtime-function-url-input.d.ts",
       "import": "./dist/components/realtime-function-url-input.mjs",
-      "require": "./dist/components/realtime-function-url-input.js",
-      "default": "./dist/components/realtime-function-url-input.js"
+      "require": "./dist/components/realtime-function-url-input.js"
     },
-    "./components/realtime-share-screen-input": {
+    "./realtime-share-screen-input": {
       "types": "./dist/components/realtime-share-screen-input.d.ts",
       "import": "./dist/components/realtime-share-screen-input.mjs",
-      "require": "./dist/components/realtime-share-screen-input.js",
-      "default": "./dist/components/realtime-share-screen-input.js"
+      "require": "./dist/components/realtime-share-screen-input.js"
     },
-    "./components/realtime-toast": {
+    "./realtime-toast": {
       "types": "./dist/components/realtime-toast.d.ts",
       "import": "./dist/components/realtime-toast.mjs",
-      "require": "./dist/components/realtime-toast.js",
-      "default": "./dist/components/realtime-toast.js"
+      "require": "./dist/components/realtime-toast.js"
     },
-    "./components/realtime-video-input": {
+    "./realtime-video-input": {
       "types": "./dist/components/realtime-video-input.d.ts",
       "import": "./dist/components/realtime-video-input.mjs",
-      "require": "./dist/components/realtime-video-input.js",
-      "default": "./dist/components/realtime-video-input.js"
+      "require": "./dist/components/realtime-video-input.js"
     },
-    "./components/realtime-video": {
+    "./realtime-video": {
       "types": "./dist/components/realtime-video.d.ts",
       "import": "./dist/components/realtime-video.mjs",
-      "require": "./dist/components/realtime-video.js",
-      "default": "./dist/components/realtime-video.js"
+      "require": "./dist/components/realtime-video.js"
     },
-    "./hooks/useAvailableMediaDevices": {
+    "./useAvailableMediaDevices": {
       "types": "./dist/hooks/useAvailableMediaDevices.d.ts",
       "import": "./dist/hooks/useAvailableMediaDevices.mjs",
-      "require": "./dist/hooks/useAvailableMediaDevices.js",
-      "default": "./dist/hooks/useAvailableMediaDevices.js"
+      "require": "./dist/hooks/useAvailableMediaDevices.js"
     },
-    "./hooks/useCreateConfig": {
+    "./useCreateConfig": {
       "types": "./dist/hooks/useCreateConfig.d.ts",
       "import": "./dist/hooks/useCreateConfig.mjs",
-      "require": "./dist/hooks/useCreateConfig.js",
-      "default": "./dist/hooks/useCreateConfig.js"
+      "require": "./dist/hooks/useCreateConfig.js"
     },
-    "./hooks/useRealtimeToast": {
+    "./useRealtimeToast": {
       "types": "./dist/hooks/useRealtimeToast.d.ts",
       "import": "./dist/hooks/useRealtimeToast.mjs",
-      "require": "./dist/hooks/useRealtimeToast.js",
-      "default": "./dist/hooks/useRealtimeToast.js"
+      "require": "./dist/hooks/useRealtimeToast.js"
     },
-    "./hooks/useWebRTC": {
+    "./useWebRTC": {
       "types": "./dist/hooks/useWebRTC.d.ts",
       "import": "./dist/hooks/useWebRTC.mjs",
-      "require": "./dist/hooks/useWebRTC.js",
-      "default": "./dist/hooks/useWebRTC.js"
+      "require": "./dist/hooks/useWebRTC.js"
     },
-    "./hooks/useWebSocket": {
+    "./useWebSocket": {
       "types": "./dist/hooks/useWebSocket.d.ts",
       "import": "./dist/hooks/useWebSocket.mjs",
-      "require": "./dist/hooks/useWebSocket.js",
-      "default": "./dist/hooks/useWebSocket.js"
+      "require": "./dist/hooks/useWebSocket.js"
     },
     "./styles.css": "./dist/styles.css"
+  },
+  "typesVersions": {
+    "*": {
+      "realtime-audio-input": [
+        "./dist/components/realtime-audio-input.d.ts"
+      ],
+      "realtime-audio-visualizer": [
+        "./dist/components/realtime-audio-visualizer.d.ts"
+      ],
+      "realtime-audio": [
+        "./dist/components/realtime-audio.d.ts"
+      ],
+      "realtime-chat": [
+        "./dist/components/realtime-chat.d.ts"
+      ],
+      "realtime-connection-status": [
+        "./dist/components/realtime-connection-status.d.ts"
+      ],
+      "realtime-form": [
+        "./dist/components/realtime-form.d.ts"
+      ],
+      "realtime-function-url-input": [
+        "./dist/components/realtime-function-url-input.d.ts"
+      ],
+      "realtime-share-screen-input": [
+        "./dist/components/realtime-share-screen-input.d.ts"
+      ],
+      "realtime-toast": [
+        "./dist/components/realtime-toast.d.ts"
+      ],
+      "realtime-video-input": [
+        "./dist/components/realtime-video-input.d.ts"
+      ],
+      "realtime-video": [
+        "./dist/components/realtime-video.d.ts"
+      ],
+      "useAvailableMediaDevices": [
+        "./dist/hooks/useAvailableMediaDevices.d.ts"
+      ],
+      "useCreateConfig": [
+        "./dist/hooks/useCreateConfig.d.ts"
+      ],
+      "useRealtimeToast": [
+        "./dist/hooks/useRealtimeToast.d.ts"
+      ],
+      "useWebRTC": [
+        "./dist/hooks/useWebRTC.d.ts"
+      ],
+      "useWebSocket": [
+        "./dist/hooks/useWebSocket.d.ts"
+      ]
+    }
   },
   "files": [
     "dist/",

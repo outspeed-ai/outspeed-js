@@ -2,12 +2,11 @@ import React from "react";
 import { useWebRTC, useRealtimeToast } from "@outspeed/react";
 import { Loader2 } from "lucide-react";
 import { Button } from "../components/button";
-import { MeetingLayout } from "../components/meeting-layout";
-import { TRealtimeAppContext } from "./types";
+import { ScreenShareLayout } from "../components/screen-share-layout";
 import { useOutletContext } from "react-router-dom";
-import { ConsoleLogger } from "@outspeed/core";
+import { TRealtimeAppContext } from "./types";
 
-export function WebRTCRealtimeApp() {
+export function SportsCommentatorRealtimeApp() {
   const { config, onDisconnect } = useOutletContext<TRealtimeAppContext>();
   const { toast } = useRealtimeToast();
 
@@ -21,7 +20,7 @@ export function WebRTCRealtimeApp() {
     getRemoteVideoTrack,
     getLocalVideoTrack,
     dataChannel,
-  } = useWebRTC({ config: { ...config, logger: ConsoleLogger.getLogger() } });
+  } = useWebRTC({ config });
 
   React.useEffect(() => {
     switch (connectionStatus) {
@@ -88,8 +87,8 @@ export function WebRTCRealtimeApp() {
   return (
     <div className="h-full flex flex-1">
       <div className="flex-1 flex">
-        <MeetingLayout
-          title="WebRTC Example"
+        <ScreenShareLayout
+          title="Sports Commentator"
           onCallEndClick={handleDisconnect}
           localTrack={getLocalVideoTrack()}
           remoteTrack={getRemoteVideoTrack()}

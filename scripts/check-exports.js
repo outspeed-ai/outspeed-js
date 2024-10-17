@@ -25,51 +25,53 @@ function checkAllPathsInExport(exportPaths) {
     if (!fs.existsSync(base.require)) {
       throw new Error(`${base.require} doesn't exist`);
     }
-    if (!fs.existsSync(base.default)) {
-      throw new Error(`${base.default} doesn't exist`);
-    }
   }
 }
 
 function getAllExports(directory) {
   const files = fs.readdirSync(directory);
   let newExports = {};
+  let typesVersions = {};
   for (const file of files) {
     const filepath = path.join(directory, file);
 
     if (fs.lstatSync(filepath).isDirectory()) {
-      newExports = { ...newExports, ...getAllExports(filepath) };
+      const { newExports: _n, typesVersions: _t } = getAllExports(filepath);
+      newExports = { ...newExports, ..._n };
+      typesVersions = { ...typesVersions, ..._t };
       continue;
     }
 
     if (
       !filepath.endsWith(".js") ||
       filepath.includes("index") ||
-      filepath.includes("@types") ||
       filepath.includes("__internal")
     )
       continue;
 
     const relativePath = path.relative(dist, directory);
     const filename = file.replace(".js", "");
-    const importName = relativePath ? `${relativePath}/${filename}` : filename;
-    const typesPath = `./dist/${importName}.d.ts`;
-    const importPath = `./dist/${importName}.mjs`;
-    const requirePath = `./dist/${importName}.js`;
-    const defaultPath = `./dist/${importName}.js`;
+    const relativeImportPath = relativePath
+      ? `${relativePath}/${filename}`
+      : filename;
 
-    newExports[`./${importName}`] = {
+    // Exports
+    const typesPath = `./dist/${relativeImportPath}.d.ts`;
+    const importPath = `./dist/${relativeImportPath}.mjs`;
+    const requirePath = `./dist/${relativeImportPath}.js`;
+
+    newExports[`./${filename}`] = {
       types: typesPath,
       import: importPath,
       require: requirePath,
-      default: defaultPath,
     };
+    typesVersions[filename] = [typesPath];
   }
 
-  return newExports;
+  return { newExports, typesVersions };
 }
 
-const newExports = getAllExports(dist);
+const { newExports, typesVersions } = getAllExports(dist);
 checkAllPathsInExport(newExports);
 
 // Reading package.json
@@ -97,7 +99,16 @@ packageJson.exports = {
   ...additionalExport,
 };
 
+packageJson.typesVersions = {
+  "*": typesVersions,
+};
+
 console.log(
   "All exports exist, you can copy the following exports object into your package.json."
 );
+
+console.log("All exports");
 console.log(JSON.stringify(packageJson.exports, undefined, 2));
+
+console.log("All typesVersions");
+console.log(JSON.stringify(packageJson.typesVersions, undefined, 2));

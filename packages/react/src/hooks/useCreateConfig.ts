@@ -1,12 +1,12 @@
 import React from "react";
+import { createConfig } from "@outspeed/core/create-config";
+import { Logger } from "@outspeed/core/Logger";
 import {
-  createConfig,
-  Logger,
   TAudioCodec,
   TRealtimeConfig,
   TVideoCodec,
   TVideoTransform,
-} from "@outspeed/core";
+} from "@outspeed/core/@types";
 
 /**
  * The shape of the variables used to create a configuration.

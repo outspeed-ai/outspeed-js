@@ -1,7 +1,8 @@
-import { RealtimeAudio, RealtimeVideo } from "@outspeed/react";
+import { RealtimeAudio } from "@outspeed/react";
 import { Track } from "@outspeed/core";
 import { MediaAction } from "./media-action";
 import { Mic, MicOff, Video, VideoOff } from "lucide-react";
+import { RealtimeVideo } from "./realtime-video";
 
 export type TVideContainerProps = {
   track: Track | null;

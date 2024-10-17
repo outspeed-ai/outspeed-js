@@ -7,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./__internal/select";
+import { useEffect } from "react";
 
 export type TRealtimeVideoInputProps = {
   /**
@@ -47,7 +48,7 @@ export function RealtimeVideoInput(props: TRealtimeVideoInputProps) {
   const {
     value,
     onChange,
-    placeholder = "Select video device",
+    placeholder = null,
     label = "Video",
     description,
     isError,
@@ -55,6 +56,12 @@ export function RealtimeVideoInput(props: TRealtimeVideoInputProps) {
   } = props;
 
   const { availableVideoDevices } = useAvailableMediaDevices();
+
+  useEffect(() => {
+    if (availableVideoDevices.length > 0 && !value && !placeholder) {
+      onChange(availableVideoDevices[0].deviceId);
+    }
+  }, [availableVideoDevices, placeholder]);
 
   return (
     <FormItem>

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { Track } from "@outspeed/core/Track";
+import { Track } from "@outspeed/core";
 
 export type RealtimeVideoProps = {
   track: Track | null;
@@ -17,7 +17,7 @@ export function RealtimeVideo(props: RealtimeVideoProps) {
 
   return (
     <video
-      className="rounded-md object-cover h-full w-full"
+      className="rounded-md object-contain h-full w-full"
       ref={videoRef}
       autoPlay={true}
       playsInline={true}

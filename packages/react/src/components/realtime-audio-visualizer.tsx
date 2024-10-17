@@ -1,4 +1,4 @@
-import { Track } from "@outspeed/core";
+import { Track } from "@outspeed/core/Track";
 import React from "react";
 
 export type RealtimeAudioVisualizerProps = {
@@ -101,7 +101,6 @@ function lerp(start: number, end: number) {
 
 function setupDraw(threshold: number) {
   const indexes = [5, 8, 10, 14, 16, 18, 20];
-  const dpr = window.devicePixelRatio || 1;
 
   const prevRadius = indexes.map(() => 0);
 

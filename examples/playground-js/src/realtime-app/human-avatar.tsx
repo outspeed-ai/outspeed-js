@@ -2,11 +2,12 @@ import React from "react";
 import { useWebRTC, useRealtimeToast } from "@outspeed/react";
 import { Loader2 } from "lucide-react";
 import { Button } from "../components/button";
-import { ScreenShareLayout } from "../components/screen-share-layout";
-import { useOutletContext } from "react-router-dom";
+import { MeetingLayout } from "../components/meeting-layout";
 import { TRealtimeAppContext } from "./types";
+import { useOutletContext } from "react-router-dom";
+import { ConsoleLogger } from "@outspeed/core";
 
-export function WebRTCScreenShareRealtimeApp() {
+export function HumanAvatarRealtimeApp() {
   const { config, onDisconnect } = useOutletContext<TRealtimeAppContext>();
   const { toast } = useRealtimeToast();
 
@@ -20,7 +21,7 @@ export function WebRTCScreenShareRealtimeApp() {
     getRemoteVideoTrack,
     getLocalVideoTrack,
     dataChannel,
-  } = useWebRTC({ config });
+  } = useWebRTC({ config: { ...config, logger: ConsoleLogger.getLogger() } });
 
   React.useEffect(() => {
     switch (connectionStatus) {
@@ -87,8 +88,8 @@ export function WebRTCScreenShareRealtimeApp() {
   return (
     <div className="h-full flex flex-1">
       <div className="flex-1 flex">
-        <ScreenShareLayout
-          title="Screen Share Example"
+        <MeetingLayout
+          title="Human Avatar"
           onCallEndClick={handleDisconnect}
           localTrack={getLocalVideoTrack()}
           remoteTrack={getRemoteVideoTrack()}

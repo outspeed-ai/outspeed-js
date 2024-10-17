@@ -1,9 +1,9 @@
 import clsx from "clsx";
 import { AudioLinesIcon, ScreenShare, VideoIcon } from "lucide-react";
 import {
-  WEBSOCKET_TAKE_INPUT_ROUTE,
-  WEB_RTC_TAKE_INPUT_ROUTE,
-  SCREEN_SHARE_TAKE_INPUT_ROUTE,
+  VOICE_BOT_TAKE_INPUT_ROUTE,
+  HUMAN_AVATAR_TAKE_INPUT_ROUTE,
+  SPORTS_COMMENTATOR_TAKE_INPUT_ROUTE,
 } from "../constants/routes";
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -20,10 +20,10 @@ type TExampleData = {
 
 const data: TExampleData[] = [
   {
-    title: "WebRTC",
+    title: "Human Avatar",
     description:
       "In this example, we will establish a WebRTC connection to stream both local and remote audio and video tracks.",
-    link: WEB_RTC_TAKE_INPUT_ROUTE,
+    link: HUMAN_AVATAR_TAKE_INPUT_ROUTE,
     icons: [
       {
         title: "Audio",
@@ -36,10 +36,10 @@ const data: TExampleData[] = [
     ],
   },
   {
-    title: "Web Socket",
+    title: "Voice Bot",
     description:
       "In this example, we will establish a Web Socket connection to stream both local and remote audio tracks.",
-    link: WEBSOCKET_TAKE_INPUT_ROUTE,
+    link: VOICE_BOT_TAKE_INPUT_ROUTE,
     icons: [
       {
         title: "Audio",
@@ -48,10 +48,10 @@ const data: TExampleData[] = [
     ],
   },
   {
-    title: "Screen Share",
+    title: "Sports Commentator",
     description:
       "In this example, we will set up a WebRTC connection to stream both screen recording and a local audio track.",
-    link: SCREEN_SHARE_TAKE_INPUT_ROUTE,
+    link: SPORTS_COMMENTATOR_TAKE_INPUT_ROUTE,
     icons: [
       {
         title: "Audio",
