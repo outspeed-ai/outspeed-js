@@ -1,9 +1,5 @@
 import { RTCPeerConnection } from "react-native-webrtc";
-import {
-  TLogger,
-  TRealtimeConfig,
-  TResponse,
-} from "@outspeed/core/dist/shared/@types";
+import { TLogger, TRealtimeConfig, TResponse } from "@outspeed/core/@types";
 
 import { RealtimeConnectionMediaManager } from "./RealtimeConnectionMediaManager";
 import { RealtimeConnectionNegotiator } from "./RealtimeConnectionNegotiator";

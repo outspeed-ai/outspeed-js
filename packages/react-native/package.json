@@ -14,47 +14,65 @@
         "default": "./dist/index.js"
       }
     },
-    "./components/RealtimePlayer": {
+    "./RealtimePlayer": {
       "types": "./dist/components/RealtimePlayer.d.ts",
       "import": "./dist/components/RealtimePlayer.mjs",
-      "require": "./dist/components/RealtimePlayer.js",
-      "default": "./dist/components/RealtimePlayer.js"
+      "require": "./dist/components/RealtimePlayer.js"
     },
-    "./connection/isAValidRTCSessionDescription": {
+    "./isAValidRTCSessionDescription": {
       "types": "./dist/connection/isAValidRTCSessionDescription.d.ts",
       "import": "./dist/connection/isAValidRTCSessionDescription.mjs",
-      "require": "./dist/connection/isAValidRTCSessionDescription.js",
-      "default": "./dist/connection/isAValidRTCSessionDescription.js"
+      "require": "./dist/connection/isAValidRTCSessionDescription.js"
     },
-    "./connection/RealtimeConnection": {
+    "./RealtimeConnection": {
       "types": "./dist/connection/RealtimeConnection.d.ts",
       "import": "./dist/connection/RealtimeConnection.mjs",
-      "require": "./dist/connection/RealtimeConnection.js",
-      "default": "./dist/connection/RealtimeConnection.js"
+      "require": "./dist/connection/RealtimeConnection.js"
     },
-    "./connection/RealtimeConnectionMediaManager": {
+    "./RealtimeConnectionMediaManager": {
       "types": "./dist/connection/RealtimeConnectionMediaManager.d.ts",
       "import": "./dist/connection/RealtimeConnectionMediaManager.mjs",
-      "require": "./dist/connection/RealtimeConnectionMediaManager.js",
-      "default": "./dist/connection/RealtimeConnectionMediaManager.js"
+      "require": "./dist/connection/RealtimeConnectionMediaManager.js"
     },
-    "./connection/RealtimeConnectionNegotiator": {
+    "./RealtimeConnectionNegotiator": {
       "types": "./dist/connection/RealtimeConnectionNegotiator.d.ts",
       "import": "./dist/connection/RealtimeConnectionNegotiator.mjs",
-      "require": "./dist/connection/RealtimeConnectionNegotiator.js",
-      "default": "./dist/connection/RealtimeConnectionNegotiator.js"
+      "require": "./dist/connection/RealtimeConnectionNegotiator.js"
     },
-    "./hooks/useAvailableMediaDevices": {
+    "./useAvailableMediaDevices": {
       "types": "./dist/hooks/useAvailableMediaDevices.d.ts",
       "import": "./dist/hooks/useAvailableMediaDevices.mjs",
-      "require": "./dist/hooks/useAvailableMediaDevices.js",
-      "default": "./dist/hooks/useAvailableMediaDevices.js"
+      "require": "./dist/hooks/useAvailableMediaDevices.js"
     },
-    "./hooks/useWebRTC": {
+    "./useWebRTC": {
       "types": "./dist/hooks/useWebRTC.d.ts",
       "import": "./dist/hooks/useWebRTC.mjs",
-      "require": "./dist/hooks/useWebRTC.js",
-      "default": "./dist/hooks/useWebRTC.js"
+      "require": "./dist/hooks/useWebRTC.js"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "RealtimePlayer": [
+        "./dist/components/RealtimePlayer.d.ts"
+      ],
+      "isAValidRTCSessionDescription": [
+        "./dist/connection/isAValidRTCSessionDescription.d.ts"
+      ],
+      "RealtimeConnection": [
+        "./dist/connection/RealtimeConnection.d.ts"
+      ],
+      "RealtimeConnectionMediaManager": [
+        "./dist/connection/RealtimeConnectionMediaManager.d.ts"
+      ],
+      "RealtimeConnectionNegotiator": [
+        "./dist/connection/RealtimeConnectionNegotiator.d.ts"
+      ],
+      "useAvailableMediaDevices": [
+        "./dist/hooks/useAvailableMediaDevices.d.ts"
+      ],
+      "useWebRTC": [
+        "./dist/hooks/useWebRTC.d.ts"
+      ]
     }
   },
   "files": [

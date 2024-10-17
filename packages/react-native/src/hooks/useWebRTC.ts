@@ -1,7 +1,7 @@
 import React from "react";
 import { MediaStream, MediaStreamTrack } from "react-native-webrtc";
 import InCallManager from "react-native-incall-manager";
-import { TRealtimeConfig } from "@outspeed/core";
+import { TRealtimeConfig } from "@outspeed/core/@types";
 
 import {
   RealtimeConnection,
