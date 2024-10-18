@@ -1,11 +1,10 @@
-import { useActor } from "@xstate/react";
 import React from "react";
 import {
+  RealtimeConnection,
   TRealtimeConnectionListener,
   TRealtimeConnectionListenerType,
 } from "@outspeed/core/RealtimeConnection";
 import { isRTCTrackEvent } from "@outspeed/core/utils";
-import { realtimeConnectionMachine } from "@outspeed/core/realtime-connection";
 import { WebRTCDataChannel } from "@outspeed/core/WebRTCDataChannel";
 import { Track, ETrackOrigin, ETrackKind } from "@outspeed/core/Track";
 import { TRealtimeConfig } from "@outspeed/core/@types";
@@ -23,11 +22,12 @@ export type TUseWebRTCOptions = {
 };
 
 export function useWebRTC(options: TUseWebRTCOptions) {
-  const [actor, send] = useActor(realtimeConnectionMachine);
   const [remoteTracks, setRemoteTracks] = React.useState<Track[]>([]);
   const [dataChannel, setDataChannel] =
     React.useState<WebRTCDataChannel | null>(null);
-
+  const [connection, setConnection] = React.useState<RealtimeConnection | null>(
+    null
+  );
   const { config } = options;
 
   const _eventListeners = React.useRef<
@@ -79,7 +79,7 @@ export function useWebRTC(options: TUseWebRTCOptions) {
       type: TRealtimeConnectionListenerType,
       listener: TRealtimeConnectionListener
     ): TUseWebRTCReturn => {
-      const connection = actor.context.connection;
+      const connection = new RealtimeConnection(config);
 
       if (!connection) {
         return {

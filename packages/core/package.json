@@ -50,11 +50,6 @@
       "import": "./dist/Logger/Logger.mjs",
       "require": "./dist/Logger/Logger.js"
     },
-    "./realtime-connection": {
-      "types": "./dist/machine/realtime-connection.d.ts",
-      "import": "./dist/machine/realtime-connection.mjs",
-      "require": "./dist/machine/realtime-connection.js"
-    },
     "./RealtimeConnection": {
       "types": "./dist/RealtimeConnection/RealtimeConnection.d.ts",
       "import": "./dist/RealtimeConnection/RealtimeConnection.mjs",
@@ -129,9 +124,6 @@
       "Logger": [
         "./dist/Logger/Logger.d.ts"
       ],
-      "realtime-connection": [
-        "./dist/machine/realtime-connection.d.ts"
-      ],
       "RealtimeConnection": [
         "./dist/RealtimeConnection/RealtimeConnection.d.ts"
       ],
@@ -196,8 +188,7 @@
     "change-case": "^5.4.4",
     "extendable-media-recorder": "^9.2.11",
     "extendable-media-recorder-wav-encoder": "^7.0.115",
-    "fast-base64": "^0.1.8",
-    "xstate": "5.17.4"
+    "fast-base64": "^0.1.8"
   },
   "keywords": [],
   "author": ""
