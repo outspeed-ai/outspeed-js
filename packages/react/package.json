@@ -95,6 +95,11 @@
       "import": "./dist/hooks/useWebSocket.mjs",
       "require": "./dist/hooks/useWebSocket.js"
     },
+    "./connection-status": {
+      "types": "./dist/shared/connection-status.d.ts",
+      "import": "./dist/shared/connection-status.mjs",
+      "require": "./dist/shared/connection-status.js"
+    },
     "./styles.css": "./dist/styles.css"
   },
   "typesVersions": {
@@ -146,6 +151,9 @@
       ],
       "useWebSocket": [
         "./dist/hooks/useWebSocket.d.ts"
+      ],
+      "connection-status": [
+        "./dist/shared/connection-status.d.ts"
       ]
     }
   },
