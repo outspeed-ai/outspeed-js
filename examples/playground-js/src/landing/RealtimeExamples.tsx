@@ -4,6 +4,7 @@ import {
   VOICE_BOT_TAKE_INPUT_ROUTE,
   HUMAN_AVATAR_TAKE_INPUT_ROUTE,
   SPORTS_COMMENTATOR_TAKE_INPUT_ROUTE,
+  WEBSOCKET_TAKE_INPUT_ROUTE,
 } from "../constants/routes";
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -60,6 +61,18 @@ const data: TExampleData[] = [
       {
         title: "Screen Share",
         children: <ScreenShare />,
+      },
+    ],
+  },
+  {
+    title: "Websocket App",
+    description:
+      "In this example, we will establish a Web Socket connection to stream both local and remote audio tracks.",
+    link: WEBSOCKET_TAKE_INPUT_ROUTE,
+    icons: [
+      {
+        title: "Audio",
+        children: <AudioLinesIcon />,
       },
     ],
   },

@@ -10,6 +10,8 @@ import {
   THANK_YOU_ROUTE,
   SPORTS_COMMENTATOR_APP_ROUTE,
   SPORTS_COMMENTATOR_TAKE_INPUT_ROUTE,
+  WEBSOCKET_APP_ROUTE,
+  WEBSOCKET_TAKE_INPUT_ROUTE,
 } from "./constants/routes";
 import { HumanAvatarTakeInput } from "./landing/HumanAvatarTakeInput";
 import { VoiceBotTakeInput } from "./landing/VoiceBotTakeInput";
@@ -21,6 +23,8 @@ import { SportsCommentatorRealtimeApp } from "./realtime-app/sports-commentator"
 import { ThankYouScreen } from "./components/thank-you";
 import { SomethingWentWrong } from "./components/something-went-wrong";
 import { PageNotFound } from "./components/page-not-found";
+import { WebSocketTakeInput } from "./landing/WebSocketTakeInput";
+import { WebSocketRealtimeApp } from "./realtime-app/websocket";
 
 /**
  * Every time the browser reloads, we will get a new sessionID.
@@ -54,6 +58,10 @@ const router = createBrowserRouter([
         path: SPORTS_COMMENTATOR_TAKE_INPUT_ROUTE,
         element: <SportsCommentatorTakeInput />,
       },
+      {
+        path: WEBSOCKET_TAKE_INPUT_ROUTE,
+        element: <WebSocketTakeInput />,
+      },
     ],
   },
   {
@@ -75,6 +83,10 @@ const router = createBrowserRouter([
       {
         path: SPORTS_COMMENTATOR_APP_ROUTE,
         element: <SportsCommentatorRealtimeApp />,
+      },
+      {
+        path: WEBSOCKET_APP_ROUTE,
+        element: <WebSocketRealtimeApp />,
       },
     ],
   },
