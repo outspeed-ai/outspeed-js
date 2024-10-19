@@ -4,7 +4,6 @@ export * from "./RealtimeWebSocket";
 export * from "./SDP";
 export * from "./constants";
 export * from "./create-config";
-export * from "./machine";
 export * from "./utils";
 export * from "./DataChannel";
 export * from "./shared/@types";
