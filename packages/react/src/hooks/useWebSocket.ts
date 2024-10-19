@@ -2,40 +2,34 @@ import React from "react";
 import { Track } from "@outspeed/core/Track";
 import { RealtimeWebSocketConnection } from "@outspeed/core/RealtimeWebSocketConnection";
 import { TRealtimeWebSocketConfig, TResponse } from "@outspeed/core/@types";
+import { ERealtimeConnectionStatus } from "../shared/connection-status";
 
 export type TUseWebSocketOptions = {
   config: TRealtimeWebSocketConfig;
 };
-
-export type TWebSocketConnectionStatus =
-  | "new"
-  | "connecting"
-  | "connected"
-  | "failed"
-  | "disconnected";
 
 export function useWebSocket(options: TUseWebSocketOptions) {
   const { config } = options;
   const [connection, setConnection] =
     React.useState<RealtimeWebSocketConnection | null>(null);
   const [connectionStatus, setConnectionStatus] =
-    React.useState<TWebSocketConnectionStatus>("new");
+    React.useState<ERealtimeConnectionStatus>(ERealtimeConnectionStatus.New);
   const [response, setResponse] = React.useState<TResponse>({});
   const [remoteTrack, setRemoteTrack] = React.useState<Track | null>(null);
 
   const connect = React.useCallback(async () => {
-    setConnectionStatus("connecting");
+    setConnectionStatus(ERealtimeConnectionStatus.Connecting);
     const ws = new RealtimeWebSocketConnection(config);
     const response = await ws.connect();
     if (!response.ok) {
       // This will release media, if it is setup.
       await ws.disconnect();
-      setConnectionStatus("failed");
+      setConnectionStatus(ERealtimeConnectionStatus.Failed);
       setResponse(response);
       return console.error("Failed to connect", response);
     }
     setConnection(ws);
-    setConnectionStatus("connected");
+    setConnectionStatus(ERealtimeConnectionStatus.Connected);
     setResponse(response);
   }, [config]);
 
@@ -44,9 +38,9 @@ export function useWebSocket(options: TUseWebSocketOptions) {
       return;
     }
 
+    setConnectionStatus(ERealtimeConnectionStatus.Disconnecting);
     await connection.disconnect();
-
-    setConnectionStatus("disconnected");
+    setConnectionStatus(ERealtimeConnectionStatus.Disconnected);
   }, [connection]);
 
   const getLocalAudioTrack = React.useCallback(() => {
