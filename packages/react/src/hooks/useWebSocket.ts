@@ -43,13 +43,14 @@ export function useWebSocket(options: TUseWebSocketOptions) {
     setConnectionStatus(ERealtimeConnectionStatus.Disconnected);
   }, [connection]);
 
-  const getLocalAudioTrack = React.useCallback(() => {
-    if (!connection) return null;
+  const localAudioTrack = React.useMemo(() => {
+    if (!connection || connectionStatus !== ERealtimeConnectionStatus.Connected)
+      return null;
 
     return connection.mediaManager.track;
-  }, [connection]);
+  }, [connection, connectionStatus]);
 
-  const getRemoteAudioTrack = React.useCallback(() => {
+  const remoteAudioTrack = React.useMemo(() => {
     if (remoteTrack) return remoteTrack;
     if (!connection) return null;
 
@@ -66,8 +67,8 @@ export function useWebSocket(options: TUseWebSocketOptions) {
     disconnect,
     connectionStatus,
     dataChannel: connection?.dataChannel,
-    getLocalAudioTrack,
-    getRemoteAudioTrack,
+    localAudioTrack,
+    remoteAudioTrack,
     connection,
     response,
   };
