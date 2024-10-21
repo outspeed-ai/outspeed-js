@@ -61,6 +61,7 @@ export function SportsCommentatorTakeInput() {
       const config = createConfig({
         functionURL,
         audioDeviceId,
+        audioCodec: "opus/48000/2",
         screenConstraints: {
           video: {
             width: screenShareInput === "512p" ? 512 : 1080,
