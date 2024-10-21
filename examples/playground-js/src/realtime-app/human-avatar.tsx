@@ -6,6 +6,7 @@ import { MeetingLayout } from "../components/meeting-layout";
 import { TRealtimeAppContext } from "./types";
 import { useOutletContext } from "react-router-dom";
 import { ConsoleLogger } from "@outspeed/core";
+import { ERealtimeConnectionStatus } from "@outspeed/react/connection-status";
 
 export function HumanAvatarRealtimeApp() {
   const { config, onDisconnect } = useOutletContext<TRealtimeAppContext>();
@@ -16,24 +17,24 @@ export function HumanAvatarRealtimeApp() {
     response,
     connect,
     disconnect,
-    getRemoteAudioTrack,
-    getLocalAudioTrack,
-    getRemoteVideoTrack,
-    getLocalVideoTrack,
+    localAudioTrack,
+    localVideoTrack,
+    remoteAudioTrack,
+    remoteVideoTrack,
     dataChannel,
   } = useWebRTC({ config: { ...config, logger: ConsoleLogger.getLogger() } });
 
   React.useEffect(() => {
     switch (connectionStatus) {
-      case "SetupCompleted":
+      case ERealtimeConnectionStatus.New:
         connect();
         break;
-      case "Disconnected":
+      case ERealtimeConnectionStatus.Disconnected:
         onDisconnect();
         break;
     }
 
-    if (connectionStatus === "Failed") {
+    if (connectionStatus === ERealtimeConnectionStatus.Failed) {
       toast({
         title: "Connection Status",
         description: "Failed to connect.",
@@ -43,14 +44,14 @@ export function HumanAvatarRealtimeApp() {
   }, [connectionStatus, connect, onDisconnect, config]);
 
   function handleDisconnect() {
-    if (connectionStatus === "Connected") {
+    if (connectionStatus === ERealtimeConnectionStatus.Connected) {
       disconnect();
     }
 
     onDisconnect();
   }
 
-  if (connectionStatus === "Connecting") {
+  if (connectionStatus === ERealtimeConnectionStatus.Connecting) {
     return (
       <div className="h-full flex flex-1 justify-center items-center">
         <Loader2 size={48} className="animate-spin" />
@@ -58,7 +59,7 @@ export function HumanAvatarRealtimeApp() {
     );
   }
 
-  if (connectionStatus === "Failed") {
+  if (connectionStatus === ERealtimeConnectionStatus.Failed) {
     return (
       <div className="h-full flex flex-1 justify-center items-center">
         <div className="flex items-center space-y-4 flex-col">
@@ -91,10 +92,10 @@ export function HumanAvatarRealtimeApp() {
         <MeetingLayout
           title="Human Avatar"
           onCallEndClick={handleDisconnect}
-          localTrack={getLocalVideoTrack()}
-          remoteTrack={getRemoteVideoTrack()}
-          localAudioTrack={getLocalAudioTrack()}
-          remoteAudioTrack={getRemoteAudioTrack()}
+          localTrack={localVideoTrack}
+          remoteTrack={remoteVideoTrack}
+          localAudioTrack={localAudioTrack}
+          remoteAudioTrack={remoteAudioTrack}
           dataChannel={dataChannel}
         />
       </div>

@@ -15,8 +15,8 @@ export function WebSocketRealtimeApp() {
     connect,
     response,
     disconnect,
-    getRemoteAudioTrack,
-    getLocalAudioTrack,
+    remoteAudioTrack,
+    localAudioTrack,
     dataChannel,
     connectionStatus,
   } = useWebSocket({
@@ -82,8 +82,8 @@ export function WebSocketRealtimeApp() {
           onCallEndClick={handleDisconnect}
           localTrack={null}
           remoteTrack={null}
-          localAudioTrack={getLocalAudioTrack()}
-          remoteAudioTrack={getRemoteAudioTrack()}
+          localAudioTrack={localAudioTrack}
+          remoteAudioTrack={remoteAudioTrack}
           dataChannel={dataChannel}
         />
       </div>

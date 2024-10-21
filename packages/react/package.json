@@ -95,6 +95,11 @@
       "import": "./dist/hooks/useWebSocket.mjs",
       "require": "./dist/hooks/useWebSocket.js"
     },
+    "./connection-status": {
+      "types": "./dist/shared/connection-status.d.ts",
+      "import": "./dist/shared/connection-status.mjs",
+      "require": "./dist/shared/connection-status.js"
+    },
     "./styles.css": "./dist/styles.css"
   },
   "typesVersions": {
@@ -146,6 +151,9 @@
       ],
       "useWebSocket": [
         "./dist/hooks/useWebSocket.d.ts"
+      ],
+      "connection-status": [
+        "./dist/shared/connection-status.d.ts"
       ]
     }
   },
@@ -189,7 +197,6 @@
     "@radix-ui/react-select": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-toast": "^1.2.1",
-    "@xstate/react": "4.1.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "tailwind-merge": "^2.5.2"
