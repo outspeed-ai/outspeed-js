@@ -48,7 +48,8 @@
       "types": "./dist/hooks/useWebRTC.d.ts",
       "import": "./dist/hooks/useWebRTC.mjs",
       "require": "./dist/hooks/useWebRTC.js"
-    }
+    },
+    "./dist/*": "./dist/*"
   },
   "typesVersions": {
     "*": {
@@ -72,6 +73,9 @@
       ],
       "useWebRTC": [
         "./dist/hooks/useWebRTC.d.ts"
+      ],
+      "./dist/*": [
+        "./dist/index.d.ts"
       ]
     }
   },
