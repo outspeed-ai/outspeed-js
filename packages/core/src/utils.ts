@@ -36,7 +36,7 @@ export async function getAllUserMediaWithoutAskingForPermission(): Promise<TAllU
     return mediaDevices.map((device, idx) => {
       const label = device.label ? device.label : `${type} #${idx}`;
       return {
-        deviceId: device.deviceId,
+        deviceId: device.deviceId || label,
         groupId: device.groupId,
         kind: device.kind,
         label,
