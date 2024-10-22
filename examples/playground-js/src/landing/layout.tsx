@@ -91,7 +91,7 @@ export function LandingLayout() {
 
   const checkBrowser = React.useCallback(() => {
     if (!isChrome && !isSafari) {
-      setIsBrowserSupported(true);
+      setIsBrowserSupported(false);
     } else {
       setIsBrowserSupported(true);
     }
