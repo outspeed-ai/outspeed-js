@@ -69,8 +69,6 @@ export type TCreateConfigInput = {
   audioConstraints?: MediaTrackConstraints;
   /** Optional media track constraints for video. */
   videoConstraints?: MediaTrackConstraints;
-  /** Optional constraints for screen sharing. */
-  screenConstraints?: DisplayMediaStreamOptions;
   /** Optional codec for audio; defaults to "PCMU/8000". */
   audioCodec?: TAudioCodec;
   /** Optional codec for video. */
@@ -108,7 +106,6 @@ export function createConfig(input: TCreateConfigInput): TRealtimeConfig {
     rtcConfig,
     videoCodec,
     videoTransform,
-    screenConstraints,
     logger,
     audioDeviceId,
     videoDeviceId,
