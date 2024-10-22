@@ -14,6 +14,11 @@
         "default": "./dist/index.js"
       }
     },
+    "./@types": {
+      "types": "./dist/@types.d.ts",
+      "import": "./dist/@types.mjs",
+      "require": "./dist/@types.js"
+    },
     "./RealtimePlayer": {
       "types": "./dist/components/RealtimePlayer.d.ts",
       "import": "./dist/components/RealtimePlayer.mjs",
@@ -49,10 +54,22 @@
       "import": "./dist/hooks/useWebRTC.mjs",
       "require": "./dist/hooks/useWebRTC.js"
     },
-    "./dist/*": "./dist/*"
+    "./SDP": {
+      "types": "./dist/SDP.d.ts",
+      "import": "./dist/SDP.mjs",
+      "require": "./dist/SDP.js"
+    },
+    "./utils": {
+      "types": "./dist/utils.d.ts",
+      "import": "./dist/utils.mjs",
+      "require": "./dist/utils.js"
+    }
   },
   "typesVersions": {
     "*": {
+      "@types": [
+        "./dist/@types.d.ts"
+      ],
       "RealtimePlayer": [
         "./dist/components/RealtimePlayer.d.ts"
       ],
@@ -74,8 +91,11 @@
       "useWebRTC": [
         "./dist/hooks/useWebRTC.d.ts"
       ],
-      "./dist/*": [
-        "./dist/index.d.ts"
+      "SDP": [
+        "./dist/SDP.d.ts"
+      ],
+      "utils": [
+        "./dist/utils.d.ts"
       ]
     }
   },
@@ -106,8 +126,5 @@
   "devDependencies": {
     "@types/react": "^18.3.10",
     "tsup": "8.2.4"
-  },
-  "dependencies": {
-    "@outspeed/core": "workspace:^"
   }
 }

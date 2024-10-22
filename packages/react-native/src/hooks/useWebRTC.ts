@@ -1,7 +1,7 @@
 import React from "react";
 import { MediaStream, MediaStreamTrack } from "react-native-webrtc";
 import InCallManager from "react-native-incall-manager";
-import { TRealtimeConfig } from "@outspeed/core/dist/shared/@types";
+import { TRealtimeConfig } from "../@types";
 
 import {
   RealtimeConnection,
@@ -12,17 +12,19 @@ export type TUseWebRTCConnectOptions = {
   config: TRealtimeConfig;
 };
 
-export type TUseWebRTCConnectionPossibleStates =
-  | "Init"
-  | "Connecting"
-  | "Connected"
-  | "Disconnected"
-  | "Failed";
+export enum ERealtimeConnectionStatus {
+  New = "new",
+  Connecting = "connecting",
+  Connected = "connected",
+  Disconnecting = "disconnecting",
+  Disconnected = "disconnected",
+  Failed = "failed",
+}
 
 export function useWebRTC() {
   const [connection, setConnection] = React.useState<RealtimeConnection>();
   const [connectionStatus, setConnectionStatus] =
-    React.useState<TUseWebRTCConnectionPossibleStates>("Init");
+    React.useState<ERealtimeConnectionStatus>(ERealtimeConnectionStatus.New);
   const [remoteStreams, setRemoteStreams] = React.useState<MediaStream[]>([]);
   const [dataChannel, setDataChannel] =
     React.useState<TRealtimeConnectionDataChannel | null>(null);
@@ -46,7 +48,7 @@ export function useWebRTC() {
 
   const connect = React.useCallback(
     async (options: TUseWebRTCConnectOptions) => {
-      setConnectionStatus("Connecting");
+      setConnectionStatus(ERealtimeConnectionStatus.Connecting);
       const { config } = options;
       const _connection = new RealtimeConnection(config);
       _connection.peerConnection.addEventListener("track", _handleOnTrack);
@@ -57,10 +59,10 @@ export function useWebRTC() {
       if (response.ok) {
         setDataChannel(_connection.dataChannel);
         setConnection(_connection);
-        setConnectionStatus("Connected");
+        setConnectionStatus(ERealtimeConnectionStatus.Connected);
       } else {
         InCallManager.setForceSpeakerphoneOn(false);
-        setConnectionStatus("Failed");
+        setConnectionStatus(ERealtimeConnectionStatus.Failed);
       }
     },
     [_handleOnTrack]
@@ -69,9 +71,15 @@ export function useWebRTC() {
   const disconnect = React.useCallback(() => {
     if (!connection) return;
 
-    connection.peerConnection.removeEventListener("track", _handleOnTrack);
-    connection.disconnect();
-    setConnectionStatus("Disconnected");
+    try {
+      setConnectionStatus(ERealtimeConnectionStatus.Disconnecting);
+      connection.peerConnection.removeEventListener("track", _handleOnTrack);
+      connection.disconnect();
+      setConnectionStatus(ERealtimeConnectionStatus.Disconnected);
+    } catch (error) {
+      console.log(error);
+      setConnectionStatus(ERealtimeConnectionStatus.Failed);
+    }
   }, [connection, _handleOnTrack]);
 
   const getLocalAudioStream = React.useCallback(() => {
