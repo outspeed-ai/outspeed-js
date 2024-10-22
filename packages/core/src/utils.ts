@@ -55,7 +55,25 @@ export async function getAllUserMediaWithoutAskingForPermission(): Promise<TAllU
   };
 }
 
-export async function getUserMediaPermissionStatus() {
+/**
+ * Asynchronously checks the current permission status for the camera and microphone.
+ *
+ * @returns {Promise<PermissionStatus>} A Promise that resolves to the permission status of the camera
+ * and microphone.
+ *
+ * @example
+ * const permissionStatus = await getUserMediaPermissionStatus()
+ *
+ * if (permissionStatus.state === 'granted') {
+ *  console.log('Camera and microphone permissions are granted.');
+ * } else if (permissionStatus.state === 'denied') {
+ *  console.log('Camera or microphone permissions are denied.');
+ * } else {
+ *  console.log('User has not responded to the permission request.');
+ * }
+ *
+ */
+export async function getUserMediaPermissionStatus(): Promise<PermissionStatus> {
   // @ts-expect-error name: "camera" is defined
   const response = await navigator.permissions.query({ name: "camera" });
 
