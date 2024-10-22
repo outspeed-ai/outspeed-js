@@ -61,7 +61,7 @@ export function RealtimeVideoInput(props: TRealtimeVideoInputProps) {
     if (availableVideoDevices.length > 0 && !value && !placeholder) {
       onChange(availableVideoDevices[0].deviceId);
     }
-  }, [availableVideoDevices, placeholder]);
+  }, [availableVideoDevices, onChange, placeholder, value]);
 
   return (
     <FormItem>
