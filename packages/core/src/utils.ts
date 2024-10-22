@@ -55,6 +55,18 @@ export async function getAllUserMediaWithoutAskingForPermission(): Promise<TAllU
   };
 }
 
+export async function getUserMediaPermissionStatus() {
+  // @ts-expect-error name: "camera" is defined
+  const response = await navigator.permissions.query({ name: "camera" });
+
+  if (response.state === "granted") {
+    // @ts-expect-error name: "microphone" is defined
+    return await navigator.permissions.query({ name: "microphone" });
+  }
+
+  return response;
+}
+
 export async function getAllUserMedia(): Promise<TAllUserMedia> {
   let stream: undefined | MediaStream;
   try {
