@@ -10,8 +10,11 @@ import { buttonVariants } from "../components/button";
 import { FileIcon, Github } from "lucide-react";
 import { TAppRouteLocationState, TLayoutOutletContext } from "./type";
 import React, { useState } from "react";
-import { TRealtimeConfig } from "@outspeed/core";
-import { TRealtimeWebSocketConfig } from "@outspeed/core";
+import {
+  TRealtimeWebSocketConfig,
+  TRealtimeConfig,
+  getUserMediaPermissionStatus,
+} from "@outspeed/core";
 import { RealtimeExamples } from "./RealtimeExamples";
 import { isChrome, isSafari } from "react-device-detect";
 import { BrowserNotSupported } from "../components/browser-not-supported";
@@ -21,13 +24,6 @@ import { UserMediaPermissionExplanation } from "../components/user-media-permiss
 import { UserMediaPermissionFailed } from "../components/user-media-permission-failed";
 
 export type TLandingProps = {};
-
-async function getPermissionStatus() {
-  // @ts-ignore
-  const response = await navigator.permissions.query({ name: "camera" });
-
-  return response;
-}
 
 export function LandingLayout() {
   const navigate = useNavigate();
@@ -53,7 +49,7 @@ export function LandingLayout() {
   );
 
   const handlePermission = React.useCallback(async () => {
-    const permissionStatus = await getPermissionStatus();
+    const permissionStatus = await getUserMediaPermissionStatus();
 
     if (permissionStatus.state === "granted") {
       setUserMediaPermissionStatus("success");
@@ -84,7 +80,7 @@ export function LandingLayout() {
     } catch (error) {
       console.error("[Handle User Media Permission Error]", error);
 
-      const permissionStatus = await getPermissionStatus();
+      const permissionStatus = await getUserMediaPermissionStatus();
       if (permissionStatus.state === "prompt") {
         setUserMediaPermissionStatus("dismissed");
       } else {
@@ -95,7 +91,7 @@ export function LandingLayout() {
 
   const checkBrowser = React.useCallback(() => {
     if (!isChrome && !isSafari) {
-      setIsBrowserSupported(false);
+      setIsBrowserSupported(true);
     } else {
       setIsBrowserSupported(true);
     }
