@@ -99,7 +99,8 @@
       "types": "./dist/utils.d.ts",
       "import": "./dist/utils.mjs",
       "require": "./dist/utils.js"
-    }
+    },
+    "./dist/*": "./dist/*"
   },
   "typesVersions": {
     "*": {
@@ -153,6 +154,9 @@
       ],
       "utils": [
         "./dist/utils.d.ts"
+      ],
+      "./dist/*": [
+        "./dist/index.d.ts"
       ]
     }
   },

@@ -41,6 +41,7 @@ export function VoiceBotTakeInput() {
       const config = createConfig({
         functionURL,
         audioDeviceId,
+        audioCodec: "opus/48000/2",
       });
       onSubmit(config, VOICE_BOT_APP_ROUTE);
     } catch (error) {

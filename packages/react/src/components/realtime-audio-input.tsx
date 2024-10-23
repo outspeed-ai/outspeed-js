@@ -62,7 +62,7 @@ export function RealtimeAudioInput(props: TRealtimeAudioInputProps) {
     if (availableAudioDevices.length > 0 && !value && !placeholder) {
       onChange(availableAudioDevices[0].deviceId);
     }
-  }, [availableAudioDevices, placeholder]);
+  }, [availableAudioDevices, onChange, placeholder, value]);
 
   return (
     <FormItem>

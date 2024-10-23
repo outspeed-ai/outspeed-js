@@ -9,13 +9,19 @@ import {
 import { buttonVariants } from "../components/button";
 import { FileIcon, Github } from "lucide-react";
 import { TAppRouteLocationState, TLayoutOutletContext } from "./type";
-import React from "react";
-import { TRealtimeConfig } from "@outspeed/core";
-import { TRealtimeWebSocketConfig } from "@outspeed/core";
+import React, { useState } from "react";
+import {
+  TRealtimeWebSocketConfig,
+  TRealtimeConfig,
+  getUserMediaPermissionStatus,
+} from "@outspeed/core";
 import { RealtimeExamples } from "./RealtimeExamples";
 import { isChrome, isSafari } from "react-device-detect";
 import { BrowserNotSupported } from "../components/browser-not-supported";
 import { TLoaderData } from "../types";
+import { UserMediaPermissionModal } from "../components/user-media-permission-modal";
+import { UserMediaPermissionExplanation } from "../components/user-media-permission-explanation";
+import { UserMediaPermissionFailed } from "../components/user-media-permission-failed";
 
 export type TLandingProps = {};
 
@@ -23,6 +29,9 @@ export function LandingLayout() {
   const navigate = useNavigate();
   const location = useLocation();
   const { sessionID } = useLoaderData() as TLoaderData;
+  const [userMediaPermissionStatus, setUserMediaPermissionStatus] = useState<
+    "init" | "pending" | "success" | "dismissed" | "failed"
+  >("init");
 
   const [isBrowserSupported, setIsBrowserSupported] = React.useState(false);
 
@@ -39,6 +48,62 @@ export function LandingLayout() {
     [navigate, location.pathname]
   );
 
+  const handlePermission = React.useCallback(async () => {
+    const permissionStatus = await getUserMediaPermissionStatus();
+
+    if (permissionStatus.state === "granted") {
+      setUserMediaPermissionStatus("success");
+      return;
+    }
+
+    if (permissionStatus.state === "denied") {
+      setUserMediaPermissionStatus("failed");
+      return;
+    }
+
+    setUserMediaPermissionStatus("pending");
+    try {
+      /**
+       * Asking for user's permission so that we have access
+       * to the name of user's devices available.
+       */
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+        video: true,
+      });
+
+      stream.getTracks().forEach(function (track) {
+        track.stop();
+      });
+
+      setUserMediaPermissionStatus("success");
+    } catch (error) {
+      console.error("[Handle User Media Permission Error]", error);
+
+      if (isSafari) {
+        /**
+         * If user denied or dismissed the permission on Safari, then
+         * we can't ask for permission again using javascript. Safari,
+         * requires user intervention to reset the permission.
+         *
+         * If user has selected "Don't Allow" then it can be fixed by
+         * refreshing the page, but if user has selected "Never Ask Again",
+         * then user has to manually reset the permission. In the instructions
+         * component, we have provided the steps to reset the permission.
+         */
+        setUserMediaPermissionStatus("failed");
+        return;
+      }
+
+      const permissionStatus = await getUserMediaPermissionStatus();
+      if (permissionStatus.state === "prompt") {
+        setUserMediaPermissionStatus("dismissed");
+      } else {
+        setUserMediaPermissionStatus("failed");
+      }
+    }
+  }, []);
+
   const checkBrowser = React.useCallback(() => {
     if (!isChrome && !isSafari) {
       setIsBrowserSupported(false);
@@ -51,12 +116,18 @@ export function LandingLayout() {
     checkBrowser();
   }, [checkBrowser]);
 
+  React.useEffect(() => {
+    if (userMediaPermissionStatus === "init" && isBrowserSupported) {
+      handlePermission();
+    }
+  }, [isBrowserSupported, handlePermission]);
+
   if (!isBrowserSupported) {
     return <BrowserNotSupported />;
   }
 
   return (
-    <div className="flex h-dvh w-dvw flex-col items-center md:items-stretch md:flex-row">
+    <div className="flex h-dvh w-full flex-col items-center md:items-stretch md:flex-row">
       <div className="flex-1 bg-[hsl(204,80%,5%)] w-full flex justify-center md:justify-end">
         <div className="flex-1 p-4 flex flex-col max-w-lg md:max-w-2xl">
           {/* Logo */}
@@ -83,14 +154,42 @@ export function LandingLayout() {
       </div>
       <div className="flex-1 flex w-full justify-center md:justify-start">
         <div className="flex-1 flex flex-col max-w-lg justify-center md:px-10 md:max-w-2xl p-4">
-          <div className="mb-4 p-4 text-red-500 text-lg border border-red-500 rounded">
-            Please ensure that the app is running and Function URL is correct.
-          </div>
-          <Outlet
-            context={
-              { onSubmit: handleOnSubmit } satisfies TLayoutOutletContext
-            }
-          />
+          {userMediaPermissionStatus === "success" && (
+            <>
+              <div className="mb-4 p-4 text-red-500 text-lg border border-red-500 rounded">
+                Please ensure that the app is running and Function URL is
+                correct.
+              </div>
+              <Outlet
+                context={
+                  { onSubmit: handleOnSubmit } satisfies TLayoutOutletContext
+                }
+              />
+            </>
+          )}
+          {userMediaPermissionStatus === "pending" && (
+            <UserMediaPermissionModal />
+          )}
+          {userMediaPermissionStatus === "dismissed" && (
+            /**
+             * If user has dismissed the popup, then we are showing
+             * a message that why we need camera and microphone access.
+             *
+             * Also, have a button that user can use top see the media
+             * access permission popup again.
+             */
+            <UserMediaPermissionExplanation
+              handlePermission={handlePermission}
+            />
+          )}
+          {userMediaPermissionStatus === "failed" && (
+            /**
+             * If the user has denied the permission, then we can't do anything
+             * using javascript to as for permission again, hence we are showing
+             * a message explaining what user can do to reset permission.
+             */
+            <UserMediaPermissionFailed />
+          )}
         </div>
       </div>
       <div className="w-full justify-center mt-16 flex md:hidden">
