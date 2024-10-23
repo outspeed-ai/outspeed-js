@@ -1,2 +1,1 @@
-export * from "./ConsoleLogger";
-export * from "./Logger";
+export * from "@outspeed/core/dist/Logger";
