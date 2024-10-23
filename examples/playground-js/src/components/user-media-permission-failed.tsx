@@ -43,7 +43,8 @@ export function UserMediaPermissionFailed() {
           the menu bar and select Settings (or Preferences on older versions).
           Go to the Websites tab. In the left-hand panel, find Camera and
           Microphone. Locate this Outspeed's playground URL and set the
-          permission to Allow or Ask.
+          permission to Allow or Ask. If it's already set to Ask, try refreshing
+          the page.
         </li>
       </ul>
     </div>
