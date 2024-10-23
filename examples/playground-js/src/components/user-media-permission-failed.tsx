@@ -34,15 +34,16 @@ export function UserMediaPermissionFailed() {
         </li>
 
         <li>
-          <span className="font-semibold">Safari</span> follow the instructions{" "}
-          <a
-            href="https://support.poodll.com/en/support/solutions/articles/19000125983-setting-webcam-and-mic-permissions-on-desktop-safari"
-            target="_blank"
-            className="text-blue-800 underline"
-          >
-            available here
-          </a>
-          .
+          <span className="font-semibold">iPhone/iPad (iOS)</span> Go to
+          Settings. Scroll down and find Safari. Tap on Camera or Microphone.
+          Change the setting to either Ask or Allow.
+        </li>
+        <li>
+          <span className="font-semibold">MacOS Safari</span> Click Safari in
+          the menu bar and select Settings (or Preferences on older versions).
+          Go to the Websites tab. In the left-hand panel, find Camera and
+          Microphone. Locate this Outspeed's playground URL and set the
+          permission to Allow or Ask.
         </li>
       </ul>
     </div>

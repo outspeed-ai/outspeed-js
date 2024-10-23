@@ -80,6 +80,21 @@ export function LandingLayout() {
     } catch (error) {
       console.error("[Handle User Media Permission Error]", error);
 
+      if (isSafari) {
+        /**
+         * If user denied or dismissed the permission on Safari, then
+         * we can't ask for permission again using javascript. Safari,
+         * requires user intervention to reset the permission.
+         *
+         * If user has selected "Don't Allow" then it can be fixed by
+         * refreshing the page, but if user has selected "Never Ask Again",
+         * then user has to manually reset the permission. In the instructions
+         * component, we have provided the steps to reset the permission.
+         */
+        setUserMediaPermissionStatus("failed");
+        return;
+      }
+
       const permissionStatus = await getUserMediaPermissionStatus();
       if (permissionStatus.state === "prompt") {
         setUserMediaPermissionStatus("dismissed");
@@ -102,8 +117,10 @@ export function LandingLayout() {
   }, [checkBrowser]);
 
   React.useEffect(() => {
-    handlePermission();
-  }, []);
+    if (userMediaPermissionStatus === "init" && isBrowserSupported) {
+      handlePermission();
+    }
+  }, [isBrowserSupported, handlePermission]);
 
   if (!isBrowserSupported) {
     return <BrowserNotSupported />;
