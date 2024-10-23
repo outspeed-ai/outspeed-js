@@ -31,5 +31,8 @@
   "devDependencies": {
     "@types/react": "^18.3.10",
     "tsup": "8.2.4"
+  },
+  "dependencies": {
+    "@outspeed/core": "workspace:^"
   }
 }
