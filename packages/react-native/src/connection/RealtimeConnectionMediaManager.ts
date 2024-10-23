@@ -3,12 +3,7 @@ import {
   mediaDevices,
   MediaStream,
 } from "react-native-webrtc";
-import {
-  TLogger,
-  TRealtimeConfig,
-  TResponse,
-  TTransceiver,
-} from "@outspeed/core/dist/shared/@types";
+import { TLogger, TRealtimeConfig, TResponse, TTransceiver } from "../@types";
 
 /**
  * This class manages local and remote media streams, including audio, video
