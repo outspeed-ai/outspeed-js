@@ -95,8 +95,7 @@
       "import": "./dist/hooks/useWebSocket.mjs",
       "require": "./dist/hooks/useWebSocket.js"
     },
-    "./styles.css": "./dist/styles.css",
-    "./dist/*": "./dist/*"
+    "./styles.css": "./dist/styles.css"
   },
   "typesVersions": {
     "*": {
@@ -147,9 +146,6 @@
       ],
       "useWebSocket": [
         "./dist/hooks/useWebSocket.d.ts"
-      ],
-      "./dist/*": [
-        "./dist/index.d.ts"
       ]
     }
   },
