@@ -1,6 +1,6 @@
 import { TLogger, TRealtimeConfig, TResponse } from "../@types";
 import { SDP } from "@outspeed/core/dist/SDP";
-import { fetchWithRetry } from "../utils";
+import { fetchWithRetry } from "@outspeed/core/dist/utils";
 import { RTCPeerConnection, RTCSessionDescription } from "react-native-webrtc";
 import { isAValidRTCSessionDescription } from "./isAValidRTCSessionDescription";
 
