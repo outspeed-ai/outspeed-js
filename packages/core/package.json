@@ -90,6 +90,11 @@
       "import": "./dist/shared/@types.mjs",
       "require": "./dist/shared/@types.js"
     },
+    "./connection-status": {
+      "types": "./dist/shared/connection-status.d.ts",
+      "import": "./dist/shared/connection-status.mjs",
+      "require": "./dist/shared/connection-status.js"
+    },
     "./Track": {
       "types": "./dist/shared/Track.d.ts",
       "import": "./dist/shared/Track.mjs",
@@ -148,6 +153,9 @@
       ],
       "@types": [
         "./dist/shared/@types.d.ts"
+      ],
+      "connection-status": [
+        "./dist/shared/connection-status.d.ts"
       ],
       "Track": [
         "./dist/shared/Track.d.ts"

@@ -8,3 +8,4 @@ export * from "./utils";
 export * from "./DataChannel";
 export * from "./shared/@types";
 export * from "./shared/Track";
+export * from "./shared/connection-status";

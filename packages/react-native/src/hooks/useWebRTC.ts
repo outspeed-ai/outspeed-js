@@ -2,6 +2,7 @@ import React from "react";
 import { MediaStream, MediaStreamTrack } from "react-native-webrtc";
 import InCallManager from "react-native-incall-manager";
 import { TRealtimeConfig } from "../@types";
+import { ERealtimeConnectionStatus } from "@outspeed/core/dist/shared/connection-status";
 
 import {
   RealtimeConnection,
@@ -11,15 +12,6 @@ import {
 export type TUseWebRTCConnectOptions = {
   config: TRealtimeConfig;
 };
-
-export enum ERealtimeConnectionStatus {
-  New = "new",
-  Connecting = "connecting",
-  Connected = "connected",
-  Disconnecting = "disconnecting",
-  Disconnected = "disconnected",
-  Failed = "failed",
-}
 
 export function useWebRTC() {
   const [connection, setConnection] = React.useState<RealtimeConnection>();
