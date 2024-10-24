@@ -67,11 +67,10 @@ export class WebSocketDataChannel implements DataChannel<null> {
     }
   }
 
-  send(payload: { type: string } & { [k in string]: unknown }): void {
+  send(payload: { type: string; data: unknown }): void {
     if (this.socket.readyState !== WebSocket.OPEN) {
       throw new Error("WebSocket is not open");
     }
-
     this.socket.send(stringify(payload));
   }
 

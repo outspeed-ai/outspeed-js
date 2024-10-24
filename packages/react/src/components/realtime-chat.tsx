@@ -43,12 +43,13 @@ export function RealtimeChat(props: RealtimeChatProps) {
   >([]);
   const input = useRef<HTMLInputElement>(null);
 
-  function updateMessage(message: {
-    content?: string;
-    text?: string;
-    type: "user" | "bot";
-  }) {
-    setMessages((currentMessages) => [...currentMessages, message]);
+  function updateMessage(message: { content?: unknown; type: "user" | "bot" }) {
+    if (typeof message !== "object" || !message) return;
+    const { type, content } = message;
+
+    if (typeof content !== "string") return;
+
+    setMessages((currentMessages) => [...currentMessages, { type, content }]);
 
     setTimeout(() => {
       chatRef.current?.scroll({
@@ -61,11 +62,14 @@ export function RealtimeChat(props: RealtimeChatProps) {
   function sendMessage(msg: string) {
     updateMessage({ content: msg, type: "user" });
 
-    dataChannel.send({
-      content: msg,
-      text: msg,
-      role: "user",
-    });
+    try {
+      dataChannel.send({
+        type: "message",
+        data: msg,
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   useEffect(() => {
