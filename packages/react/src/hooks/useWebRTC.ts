@@ -8,7 +8,7 @@ import { isRTCTrackEvent } from "@outspeed/core/utils";
 import { WebRTCDataChannel } from "@outspeed/core/WebRTCDataChannel";
 import { Track, ETrackOrigin, ETrackKind } from "@outspeed/core/Track";
 import { TRealtimeConfig, TResponse } from "@outspeed/core/@types";
-import { ERealtimeConnectionStatus } from "@outspeed/core/connection-status";
+import { ERealtimeConnectionStatus } from "../connection-status";
 
 export type TUseWebRTCReturn<T = unknown> = {
   ok?: boolean;

@@ -70,6 +70,11 @@
       "import": "./dist/components/realtime-video.mjs",
       "require": "./dist/components/realtime-video.js"
     },
+    "./connection-status": {
+      "types": "./dist/connection-status.d.ts",
+      "import": "./dist/connection-status.mjs",
+      "require": "./dist/connection-status.js"
+    },
     "./useAvailableMediaDevices": {
       "types": "./dist/hooks/useAvailableMediaDevices.d.ts",
       "import": "./dist/hooks/useAvailableMediaDevices.mjs",
@@ -94,11 +99,6 @@
       "types": "./dist/hooks/useWebSocket.d.ts",
       "import": "./dist/hooks/useWebSocket.mjs",
       "require": "./dist/hooks/useWebSocket.js"
-    },
-    "./connection-status": {
-      "types": "./dist/shared/connection-status.d.ts",
-      "import": "./dist/shared/connection-status.mjs",
-      "require": "./dist/shared/connection-status.js"
     },
     "./styles.css": "./dist/styles.css"
   },
@@ -137,6 +137,9 @@
       "realtime-video": [
         "./dist/components/realtime-video.d.ts"
       ],
+      "connection-status": [
+        "./dist/connection-status.d.ts"
+      ],
       "useAvailableMediaDevices": [
         "./dist/hooks/useAvailableMediaDevices.d.ts"
       ],
@@ -151,9 +154,6 @@
       ],
       "useWebSocket": [
         "./dist/hooks/useWebSocket.d.ts"
-      ],
-      "connection-status": [
-        "./dist/shared/connection-status.d.ts"
       ]
     }
   },
