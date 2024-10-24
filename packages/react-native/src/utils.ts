@@ -9,6 +9,8 @@ import {
   TTransceiver,
 } from "./@types";
 
+export { ERealtimeConnectionStatus } from "@outspeed/core/dist/shared/connection-status";
+
 /**
  * The input parameters for creating a real-time configuration.
  */

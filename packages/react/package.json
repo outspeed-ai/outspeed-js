@@ -70,6 +70,11 @@
       "import": "./dist/components/realtime-video.mjs",
       "require": "./dist/components/realtime-video.js"
     },
+    "./connection-status": {
+      "types": "./dist/connection-status.d.ts",
+      "import": "./dist/connection-status.mjs",
+      "require": "./dist/connection-status.js"
+    },
     "./useAvailableMediaDevices": {
       "types": "./dist/hooks/useAvailableMediaDevices.d.ts",
       "import": "./dist/hooks/useAvailableMediaDevices.mjs",
@@ -132,6 +137,9 @@
       "realtime-video": [
         "./dist/components/realtime-video.d.ts"
       ],
+      "connection-status": [
+        "./dist/connection-status.d.ts"
+      ],
       "useAvailableMediaDevices": [
         "./dist/hooks/useAvailableMediaDevices.d.ts"
       ],
@@ -189,7 +197,6 @@
     "@radix-ui/react-select": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-toast": "^1.2.1",
-    "@xstate/react": "4.1.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "tailwind-merge": "^2.5.2"

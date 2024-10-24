@@ -1,14 +1,14 @@
-import { useActor } from "@xstate/react";
 import React from "react";
 import {
+  RealtimeConnection,
   TRealtimeConnectionListener,
   TRealtimeConnectionListenerType,
 } from "@outspeed/core/RealtimeConnection";
 import { isRTCTrackEvent } from "@outspeed/core/utils";
-import { realtimeConnectionMachine } from "@outspeed/core/realtime-connection";
 import { WebRTCDataChannel } from "@outspeed/core/WebRTCDataChannel";
 import { Track, ETrackOrigin, ETrackKind } from "@outspeed/core/Track";
-import { TRealtimeConfig } from "@outspeed/core/@types";
+import { TRealtimeConfig, TResponse } from "@outspeed/core/@types";
+import { ERealtimeConnectionStatus } from "../connection-status";
 
 export type TUseWebRTCReturn<T = unknown> = {
   ok?: boolean;
@@ -23,12 +23,17 @@ export type TUseWebRTCOptions = {
 };
 
 export function useWebRTC(options: TUseWebRTCOptions) {
-  const [actor, send] = useActor(realtimeConnectionMachine);
+  const { config } = options;
   const [remoteTracks, setRemoteTracks] = React.useState<Track[]>([]);
   const [dataChannel, setDataChannel] =
     React.useState<WebRTCDataChannel | null>(null);
 
-  const { config } = options;
+  const [connection] = React.useState(new RealtimeConnection(config));
+  const [connectionResponse, setConnectionResponse] = React.useState<TResponse>(
+    {}
+  );
+  const [connectionStatus, setConnectionStatus] =
+    React.useState<ERealtimeConnectionStatus>(ERealtimeConnectionStatus.New);
 
   const _eventListeners = React.useRef<
     Partial<
@@ -79,8 +84,6 @@ export function useWebRTC(options: TUseWebRTCOptions) {
       type: TRealtimeConnectionListenerType,
       listener: TRealtimeConnectionListener
     ): TUseWebRTCReturn => {
-      const connection = actor.context.connection;
-
       if (!connection) {
         return {
           error: {
@@ -96,7 +99,7 @@ export function useWebRTC(options: TUseWebRTCOptions) {
         ok: true,
       };
     },
-    [_registerEventListener, actor.context.connection]
+    [_registerEventListener, connection]
   );
 
   const removeEventListener = React.useCallback(
@@ -104,8 +107,6 @@ export function useWebRTC(options: TUseWebRTCOptions) {
       type: TRealtimeConnectionListenerType,
       listener: TRealtimeConnectionListener
     ): TUseWebRTCReturn => {
-      const connection = actor.context.connection;
-
       if (!connection) {
         return {
           error: {
@@ -121,12 +122,10 @@ export function useWebRTC(options: TUseWebRTCOptions) {
         ok: true,
       };
     },
-    [_unregisterEventListener, actor.context.connection]
+    [_unregisterEventListener, connection]
   );
 
   const removeAllOnPacketReceiveListeners = React.useCallback(() => {
-    const connection = actor.context.connection;
-
     if (!connection) {
       return {
         error: {
@@ -136,31 +135,45 @@ export function useWebRTC(options: TUseWebRTCOptions) {
     }
 
     connection.removeAllOnPacketReceiverListeners();
-  }, [actor.context.connection]);
+  }, [connection]);
 
-  const connect = React.useCallback(() => {
-    if (!actor.can({ type: "CONNECT" })) {
+  const connect = React.useCallback(async () => {
+    if (connectionStatus !== ERealtimeConnectionStatus.New) {
       return {
         error: {
-          msg: `You cannot call connect() if the connection state is: ${actor.value}. It can only be called if the connection state is SetupCompleted.`,
+          msg: `You cannot call connect() if the connection state is: ${connectionStatus}. It can only be called if the connection state is ${ERealtimeConnectionStatus.New}.`,
+        },
+      };
+    }
+
+    if (!connection) {
+      return {
+        error: {
+          msg: "connect() is called but connection is not defined.",
         },
       };
     }
 
     addEventListener("track", _handleOnTrack);
+    setConnectionStatus(ERealtimeConnectionStatus.Connecting);
+    const response = await connection.connect();
 
-    send({ type: "CONNECT" });
+    if (response.ok) {
+      setConnectionStatus(ERealtimeConnectionStatus.Connected);
+    } else {
+      setConnectionStatus(ERealtimeConnectionStatus.Failed);
+    }
 
-    return {
-      ok: true,
-    };
-  }, [actor, addEventListener, _handleOnTrack, send]);
+    setConnectionResponse(response);
 
-  const disconnect = React.useCallback((): TUseWebRTCReturn => {
-    if (!actor.can({ type: "DISCONNECT" })) {
+    return response;
+  }, [addEventListener, _handleOnTrack, connection, connectionStatus]);
+
+  const disconnect = React.useCallback(() => {
+    if (connectionStatus !== ERealtimeConnectionStatus.Connected) {
       return {
         error: {
-          msg: `You cannot call disconnect(), if the connection state is: ${actor.value}. It can only be called if the connection state is Connected`,
+          msg: `You cannot call disconnect(), if the connection state is: ${connectionStatus}. It can only be called if the connection state is ${ERealtimeConnectionStatus.Connected}`,
         },
       };
     }
@@ -181,21 +194,37 @@ export function useWebRTC(options: TUseWebRTCOptions) {
      */
     removeAllOnPacketReceiveListeners();
 
-    send({ type: "DISCONNECT" });
+    setConnectionStatus(ERealtimeConnectionStatus.Disconnecting);
+    const response = connection.disconnect();
 
-    return {
-      ok: true,
-    };
-  }, [actor, send, removeEventListener, removeAllOnPacketReceiveListeners]);
+    if (response.ok) {
+      setConnectionStatus(ERealtimeConnectionStatus.Disconnected);
+    } else {
+      setConnectionStatus(ERealtimeConnectionStatus.Failed);
+    }
+
+    return response;
+  }, [
+    connection,
+    connectionStatus,
+    removeEventListener,
+    removeAllOnPacketReceiveListeners,
+  ]);
 
   const getLocalTracks = React.useCallback(
     (type: ETrackKind): TUseWebRTCReturn<Track[] | null> => {
-      const connection = actor.context.connection;
-
       if (!connection) {
         return {
           error: {
             msg: "Connection is not defined.",
+          },
+        };
+      }
+
+      if (connectionStatus !== ERealtimeConnectionStatus.Connected) {
+        return {
+          error: {
+            msg: "Not connected.",
           },
         };
       }
@@ -216,10 +245,10 @@ export function useWebRTC(options: TUseWebRTCOptions) {
       }
     },
 
-    [actor]
+    [connection, connectionStatus]
   );
 
-  const getLocalAudioTrack = React.useCallback(() => {
+  const localAudioTrack = React.useMemo(() => {
     const res = getLocalTracks(ETrackKind.Audio);
 
     if (res.data) {
@@ -229,7 +258,7 @@ export function useWebRTC(options: TUseWebRTCOptions) {
     return null;
   }, [getLocalTracks]);
 
-  const getLocalVideoTrack = React.useCallback(() => {
+  const localVideoTrack = React.useMemo(() => {
     const res = getLocalTracks(ETrackKind.Video);
 
     if (res.data) {
@@ -263,7 +292,7 @@ export function useWebRTC(options: TUseWebRTCOptions) {
     [remoteTracks]
   );
 
-  const getRemoteAudioTrack = React.useCallback(() => {
+  const remoteAudioTrack = React.useMemo(() => {
     const res = getRemoteTracks(ETrackKind.Audio);
 
     if (res.data) {
@@ -273,7 +302,7 @@ export function useWebRTC(options: TUseWebRTCOptions) {
     return null;
   }, [getRemoteTracks]);
 
-  const getRemoteVideoTrack = React.useCallback(() => {
+  const remoteVideoTrack = React.useMemo(() => {
     const res = getRemoteTracks(ETrackKind.Video);
 
     if (res.data) {
@@ -283,56 +312,34 @@ export function useWebRTC(options: TUseWebRTCOptions) {
     return null;
   }, [getRemoteTracks]);
 
-  const reset = React.useCallback((): TUseWebRTCReturn => {
-    if (!actor.can({ type: "RESET" })) {
-      return {
-        error: {
-          msg: `You cannot reset if the connection state is: ${actor.value}. It can be called if the connection state is Disconnected or Failed.`,
-        },
-      };
-    }
-
-    send({ type: "RESET" });
-
-    return {
-      ok: true,
-    };
-  }, [send, actor]);
-
   React.useEffect(() => {
-    if (actor.can({ type: "SETUP_CONNECTION", payload: { config } })) {
-      send({ type: "SETUP_CONNECTION", payload: { config } });
-    }
-  }, [actor, send, config]);
-
-  React.useEffect(() => {
-    const connection = actor.context.connection;
-
     if (!connection) return;
 
-    if (connection.dataChannel && actor.value === "Connected") {
+    if (
+      connection.dataChannel &&
+      connectionStatus === ERealtimeConnectionStatus.Connected
+    ) {
       setDataChannel(new WebRTCDataChannel(connection.dataChannel));
     }
 
     return () => {
       setDataChannel(null);
     };
-  }, [actor]);
+  }, [connection, connectionStatus]);
 
   return {
-    connectionStatus: actor.value,
-    response: actor.context.connectionResponse,
+    connectionStatus,
+    response: connectionResponse,
     connect,
     disconnect,
-    reset,
     dataChannel,
     addEventListener,
     removeEventListener,
-    getLocalAudioTrack,
-    getLocalVideoTrack,
     getLocalTracks,
-    getRemoteAudioTrack,
-    getRemoteVideoTrack,
+    localAudioTrack,
+    localVideoTrack,
     getRemoteTracks,
+    remoteAudioTrack,
+    remoteVideoTrack,
   };
 }
