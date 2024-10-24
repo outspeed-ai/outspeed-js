@@ -78,7 +78,7 @@ export function WebSocketRealtimeApp() {
     <div className="h-full flex flex-1">
       <div className="flex-1 flex">
         <MeetingLayout
-          title="WebSocket Example"
+          title="Voice Bot (Websocket)"
           onCallEndClick={handleDisconnect}
           localTrack={null}
           remoteTrack={null}

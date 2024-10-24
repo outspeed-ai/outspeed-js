@@ -65,7 +65,7 @@ const data: TExampleData[] = [
     ],
   },
   {
-    title: "Websocket App",
+    title: "Voice Bot (Websocket)",
     description:
       "In this example, we will establish a Web Socket connection to stream both local and remote audio tracks.",
     link: WEBSOCKET_TAKE_INPUT_ROUTE,
