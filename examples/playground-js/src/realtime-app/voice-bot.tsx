@@ -1,12 +1,15 @@
 import React from "react";
-import { useRealtimeToast, useWebRTC } from "@outspeed/react";
+import {
+  useRealtimeToast,
+  useWebRTC,
+  ERealtimeConnectionStatus,
+} from "@outspeed/react";
 import { Loader2 } from "lucide-react";
 import { Button } from "../components/button";
 import { MeetingLayout } from "../components/meeting-layout";
 import { useOutletContext } from "react-router-dom";
 import { TRealtimeAppContext } from "./types";
 import { ConsoleLogger } from "@outspeed/core";
-import { ERealtimeConnectionStatus } from "@outspeed/react/connection-status";
 
 export function VoiceBotRealtimeApp() {
   const { config, onDisconnect } = useOutletContext<TRealtimeAppContext>();

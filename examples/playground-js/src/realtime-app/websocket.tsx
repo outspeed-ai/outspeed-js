@@ -1,5 +1,5 @@
 import React from "react";
-import { useWebSocket } from "@outspeed/react";
+import { useWebSocket, ERealtimeConnectionStatus } from "@outspeed/react";
 import { Loader2 } from "lucide-react";
 import { Button } from "../components/button";
 import { MeetingLayout } from "../components/meeting-layout";
@@ -39,7 +39,7 @@ export function WebSocketRealtimeApp() {
     };
   }, []);
 
-  if (connectionStatus === "connecting") {
+  if (connectionStatus === ERealtimeConnectionStatus.Connecting) {
     return (
       <div className="h-full flex flex-1 justify-center items-center">
         <Loader2 size={48} className="animate-spin" />
@@ -47,7 +47,7 @@ export function WebSocketRealtimeApp() {
     );
   }
 
-  if (connectionStatus === "failed") {
+  if (connectionStatus === ERealtimeConnectionStatus.Failed) {
     return (
       <div className="h-full flex flex-1 justify-center items-center">
         <div className="flex items-center space-y-4 flex-col">

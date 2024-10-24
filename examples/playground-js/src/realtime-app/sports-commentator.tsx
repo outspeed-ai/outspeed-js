@@ -1,11 +1,14 @@
 import React from "react";
-import { useWebRTC, useRealtimeToast } from "@outspeed/react";
+import {
+  useWebRTC,
+  useRealtimeToast,
+  ERealtimeConnectionStatus,
+} from "@outspeed/react";
 import { Loader2 } from "lucide-react";
 import { Button } from "../components/button";
 import { ScreenShareLayout } from "../components/screen-share-layout";
 import { useOutletContext } from "react-router-dom";
 import { TRealtimeAppContext } from "./types";
-import { ERealtimeConnectionStatus } from "@outspeed/react/connection-status";
 
 export function SportsCommentatorRealtimeApp() {
   const { config, onDisconnect } = useOutletContext<TRealtimeAppContext>();
