@@ -4,6 +4,8 @@ import { toBytes } from "fast-base64";
 import { ETrackOrigin, Track } from "../shared/Track";
 import { TLogger, TRealtimeWebSocketConfig, TResponse } from "../shared/@types";
 
+import RealtimeWebsocketAudioProcessorWorkletCode from "./RealtimeWebsocketAudioProcessorWorkletCode";
+
 /**
  * The worklet code runs within the `AudioWorkletGlobalScope`, a special global execution context
  * that operates on a separate Audio Worklet thread. This thread is shared by the worklet and other
@@ -13,40 +15,14 @@ import { TLogger, TRealtimeWebSocketConfig, TResponse } from "../shared/@types";
  * running in this context. This separation is achieved by loading the worklet code as a module using
  * the `addModule()` function, ensuring that it runs in the correct context.
  *
- * The `RealtimeWebsocketAudioProcessor` class is defined in a file called
- * `RealtimeWebsocketAudioProcessor.worklet.ts`. However, we can't directly pass this code to the
- * `addModule()` function because it expects a URL pointing to a JavaScript module, which maintains
- * this separation.
- *
- * This function converts the `RealtimeWebsocketAudioProcessor` code into a string, performs necessary
- * string replacements to make it compatible with `addModule()`, and then converts the string into a
- * blob URL. This URL can be passed to the `addModule()` function for use in the Audio Worklet.
  */
 async function getRealtimeWebsocketAudioProcessorURL() {
   if (typeof window === "undefined") return "";
 
-  const {
-    default: { RealtimeWebsocketAudioProcessor },
-  } = await import("./RealtimeWebsocketAudioProcessor.worklet");
-
-  if (
-    typeof RealtimeWebsocketAudioProcessor !== "function" ||
-    !RealtimeWebsocketAudioProcessor
-  ) {
-    return "";
-  }
-
-  const workletCode = `${RealtimeWebsocketAudioProcessor.toString()}
-    registerProcessor("audio-processor", RealtimeWebsocketAudioProcessor);
-  `
-    .replace(
-      "class extends AudioWorkletProcessor",
-      "var RealtimeWebsocketAudioProcessor = class extends AudioWorkletProcessor"
-    )
-    .replace(/__publicField.*/g, "");
-
   // Create a Blob from the string
-  const blob = new Blob([workletCode], { type: "application/javascript" });
+  const blob = new Blob([RealtimeWebsocketAudioProcessorWorkletCode], {
+    type: "application/javascript",
+  });
 
   // Create an object URL for the blob
   return URL.createObjectURL(blob);
