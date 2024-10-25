@@ -28,7 +28,9 @@ export function useWebRTC(options: TUseWebRTCOptions) {
   const [dataChannel, setDataChannel] =
     React.useState<WebRTCDataChannel | null>(null);
 
-  const [connection] = React.useState(new RealtimeConnection(config));
+  const [connection, setConnection] = React.useState<RealtimeConnection | null>(
+    null
+  );
   const [connectionResponse, setConnectionResponse] = React.useState<TResponse>(
     {}
   );
@@ -174,6 +176,14 @@ export function useWebRTC(options: TUseWebRTCOptions) {
       return {
         error: {
           msg: `You cannot call disconnect(), if the connection state is: ${connectionStatus}. It can only be called if the connection state is ${ERealtimeConnectionStatus.Connected}`,
+        },
+      };
+    }
+
+    if (!connection) {
+      return {
+        error: {
+          msg: "disconnect() is called but connection is not defined.",
         },
       };
     }
@@ -326,6 +336,10 @@ export function useWebRTC(options: TUseWebRTCOptions) {
       setDataChannel(null);
     };
   }, [connection, connectionStatus]);
+
+  React.useEffect(() => {
+    if (!connection) setConnection(new RealtimeConnection(config));
+  }, [config]);
 
   return {
     connectionStatus,
