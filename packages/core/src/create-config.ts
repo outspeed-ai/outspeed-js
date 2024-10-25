@@ -57,7 +57,7 @@ export function createConfig(input: TCreateConfigInput): TRealtimeConfig {
   const {
     functionURL,
     offerURL,
-    audioCodec = "PCMU/8000",
+    audioCodec = "opus/48000/2",
     audioConstraints,
     videoConstraints,
     dataChannelOptions,
