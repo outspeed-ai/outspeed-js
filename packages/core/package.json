@@ -65,10 +65,10 @@
       "import": "./dist/RealtimeConnection/RealtimeConnectionNegotiator.mjs",
       "require": "./dist/RealtimeConnection/RealtimeConnectionNegotiator.js"
     },
-    "./RealtimeWebsocketAudioProcessor.worklet": {
-      "types": "./dist/RealtimeWebSocket/RealtimeWebsocketAudioProcessor.worklet.d.ts",
-      "import": "./dist/RealtimeWebSocket/RealtimeWebsocketAudioProcessor.worklet.mjs",
-      "require": "./dist/RealtimeWebSocket/RealtimeWebsocketAudioProcessor.worklet.js"
+    "./RealtimeWebsocketAudioProcessorWorkletCode": {
+      "types": "./dist/RealtimeWebSocket/RealtimeWebsocketAudioProcessorWorkletCode.d.ts",
+      "import": "./dist/RealtimeWebSocket/RealtimeWebsocketAudioProcessorWorkletCode.mjs",
+      "require": "./dist/RealtimeWebSocket/RealtimeWebsocketAudioProcessorWorkletCode.js"
     },
     "./RealtimeWebSocketConnection": {
       "types": "./dist/RealtimeWebSocket/RealtimeWebSocketConnection.d.ts",
@@ -139,8 +139,8 @@
       "RealtimeConnectionNegotiator": [
         "./dist/RealtimeConnection/RealtimeConnectionNegotiator.d.ts"
       ],
-      "RealtimeWebsocketAudioProcessor.worklet": [
-        "./dist/RealtimeWebSocket/RealtimeWebsocketAudioProcessor.worklet.d.ts"
+      "RealtimeWebsocketAudioProcessorWorkletCode": [
+        "./dist/RealtimeWebSocket/RealtimeWebsocketAudioProcessorWorkletCode.d.ts"
       ],
       "RealtimeWebSocketConnection": [
         "./dist/RealtimeWebSocket/RealtimeWebSocketConnection.d.ts"
