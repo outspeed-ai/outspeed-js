@@ -1,3 +1,3 @@
 export * from "./RealtimeWebSocketConnection";
 export * from "./RealtimeWebSocketMediaManager";
-export * from "./RealtimeWebsocketAudioProcessor.worklet";
+export { default as RealtimeWebsocketAudioProcessorWorkletCode } from "./RealtimeWebsocketAudioProcessorWorkletCode";
