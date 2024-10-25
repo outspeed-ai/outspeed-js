@@ -1,14 +1,10 @@
-import {
-  IMediaRecorder,
-  MediaRecorder,
-  register,
-} from "extendable-media-recorder";
+import type { IMediaRecorder } from "extendable-media-recorder";
 import { toBytes } from "fast-base64";
-import { connect as wavEncodedConnect } from "extendable-media-recorder-wav-encoder";
 
 import { ETrackOrigin, Track } from "../shared/Track";
 import { TLogger, TRealtimeWebSocketConfig, TResponse } from "../shared/@types";
-import { RealtimeWebsocketAudioProcessor } from "./RealtimeWebsocketAudioProcessor.worklet";
+
+import RealtimeWebsocketAudioProcessorWorkletCode from "./RealtimeWebsocketAudioProcessorWorkletCode";
 
 /**
  * The worklet code runs within the `AudioWorkletGlobalScope`, a special global execution context
@@ -19,27 +15,14 @@ import { RealtimeWebsocketAudioProcessor } from "./RealtimeWebsocketAudioProcess
  * running in this context. This separation is achieved by loading the worklet code as a module using
  * the `addModule()` function, ensuring that it runs in the correct context.
  *
- * The `RealtimeWebsocketAudioProcessor` class is defined in a file called
- * `RealtimeWebsocketAudioProcessor.worklet.ts`. However, we can't directly pass this code to the
- * `addModule()` function because it expects a URL pointing to a JavaScript module, which maintains
- * this separation.
- *
- * This function converts the `RealtimeWebsocketAudioProcessor` code into a string, performs necessary
- * string replacements to make it compatible with `addModule()`, and then converts the string into a
- * blob URL. This URL can be passed to the `addModule()` function for use in the Audio Worklet.
  */
-function getRealtimeWebsocketAudioProcessorURL() {
-  const workletCode = `${RealtimeWebsocketAudioProcessor.toString()}
-    registerProcessor("audio-processor", RealtimeWebsocketAudioProcessor);
-  `
-    .replace(
-      "class extends AudioWorkletProcessor",
-      "var RealtimeWebsocketAudioProcessor = class extends AudioWorkletProcessor"
-    )
-    .replace(/__publicField.*/g, "");
+async function getRealtimeWebsocketAudioProcessorURL() {
+  if (typeof window === "undefined") return "";
 
   // Create a Blob from the string
-  const blob = new Blob([workletCode], { type: "application/javascript" });
+  const blob = new Blob([RealtimeWebsocketAudioProcessorWorkletCode], {
+    type: "application/javascript",
+  });
 
   // Create an object URL for the blob
   return URL.createObjectURL(blob);
@@ -119,14 +102,22 @@ export class RealtimeWebSocketMediaManager {
 
   async setup() {
     try {
+      if (typeof window === "undefined") throw new Error("Window is undefined");
+
+      const { MediaRecorder, register } = await import(
+        "extendable-media-recorder"
+      );
+
+      const { connect: wavEncodedConnect } = await import(
+        "extendable-media-recorder-wav-encoder"
+      );
+
       if (!MediaRecorder.isTypeSupported("audio/wav")) {
         this.wavEncoderPort = await wavEncodedConnect();
         await register(this.wavEncoderPort);
       }
-
       // Define desired sample rate
       const desiredSampleRate = 16000;
-
       // Request user media with explicit sample rate constraints
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
@@ -136,32 +127,26 @@ export class RealtimeWebSocketMediaManager {
           ...this._config.audio, // Merge with existing audio config if any
         },
       });
-
       this.stream = stream;
       this.track = new Track(stream.getTracks()[0], ETrackOrigin.Local);
       this.recorder = new MediaRecorder(stream, {
         mimeType: "audio/wav",
       });
-
       // Create AudioContext with the desired sample rate
       const audioContext = new AudioContext({ sampleRate: desiredSampleRate });
       this.audioContext = audioContext;
-
       this.remoteAudioDestination =
         this.audioContext.createMediaStreamDestination();
-
       this._logger?.info(this._logLabel, "Created Audio context");
-
       // Log the actual sample rate to verify
       this._logger?.info(
         this._logLabel,
         `Actual AudioContext sample rate: ${this.audioContext.sampleRate}`
       );
-
       /**
        * Setup the AudioWorklet `audioProcessor`. It decodes the b64 encoded audio, and plays it.
        */
-      const workletURL = getRealtimeWebsocketAudioProcessorURL();
+      const workletURL = await getRealtimeWebsocketAudioProcessorURL();
       await this.audioContext.audioWorklet.addModule(workletURL);
       this._logger?.info(this._logLabel, "Added audio worklet module");
       this.audioWorkletNode = new AudioWorkletNode(
@@ -175,10 +160,8 @@ export class RealtimeWebSocketMediaManager {
           ev
         );
       };
-
       this.audioWorkletNode.port.onmessage = (event) => {
         if (!this.remoteAudioDestination) return;
-
         switch (event.data) {
           case "agent_start_talking":
             this._logger?.info(this._logLabel, "Received agent_start_talking");
@@ -198,9 +181,7 @@ export class RealtimeWebSocketMediaManager {
             );
         }
       };
-
       this.audioWorkletNode?.connect(this.remoteAudioDestination);
-
       this._logger?.info(this._logLabel, "Audio setup complete");
       return {
         ok: true,
@@ -287,8 +268,12 @@ export class RealtimeWebSocketMediaManager {
     }
 
     try {
+      if (!this.remoteAudioDestination) {
+        throw new Error("remoteAudioDestination is not defined");
+      }
+
       const track = new Track(
-        this.remoteAudioDestination?.stream.getTracks()[0]!,
+        this.remoteAudioDestination.stream.getTracks()[0],
         ETrackOrigin.Remote
       );
 
