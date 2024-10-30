@@ -1,10 +1,8 @@
 import clsx from "clsx";
-import { AudioLinesIcon, ScreenShare, VideoIcon } from "lucide-react";
+import { AudioLinesIcon, VideoIcon } from "lucide-react";
 import {
   VOICE_BOT_TAKE_INPUT_ROUTE,
   HUMAN_AVATAR_TAKE_INPUT_ROUTE,
-  SPORTS_COMMENTATOR_TAKE_INPUT_ROUTE,
-  WEBSOCKET_TAKE_INPUT_ROUTE,
 } from "../constants/routes";
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
