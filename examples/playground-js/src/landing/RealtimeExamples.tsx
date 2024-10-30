@@ -48,34 +48,6 @@ const data: TExampleData[] = [
       },
     ],
   },
-  {
-    title: "Sports Commentator",
-    description:
-      "In this example, we will set up a WebRTC connection to stream both screen recording and a local audio track.",
-    link: SPORTS_COMMENTATOR_TAKE_INPUT_ROUTE,
-    icons: [
-      {
-        title: "Audio",
-        children: <AudioLinesIcon />,
-      },
-      {
-        title: "Screen Share",
-        children: <ScreenShare />,
-      },
-    ],
-  },
-  {
-    title: "Voice Bot (Websocket)",
-    description:
-      "In this example, we will establish a Web Socket connection to stream both local and remote audio tracks.",
-    link: WEBSOCKET_TAKE_INPUT_ROUTE,
-    icons: [
-      {
-        title: "Audio",
-        children: <AudioLinesIcon />,
-      },
-    ],
-  },
 ];
 
 export function RealtimeExamples() {
