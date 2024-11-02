@@ -32,11 +32,11 @@ export function TakeInput(props: TTakeInputProps) {
             deviceId: audioInput,
           }
         : undefined,
-      // video: videoInput
-      //   ? {
-      //       deviceId: videoInput,
-      //     }
-      //   : undefined,
+      video: videoInput
+        ? {
+            deviceId: videoInput,
+          }
+        : undefined,
       codec: {
         audio: audioCodec as TAudioCodec,
       },
