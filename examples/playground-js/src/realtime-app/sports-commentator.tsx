@@ -24,12 +24,12 @@ export function SportsCommentatorRealtimeApp() {
     remoteAudioTrack,
     remoteVideoTrack,
     dataChannel,
-  } = useWebRTC({ config });
+  } = useWebRTC();
 
   React.useEffect(() => {
     switch (connectionStatus) {
       case ERealtimeConnectionStatus.New:
-        connect();
+        connect({ config });
         break;
       case ERealtimeConnectionStatus.Disconnected:
         onDisconnect();

@@ -23,12 +23,12 @@ export function VoiceBotRealtimeApp() {
     remoteAudioTrack,
     localAudioTrack,
     dataChannel,
-  } = useWebRTC({ config: { ...config, logger: ConsoleLogger.getLogger() } });
+  } = useWebRTC();
 
   React.useEffect(() => {
     switch (connectionStatus) {
       case ERealtimeConnectionStatus.New:
-        connect();
+        connect({ config: { ...config, logger: ConsoleLogger.getLogger() } });
         break;
       case ERealtimeConnectionStatus.Disconnected:
         onDisconnect();
