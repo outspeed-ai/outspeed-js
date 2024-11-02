@@ -19,12 +19,7 @@ export function WebSocketRealtimeApp() {
     localAudioTrack,
     dataChannel,
     connectionStatus,
-  } = useWebSocket({
-    config: {
-      ...config,
-      logger: ConsoleLogger.getLogger(),
-    } as TRealtimeWebSocketConfig,
-  });
+  } = useWebSocket();
 
   const handleDisconnect = React.useCallback(() => {
     disconnect();
@@ -32,7 +27,12 @@ export function WebSocketRealtimeApp() {
   }, [disconnect, onDisconnect]);
 
   React.useEffect(() => {
-    connect();
+    connect({
+      config: {
+        ...config,
+        logger: ConsoleLogger.getLogger(),
+      } as TRealtimeWebSocketConfig,
+    });
 
     return () => {
       disconnect();
