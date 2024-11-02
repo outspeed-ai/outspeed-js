@@ -143,7 +143,7 @@ export function useWebRTC() {
       if (connection) {
         return {
           error: {
-            msg: `You cannot call connect() if the connection is already establish. To reset the connection first call reset() and then connect().`,
+            msg: `You cannot call connect() if the connection is already established. To reset the connection first call reset() and then connect().`,
           },
         };
       }
