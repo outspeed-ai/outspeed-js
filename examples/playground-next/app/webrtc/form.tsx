@@ -1,9 +1,10 @@
-import { ConsoleLogger, TAudioCodec, TRealtimeConfig } from "@outspeed/core";
+import { TAudioCodec, TRealtimeConfig } from "@outspeed/core";
 import {
   RealtimeAudioInput,
   RealtimeFormButton,
   RealtimeFunctionURLInput,
   RealtimeVideoInput,
+  ConsoleLogger,
 } from "@outspeed/react";
 import React from "react";
 

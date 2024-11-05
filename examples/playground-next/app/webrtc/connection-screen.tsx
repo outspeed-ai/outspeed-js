@@ -1,9 +1,10 @@
-import { ERealtimeConnectionStatus, TRealtimeConfig } from "@outspeed/core";
+import { TRealtimeConfig } from "@outspeed/core";
 import {
   RealtimeAudio,
   RealtimeAudioVisualizer,
   RealtimeVideo,
   useWebRTC,
+  ERealtimeConnectionStatus,
 } from "@outspeed/react";
 import React from "react";
 
