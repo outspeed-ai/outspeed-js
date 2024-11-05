@@ -118,6 +118,9 @@ export class RealtimeConnection {
    *
    */
   async connect(): Promise<TResponse> {
+    this._logger?.debug(this._logLabel, "Connecting...");
+    this._logger?.debug(this._logLabel, "Config", this._config);
+
     // Prevents multiple simultaneous connection attempts.
     if (this._isConnecting) {
       const msg =
@@ -146,6 +149,11 @@ export class RealtimeConnection {
     // Setup the media manager for the connection.
     let response = await this.mediaManager.setup();
     if (!response.ok) {
+      this._logger?.debug(
+        this._logLabel,
+        "Failed to setup RealtimeConnectionMediaManager."
+      );
+
       return {
         error: `Failed to setup RealtimeConnectionMediaManager. Response: ${response.error}.`,
       };
@@ -162,6 +170,7 @@ export class RealtimeConnection {
     }
 
     this._isConnecting = false;
+    this._logger?.debug(this._logLabel, "Connected!");
     return {
       ok: true,
     };

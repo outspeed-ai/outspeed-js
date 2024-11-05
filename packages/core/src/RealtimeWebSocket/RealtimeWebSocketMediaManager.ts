@@ -94,7 +94,13 @@ export class RealtimeWebSocketMediaManager {
   }
 
   private _stopPlayingAudio() {
-    if (!this.audioWorkletNode) return;
+    if (!this.audioWorkletNode) {
+      this._logger?.debug(
+        this._logLabel,
+        "_stopPlayingAudio is called but this.audioWorkletNode is not defined. Returning without throwing error."
+      );
+      return;
+    }
     this.audioWorkletNode?.port.postMessage({
       type: "audio_end",
     });
@@ -113,9 +119,14 @@ export class RealtimeWebSocketMediaManager {
       );
 
       if (!MediaRecorder.isTypeSupported("audio/wav")) {
+        this._logger?.debug(this._logLabel, "Registering audio/wav encoder.");
         this.wavEncoderPort = await wavEncodedConnect();
         await register(this.wavEncoderPort);
+        this._logger?.debug(this._logLabel, "Registered audio/wav encoder.");
+      } else {
+        this._logger?.debug(this._logLabel, "audio/wav encoder is present.");
       }
+
       // Define desired sample rate
       const desiredSampleRate = 16000;
       // Request user media with explicit sample rate constraints
@@ -235,7 +246,7 @@ export class RealtimeWebSocketMediaManager {
     try {
       const audioSettings = this.stream.getTracks()[0].getSettings();
 
-      this._logger?.info(this._logLabel, "Audio settings:", audioSettings);
+      this._logger?.debug(this._logLabel, "Audio settings:", audioSettings);
       const inputAudioMetadata = {
         samplingRate: audioSettings.sampleRate || this.audioContext?.sampleRate,
         audioEncoding: "linear16",
@@ -260,6 +271,10 @@ export class RealtimeWebSocketMediaManager {
 
   getRemoteAudioTrack(): TResponse<string, Track> {
     if (!this.audioContext) {
+      this._logger?.debug(
+        this._logLabel,
+        "getRemoteAudioTrack is called but this.audioContext is not defined. Returning without throwing error."
+      );
       return { error: "No audio context available" };
     }
 

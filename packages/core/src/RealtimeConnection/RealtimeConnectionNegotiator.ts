@@ -130,6 +130,11 @@ export class RealtimeConnectionNegotiator {
 
       await Promise.all([setLocalDescriptionPromise, gatherStatePromise]);
 
+      this._logger?.debug(
+        this._logLabel,
+        "Offer created successfully and also updated local description."
+      );
+
       return {
         ok: true,
       };
@@ -176,8 +181,16 @@ export class RealtimeConnectionNegotiator {
         );
       }
 
+      this._logger?.info(this._logLabel, "Payload received", payload);
+
       const offerURL =
         payload.address.replace("0.0.0.0", "localhost") + "/offer";
+
+      this._logger?.debug(
+        this._logLabel,
+        "Offer URL after modifying",
+        offerURL
+      );
 
       return {
         ok: true,
@@ -215,6 +228,10 @@ export class RealtimeConnectionNegotiator {
         this._config.codec.audio &&
         this._config.codec.audio !== "default"
       ) {
+        this._logger?.debug(
+          this._logLabel,
+          "Modifying audio codec in local sdp."
+        );
         modifiedSDP = SDP.filter(
           modifiedSDP,
           "audio",
@@ -227,12 +244,19 @@ export class RealtimeConnectionNegotiator {
         this._config.codec.video &&
         this._config.codec.video !== "default"
       ) {
+        this._logger?.debug(
+          this._logLabel,
+          "Modifying video codec in local sdp."
+        );
+
         modifiedSDP = SDP.filter(
           modifiedSDP,
           "video",
           this._config.codec.video
         );
       }
+
+      this._logger?.debug(this._logLabel, "Modified SDP", modifiedSDP);
 
       return {
         ok: true,
@@ -267,26 +291,36 @@ export class RealtimeConnectionNegotiator {
         typeof this._config.video === "object" &&
         this._config.videoTransform
       ) {
+        this._logger?.debug(
+          this._logLabel,
+          "Transforming video",
+          this._config.videoTransform
+        );
+
         videoTransform = this._config.videoTransform;
       }
 
-      const response = await fetchWithRetry(
-        offerURL,
-        {
-          body: JSON.stringify({
-            sdp: description.sdp,
-            type: description.type,
-            video_transform: videoTransform,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-          method: "POST",
+      const body = {
+        body: JSON.stringify({
+          sdp: description.sdp,
+          type: description.type,
+          video_transform: videoTransform,
+        }),
+        headers: {
+          "Content-Type": "application/json",
         },
-        7,
-        undefined,
-        [400]
+        method: "POST",
+      };
+
+      this._logger?.debug(
+        this._logLabel,
+        "Sending offer to backend with following request body",
+        body
       );
+
+      const response = await fetchWithRetry(offerURL, body, 7, undefined, [
+        400,
+      ]);
 
       if (!response.ok) {
         this._logger?.error(this._logLabel, "Unable to get the offer URL.");
