@@ -149,7 +149,7 @@ export class RealtimeConnection {
     // Setup the media manager for the connection.
     let response = await this.mediaManager.setup();
     if (!response.ok) {
-      this._logger?.debug(
+      this._logger?.error(
         this._logLabel,
         "Failed to setup RealtimeConnectionMediaManager."
       );
