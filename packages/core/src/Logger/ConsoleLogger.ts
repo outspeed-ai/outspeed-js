@@ -1,10 +1,10 @@
-import { Logger } from "./Logger"
+import { Logger } from "./Logger";
 
 enum LogLevel {
   DEBUG = 0,
   INFO = 1,
   WARN = 2,
-  ERROR = 3
+  ERROR = 3,
 }
 
 /**
@@ -12,7 +12,7 @@ enum LogLevel {
  */
 export class ConsoleLogger extends Logger {
   private static instance: ConsoleLogger | null = null;
-  private static logLevel: LogLevel = LogLevel.INFO;
+  private static logLevel: LogLevel = LogLevel.DEBUG;
 
   private constructor() {
     super();

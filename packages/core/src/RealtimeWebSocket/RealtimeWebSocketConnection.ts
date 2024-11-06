@@ -98,9 +98,17 @@ export class RealtimeWebSocketConnection {
         );
       }
 
+      this._logger?.info(this._logLabel, "Payload received", payload);
+
       const offerURL = payload.address
         .replace("http", "ws")
         .replace("0.0.0.0", "localhost");
+
+      this._logger?.debug(
+        this._logLabel,
+        "Offer URL after modifying",
+        offerURL
+      );
 
       return {
         ok: true,
@@ -117,6 +125,12 @@ export class RealtimeWebSocketConnection {
 
   private _sendAudioMetadata(): TResponse {
     const metadataResponse = this.mediaManager.getMetadata();
+
+    this._logger?.debug(
+      this._logLabel,
+      "audio metadata response",
+      metadataResponse
+    );
 
     if (!metadataResponse.ok || !metadataResponse.data) {
       this._logger?.error(
@@ -183,9 +197,11 @@ export class RealtimeWebSocketConnection {
     options = {} as TRealtimeWebSocketConnectOptions
   ): Promise<TResponse> {
     const config = this._config;
+    this._logger?.debug(this._logLabel, "Connecting...");
+    this._logger?.debug(this._logLabel, "Config", this._config);
 
     if (!config.functionURL) {
-      this._logger?.warn(this._logLabel, "No function URL provided");
+      this._logger?.error(this._logLabel, "No function URL provided");
 
       return {
         error: "No function URL provided",
@@ -299,6 +315,8 @@ export class RealtimeWebSocketConnection {
       this._logLabel,
       "Connected to socket and started recording"
     );
+
+    this._logger?.debug(this._logLabel, "Connected!");
 
     return {
       ok: true,
