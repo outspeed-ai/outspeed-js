@@ -5,10 +5,10 @@ import {
   RealtimeFormButton,
   RealtimeShareScreenInput,
 } from "@outspeed/react";
-import { createConfig } from "@outspeed/core";
 import { useOutletContext, useLocation } from "react-router-dom";
 import { TLayoutOutletContext } from "./type";
 import { SPORTS_COMMENTATOR_APP_ROUTE } from "../constants/routes";
+import { TRealtimeConfig } from "@outspeed/core";
 
 export function SportsCommentatorTakeInput() {
   const location = useLocation();
@@ -58,18 +58,23 @@ export function SportsCommentatorTakeInput() {
     }
 
     try {
-      const config = createConfig({
+      const config: TRealtimeConfig = {
         functionURL,
-        audioDeviceId,
-        audioCodec: "opus/48000/2",
-        screenConstraints: {
+        audio: {
+          deviceId: audioDeviceId,
+        },
+        codec: {
+          audio: "opus/48000/2",
+        },
+        screen: {
           video: {
             width: screenShareInput === "512p" ? 512 : 1080,
             height: screenShareInput === "512p" ? 512 : 1080,
             frameRate: 5,
           },
         },
-      });
+      };
+
       onSubmit(config, SPORTS_COMMENTATOR_APP_ROUTE);
     } catch (error) {
       console.error("Unable to create config", error);

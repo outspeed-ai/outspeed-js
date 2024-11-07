@@ -5,10 +5,10 @@ import {
   RealtimeVideoInput,
   RealtimeFormButton,
 } from "@outspeed/react";
-import { createConfig } from "@outspeed/core";
 import { useOutletContext, useLocation } from "react-router-dom";
 import { TLayoutOutletContext } from "./type";
 import { HUMAN_AVATAR_APP_ROUTE } from "../constants/routes";
+import { TRealtimeConfig } from "@outspeed/core";
 
 export function HumanAvatarTakeInput() {
   const { onSubmit } = useOutletContext<TLayoutOutletContext>();
@@ -52,13 +52,19 @@ export function HumanAvatarTakeInput() {
     }
 
     try {
-      const config = createConfig({
+      const config: TRealtimeConfig = {
         functionURL,
-        audioDeviceId,
-        videoDeviceId,
-        videoCodec: "H264/90000",
-        audioCodec: "opus/48000/2",
-      });
+        audio: {
+          deviceId: audioDeviceId,
+        },
+        video: {
+          deviceId: videoDeviceId,
+        },
+        codec: {
+          video: "H264/90000",
+          audio: "opus/48000/2",
+        },
+      };
       onSubmit(config, HUMAN_AVATAR_APP_ROUTE);
     } catch (error) {
       console.error("Unable to create config", error);

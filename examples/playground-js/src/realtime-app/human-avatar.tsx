@@ -1,5 +1,9 @@
 import React from "react";
-import { useWebRTC, useRealtimeToast, ERealtimeConnectionStatus } from "@outspeed/react";
+import {
+  useWebRTC,
+  useRealtimeToast,
+  ERealtimeConnectionStatus,
+} from "@outspeed/react";
 import { Loader2 } from "lucide-react";
 import { Button } from "../components/button";
 import { MeetingLayout } from "../components/meeting-layout";
@@ -21,12 +25,12 @@ export function HumanAvatarRealtimeApp() {
     remoteAudioTrack,
     remoteVideoTrack,
     dataChannel,
-  } = useWebRTC({ config: { ...config, logger: ConsoleLogger.getLogger() } });
+  } = useWebRTC();
 
   React.useEffect(() => {
     switch (connectionStatus) {
       case ERealtimeConnectionStatus.New:
-        connect();
+        connect({ config: { ...config, logger: ConsoleLogger.getLogger() } });
         break;
       case ERealtimeConnectionStatus.Disconnected:
         onDisconnect();

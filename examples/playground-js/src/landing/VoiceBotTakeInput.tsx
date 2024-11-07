@@ -4,10 +4,10 @@ import {
   RealtimeAudioInput,
   RealtimeFormButton,
 } from "@outspeed/react";
-import { createConfig } from "@outspeed/core";
 import { useOutletContext, useLocation } from "react-router-dom";
 import { TLayoutOutletContext } from "./type";
 import { VOICE_BOT_APP_ROUTE } from "../constants/routes";
+import { TRealtimeConfig } from "@outspeed/core";
 
 export function VoiceBotTakeInput() {
   const location = useLocation();
@@ -38,11 +38,15 @@ export function VoiceBotTakeInput() {
       return;
     }
     try {
-      const config = createConfig({
+      const config: TRealtimeConfig = {
         functionURL,
-        audioDeviceId,
-        audioCodec: "opus/48000/2",
-      });
+        audio: {
+          deviceId: audioDeviceId,
+        },
+        codec: {
+          audio: "opus/48000/2",
+        },
+      };
       onSubmit(config, VOICE_BOT_APP_ROUTE);
     } catch (error) {
       console.error("Unable to create config", error);
