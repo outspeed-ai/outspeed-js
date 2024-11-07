@@ -72,16 +72,20 @@ export class RealtimeConnectionMediaManager {
       };
     }
 
+    this._logger?.debug(this._logLabel, "Setting up Media Manager.");
+
     const constraints: MediaStreamConstraints = {};
     const audioConfig = this._config.audio;
     const videoConfig = this._config.video;
     const screenConfig = this._config.screen;
 
     if (audioConfig) {
+      this._logger?.debug(this._logLabel, "Audio config:", audioConfig);
       constraints.audio = audioConfig;
     }
 
     if (videoConfig) {
+      this._logger?.debug(this._logLabel, "Video config:", videoConfig);
       constraints.video = videoConfig;
     }
 
@@ -92,6 +96,12 @@ export class RealtimeConnectionMediaManager {
       setupMediaResponse = await this.setupWithMediaDevices(constraints);
 
       if (!setupMediaResponse.ok) {
+        this._logger?.error(
+          this._logLabel,
+          "Failed to setup user media.",
+          setupMediaResponse
+        );
+
         return {
           error: "Failed to setup user media",
         };
@@ -99,6 +109,12 @@ export class RealtimeConnectionMediaManager {
     }
 
     if (screenConfig) {
+      this._logger?.debug(
+        this._logLabel,
+        "screen config received",
+        screenConfig
+      );
+
       // If we want user display media access.
       setupMediaResponse = await this.setupScreenShare(screenConfig);
 
@@ -110,6 +126,12 @@ export class RealtimeConnectionMediaManager {
     }
 
     if (this._config.addTransceivers) {
+      this._logger?.debug(
+        this._logLabel,
+        "Add transceivers.",
+        this._config.addTransceivers
+      );
+
       setupMediaResponse = this.setupTransceiver(this._config.addTransceivers);
 
       if (!setupMediaResponse.ok) {
@@ -155,6 +177,12 @@ export class RealtimeConnectionMediaManager {
         const stream = new MediaStream([track]);
         this._peerConnection.addTrack(track, stream);
 
+        this._logger?.debug(
+          this._logLabel,
+          `Track: ${track.id} has been added to peerConnection.`,
+          track
+        );
+
         const _trackInstance = new Track(track, ETrackOrigin.Local);
 
         if (track.kind === "audio") {
@@ -170,6 +198,12 @@ export class RealtimeConnectionMediaManager {
         };
       }
     });
+
+    this._logger?.debug(
+      this._logLabel,
+      "Local Media Streams",
+      this.localStreams
+    );
 
     return {
       ok: true,
@@ -220,6 +254,12 @@ export class RealtimeConnectionMediaManager {
       const stream = await navigator.mediaDevices.getDisplayMedia(config);
       stream.getTracks().forEach((track) => {
         this._peerConnection.addTrack(track, stream);
+        this._logger?.debug(
+          this._logLabel,
+          `Track: ${track.id} has been added to peerConnection.`,
+          track
+        );
+
         const _trackInstance = new Track(track, ETrackOrigin.Local);
 
         if (_trackInstance.kind === ETrackKind.Audio) {
@@ -228,6 +268,12 @@ export class RealtimeConnectionMediaManager {
           this.localStreams.video.push(_trackInstance);
         }
       });
+
+      this._logger?.debug(
+        this._logLabel,
+        "Screen added. Local media stream.",
+        this.localStreams
+      );
 
       return {
         ok: true,
