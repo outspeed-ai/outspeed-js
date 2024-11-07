@@ -89,9 +89,10 @@ export default function Page() {
     console.log("connected");
   };
 
-  const disconnectFromOutspeed = () => {
+  const disconnectFromOutspeed = async () => {
     console.log("disconnecting");
     connection.disconnect();
+    await connection.reset();
   };
 
   return (
