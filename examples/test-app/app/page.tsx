@@ -4,7 +4,6 @@ import {
   useWebRTC,
   RealtimeAudioVisualizer,
   ERealtimeConnectionStatus,
-  createConfig,
 } from "@outspeed/react";
 import { useEffect, useState } from "react";
 
@@ -32,7 +31,7 @@ const OutspeedUI = ({ connection }: { connection: any }) => {
       <button onClick={() => connection.localAudioTrack?.resume()}>
         unmute
       </button>
-      <button onClick={() => connection.dataChannel.send("hello")}>
+      <button onClick={() => connection.dataChannel.send({ content: "hello" })}>
         send message
       </button>
       <textarea
@@ -71,18 +70,21 @@ const OutspeedUI = ({ connection }: { connection: any }) => {
 export default function Page() {
   const connection = useWebRTC();
 
-  const connectToOutspeed = () => {
+  const connectToOutspeed = async () => {
     console.log("connecting");
-    connection.connect({
-      config: createConfig({
+    await connection.connect({
+      config: {
         functionURL: "http://localhost:8080",
-        audioDeviceId: "",
-        audioCodec: "opus/48000/2",
-        dataChannelOptions: {},
-        audioConstraints: {
+        codec: {
+          audio: "opus/48000/2",
+        },
+        dataChannelOptions: {
+          ordered: true,
+        },
+        audio: {
           echoCancellation: true,
         },
-      }),
+      },
     });
     console.log("connected");
   };
