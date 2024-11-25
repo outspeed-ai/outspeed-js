@@ -151,7 +151,7 @@ export function useWebRTC(options: TUseWebRTCOptions) {
     if (!connection) {
       return {
         error: {
-          msg: "connect() is called but .",
+          msg: "connect() is called but connection is not defined.",
         },
       };
     }
