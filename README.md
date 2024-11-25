@@ -103,10 +103,10 @@ This will install dependencies for all the packages in the monorepo.
 To run the example playground (a React app) in development mode, run the following command:
 
 ```bash
-pnpm playground:dev
+pnpm dev
 ```
 
-The playground is in `./examples/playground-js`, and any edits you make will be reflected in real-time.
+The playground is in `./playground`, and any edits you make will be reflected in real-time.
 
 #### Step 4: Run packages in dev mode
 
@@ -144,26 +144,18 @@ This command will verify the exports and print them to the console. You then nee
 
 To build the packages for production, follow these steps:
 
-#### Build core and react packages:
+#### Build packages and playground:
 
-Run the following command to build both `@outspeed/core` and `@outspeed/react`:
+Run the following command to build all the packages and the playground in the repo:
 
 ```bash
 pnpm build
 ```
 
-#### Build the playground
-
-To build the playground for production, run:
-
-```bash
-pnpm playground:build
-```
-
 #### Serve the playground in production mode
 
 ```bash
-pnpm playground:serve
+pnpm serve
 ```
 
 # License
