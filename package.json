@@ -1,19 +1,19 @@
 {
+  "private": true,
+  "packageManager": "pnpm@8.8.0",
+  "workspaces": [
+    "packages/*",
+    "playground"
+  ],
   "scripts": {
-    "build": "pnpm -r --stream --filter @outspeed/* build",
-    "release": "pnpm publish -r",
-    "watch:core": "cd packages/core && pnpm run watch",
-    "watch:react": "cd packages/react && pnpm run watch",
-    "playground:dev": "cd examples/playground-js && pnpm dev",
-    "playground:build": "pnpm build && cd examples/playground-js && pnpm build",
-    "playground:serve": "cd examples/playground-js && pnpm preview",
-    "dev": "concurrently \"pnpm run watch:core\" \"pnpm run watch:react\" \"pnpm run playground:dev\""
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint"
   },
   "keywords": [],
   "author": "",
   "devDependencies": {
-    "@changesets/cli": "^2.27.9",
-    "concurrently": "^9.0.1"
+    "turbo": "^2.3.1"
   },
   "homepage": "https://outspeed.com"
 }
