@@ -142,6 +142,16 @@ This command will verify the exports and print them to the console. You then nee
 
 # Build
 
+The build and dependency management tools used in this repo are the following:
+
+1. `pnpm`: Fast package manager with monorepo workspace support
+2. `vite`: Dev server and bundler for the playground/demo app
+3. `turborepo`: Smart build orchestration with caching and auto-rebuilds on changes
+4. `tsup`: TypeScript library builder that auto-generates type declarations
+
+These tools work together - `tsup` builds the libraries with full TypeScript support, `vite` powers the frontend development, `turborepo` intelligently manages the build process and dependencies between packages, and `pnpm` provides fast, efficient package management.
+
+
 To build the packages for production, follow these steps:
 
 #### Build packages and playground:
