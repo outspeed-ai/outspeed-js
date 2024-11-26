@@ -165,6 +165,8 @@
   "scripts": {
     "build": "tsup",
     "watch": "tsup --watch",
+    "lint": "eslint src/",
+    "clean": "rm -rf dist",
     "check-exports": "node ../../scripts/check-exports.js styles.css"
   },
   "repository": {

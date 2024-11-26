@@ -103,10 +103,10 @@ This will install dependencies for all the packages in the monorepo.
 To run the example playground (a React app) in development mode, run the following command:
 
 ```bash
-pnpm playground:dev
+pnpm dev
 ```
 
-The playground is in `./examples/playground-js`, and any edits you make will be reflected in real-time.
+The playground is in `./playground`, and any edits you make will be reflected in real-time.
 
 #### Step 4: Run packages in dev mode
 
@@ -142,28 +142,30 @@ This command will verify the exports and print them to the console. You then nee
 
 # Build
 
+The build and dependency management tools used in this repo are the following:
+
+1. `pnpm`: Fast package manager with monorepo workspace support
+2. `vite`: Dev server and bundler for the playground/demo app
+3. `turborepo`: Smart build orchestration with caching and auto-rebuilds on changes
+4. `tsup`: TypeScript library builder that auto-generates type declarations
+
+These tools work together - `tsup` builds the libraries with full TypeScript support, `vite` powers the frontend development, `turborepo` intelligently manages the build process and dependencies between packages, and `pnpm` provides fast, efficient package management.
+
+
 To build the packages for production, follow these steps:
 
-#### Build core and react packages:
+#### Build packages and playground:
 
-Run the following command to build both `@outspeed/core` and `@outspeed/react`:
+Run the following command to build all the packages and the playground in the repo:
 
 ```bash
 pnpm build
 ```
 
-#### Build the playground
-
-To build the playground for production, run:
-
-```bash
-pnpm playground:build
-```
-
 #### Serve the playground in production mode
 
 ```bash
-pnpm playground:serve
+pnpm serve
 ```
 
 # License

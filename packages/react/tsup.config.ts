@@ -6,12 +6,22 @@ export default defineConfig({
   entry: ["src/**/*.(ts|tsx)"],
   dts: true,
   format: ["cjs", "esm"],
-  clean: true,
   outDir: "dist",
   tsconfig: "./tsconfig.json",
   sourcemap: true,
-  minify: false,
-  splitting: false,
+
+  // Bundle settings
+  clean: true,
+  splitting: true,
+  treeshake: true,
+  minify: false, // minification not recommended for libraries/packages
+
+  // Don't bundle these
+  external: [
+    'react',
+    'react-dom',
+    '@radix-ui/react-*'
+  ],
   onSuccess: async () => {
     const destPath = join(__dirname, "dist");
     const licensePath = join(__dirname, "..", "..", "LICENSE");
